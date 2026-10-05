@@ -1,0 +1,257 @@
+# Continuous integration for every pull request into main and every push to main
+# (US1.3, US1.4; BR8.6, BR8.9, BR8.10; infrastructure-design/cicd-pipeline.md).
+# All four jobs are required checks on the protected main branch (docs/branch-protection.md).
+#
+# - Third-party actions and container images are pinned by commit SHA or digest.
+# - The workflow token is read-only; checkouts do not persist credentials.
+# - Throwaway signing/code keys come from scripts/ci-env.sh (openssl rand), are masked, and
+#   live only in the steps that source it. The repository holds no secrets (U1, U2).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  UV_VERSION: "0.9.30"
+  PNPM_VERSION: "10.32.1"
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.12"
+  POSTGRES_IMAGE: postgres:16@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54
+  GITLEAKS_IMAGE: ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854
+
+jobs:
+  backend:
+    name: backend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        # Same digest as docker-compose.yml (postgres:16).
+        image: postgres:16@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app -d app"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Install
+        run: uv sync --frozen
+      - name: Cache the pinned face model (U4; key = the pinned SHA-256)
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: backend/var/models
+          key: face-model-64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff-portrait-a6f11efa
+      - name: Fetch the pinned face model (hash-checked)
+        run: uv run python -m tools.fetch_face_model
+      - name: Lint (Ruff, incl. S security rules)
+        run: uv run ruff check .
+      - name: Format check
+        run: uv run ruff format --check .
+      - name: Types (mypy --strict)
+        run: uv run mypy --strict app
+      - name: Layering (import-linter)
+        run: uv run lint-imports
+      - name: Tests with coverage >= 80% (network blocked except localhost)
+        run: |
+          source ../scripts/ci-env.sh
+          uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
+            tests/face tests/photos tests/payments -m "not perf" \
+            --cov=app --cov-report=term-missing --cov-fail-under=80
+      - name: Latency targets and anti-enumeration timing (p95; one re-run per target)
+        run: |
+          source ../scripts/ci-env.sh
+          uv run pytest tests/identity/test_perf_auth.py tests/health/test_perf_health.py \
+            tests/identity/test_perf_sessions.py tests/identity/test_perf_enumeration.py -m perf -q
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Lint (ESLint, security plugin, layering rules)
+        run: pnpm lint
+      - name: Format check (Prettier)
+        run: pnpm format:check
+      - name: Types (tsc --noEmit)
+        run: pnpm typecheck
+      - name: Tests with coverage (lines >= 80%)
+        run: pnpm exec vitest run --coverage
+      - name: Production build
+        run: pnpm build
+      - name: Bundle budget (auth, onboarding, photo and payment routes <= 200 KB gzipped)
+        run: pnpm size-check
+      - name: OpenAPI drift check
+        working-directory: .
+        run: |
+          (cd backend && uv sync --frozen)
+          bash scripts/export-openapi.sh --check
+          git diff --exit-code -- frontend/src/lib/api/types.gen.ts
+
+  e2e:
+    name: e2e
+    needs: [backend, frontend]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Start PostgreSQL and Mailpit (Compose)
+        run: docker compose up -d --wait postgres mailpit
+      - name: Cache the pinned face model (U4; key = the pinned SHA-256)
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: backend/var/models
+          key: face-model-64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff-portrait-a6f11efa
+      - name: Install
+        run: |
+          (cd backend && uv sync --frozen && uv run python -m tools.fetch_face_model)
+          (cd frontend && pnpm install --frozen-lockfile)
+      - name: Fresh app_e2e database and migration round-trip
+        working-directory: backend
+        run: |
+          source ../scripts/ci-env.sh
+          docker compose exec -T postgres psql -q -v ON_ERROR_STOP=1 -U app -d postgres \
+            -c "DROP DATABASE IF EXISTS app_e2e WITH (FORCE)" -c "CREATE DATABASE app_e2e"
+          uv run alembic -x db=e2e upgrade head
+          uv run alembic -x db=e2e downgrade base
+          uv run alembic -x db=e2e upgrade head
+      - name: Build the web app
+        working-directory: frontend
+        run: pnpm build
+      - name: Start the API and the web app
+        run: |
+          source scripts/ci-env.sh
+          mkdir -p .verify
+          (cd backend && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \
+            MEDIA_ROOT="$GITHUB_WORKSPACE/.verify/media" \
+            FACE_LANDMARK_OVERRIDES_FILE=tests/fixtures/faces/overrides.json \
+            nohup uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000 \
+            --timeout-graceful-shutdown 10 > ../.verify/api.log 2>&1 &)
+          bash scripts/wait-for.sh http://127.0.0.1:8000/health/ready 60
+          (cd frontend && API_ORIGIN="$API_ORIGIN" nohup pnpm start --port 3000 > ../.verify/web.log 2>&1 &)
+          bash scripts/wait-for.sh http://localhost:3000/login 60
+      - name: Playwright skeleton, session, onboarding, photo and payment journeys (phone + desktop, axe)
+        working-directory: frontend
+        env:
+          CI: "true"
+          MAILPIT_URL: http://127.0.0.1:8025
+          WEB_BASE_URL: http://localhost:3000
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
+            e2e/photos.spec.ts e2e/payments.spec.ts
+      - name: Upload Playwright report and API log
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: e2e-failure
+          retention-days: 7
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+            .verify/api.log
+            .verify/web.log
+      - name: Stop Compose services
+        if: always()
+        run: docker compose down -v
+
+  security:
+    name: security
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # full history for the secret scan
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Secret scan (Gitleaks, full git history)
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo" "$GITLEAKS_IMAGE" \
+            git /repo --config /repo/.gitleaks.toml --redact --no-banner
+      - name: Python dependency audit (pip-audit on uv.lock)
+        working-directory: backend
+        run: |
+          uv export --frozen --no-emit-project --format requirements-txt > "$RUNNER_TEMP/requirements.lock.txt"
+          uvx --from pip-audit pip-audit --strict --progress-spinner off --require-hashes \
+            --disable-pip -r "$RUNNER_TEMP/requirements.lock.txt"
+      - name: npm dependency audit (high and critical)
+        working-directory: frontend
+        run: pnpm audit --prod --audit-level high
+      - name: Auth-as-a-service deny-list
+        run: bash scripts/check-denylist.sh
+      - name: App independence (no cross-imports between backend and frontend)
+        run: bash scripts/check-app-independence.sh

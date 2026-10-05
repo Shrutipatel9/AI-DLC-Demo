@@ -1,0 +1,29 @@
+## Review
+
+**Verdict:** READY
+**Reviewer:** aidlc-architecture-reviewer-agent
+**Date:** 2026-10-01T12:41:01Z
+**Iteration:** 1
+
+### Findings
+
+| ID | Severity | Location | Finding | Required action | Status |
+|---|---|---|---|---|---|
+| R-01 | Major | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/security-requirements.md > section 5 threat model, Denial of service row, versus NFR2.12 | The accepted-risk row says a lockout "blocks codes only, not password login steps". Functional rule BR1.3 lists POST /auth/login among the triggers that are refused during lockout, and the login flow needs a code after the password step. So an attacker who guesses 5 wrong codes for a victim blocks that victim's login for 15 minutes, and the risk as written understates this. Code generation cannot tell whether the password step of /auth/login is refused during lockout. | State exactly which endpoints refuse during lockout (verify, resend, and whether the login password step does), align the threat-model row with BR1.3, and record the real 15-minute login denial as the accepted risk with its per-IP throttle mitigation. | New |
+| R-02 | Major | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/security-requirements.md > NFR2.3, NFR2.7 and NFR6.1 (no CORS requirement anywhere in the unit) | The refresh and logout calls are cross-origin with credentials and carry two custom headers, X-Requested-With and X-Refresh-Attempt. No NFR requires CORS to allow those request headers, to allow credentials, and to use the explicit allow-list of origins (no wildcard). Without it the preflight fails and refresh breaks. Cookie SameSite and Secure settings are left to config, with no rule for a cross-site frontend and backend. | Add a requirement and a test: CORS allow_origins equals the CSRF allow-list, allow_credentials is true, allow_headers includes both custom headers, and a preflight test passes for /auth/refresh and /auth/logout. Add the SameSite=None plus Secure combination rule for cross-origin setups. | New |
+| R-03 | Minor | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/security-requirements.md > NFR2.3 and NFR3.1 | The attempt id is classified Restricted, but the requirement does not say how it is stored on the child session (plaintext or hash), how its format is validated (128-bit, base64url or hex, length bound), or that it is compared in constant time. | Require storing only a SHA-256 of the id, strict format validation (malformed means no id, so strict reuse handling), constant-time compare, and a test of each. | New |
+| R-04 | Minor | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/security-requirements.md > NFR2.13 | The per-IP throttle list omits /auth/refresh and /auth/logout, which are unauthenticated cookie endpoints that do a row-locked write. | Add them to NFR2.13, or record why they are exempt. | New |
+| R-05 | Minor | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/performance-requirements.md and aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/tech-stack-decisions.md > NFR8.3 | The unit ships the toast service and the shared confirmation dialog (BR-009, BR-010), but no quantified accessibility target covers them (focus trap and return, aria-live for toasts, keyboard dismissal, auto-dismiss duration). Only an axe run is mentioned. NFR9 in the inception NFRs is about accessibility, yet the NFR9.x IDs here are all performance. | Add an NFR9.x accessibility entry for the dialog and toasts with testable checks, and note that NFR9.1-9.8 extend the NFR9 parent for performance by team decision. | New |
+| R-06 | Minor | aidlc/spaces/default/intents/260930-client-requirements-buil/construction/u2-session-security/nfr-requirements/security-requirements.md > NFR2.11 | The timing pass criterion "p95 differs by less than 50 ms" is checked over only 50 samples, which is statistically weak, and it does not cover the cooldown and lockout branches. | Specify a sample size of at least 200 per branch (real, unknown, cooldown, locked) and compare medians as well as p95. | New |
+
+### Validation Tool Results
+
+| Tool | Result | Interpretation |
+|---|---|---|
+| Manual ID check of traceability.json | PASS | All 12 inception NFRs are present. Derived IDs NFR1.1, NFR2.1-2.16, NFR3.1-3.2, NFR5.1-5.12, NFR6.1, NFR7.1, NFR8.1-8.3, NFR9.1-9.8, NFR11.1-11.4 all exist, with no duplicates across files. NFR5.12 is defined in security-requirements.md, NFR5.1-5.8 in reliability, NFR5.9-5.11 in observability. |
+| N/A justification check | PASS | NFR4 (no analysis), NFR10 (no paid AI) and NFR12 (U1 adapter reused) are justified. |
+| Consistency with post-review-changes.md | PASS with R-01 | Attempt-id recovery, Path=/auth, family logout, shadow counters, 429 RATE_LIMITED and the 256-bit reset token all match. The lockout scope in the threat model does not match BR1.3. |
+| Answers Q1 and Q2 | PASS | The 200/500 ms split (NFR9.1-9.5) and logs-only security events (NFR5.12) match the human answers. |
+
+### Summary
+The NFR set is complete, quantified, and consistent with the amended functional design and the contract. The attempt-id recovery, CSRF check, single-use reset token and anti-enumeration design are sound. Two Major gaps would bite code generation, but neither makes the unit insecure on its own. The lockout threat-model row misstates the login denial effect, and there is no CORS requirement for the custom-header cross-origin refresh. Four Minor items cover attempt-id storage, throttle coverage, dialog and toast accessibility, and timing sample size.

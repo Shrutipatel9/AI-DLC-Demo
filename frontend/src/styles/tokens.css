@@ -1,0 +1,22 @@
+/*
+ * Design tokens (refined-mockups/design-system-mapping.md, light theme only).
+ * One file to rebrand (NFR-011). Corrected contrast values are used where the report
+ * design values fail WCAG 2.1 AA.
+ */
+:root {
+  --ink-heading: #1a2230;
+  --ink-subheading: #5a7690; /* corrected from #9FB4C7 (2.1:1) */
+  --ink-body: #2a2d31;
+  --ink-muted: #5f6673; /* corrected for the grey page background */
+  --accent: #2e8b7d; /* fills, borders, large numerals */
+  --accent-strong: #25756a; /* accent text under 24 px and button base (5.5:1) */
+  --surface-page: #f5f6f7;
+  --surface-card: #ffffff;
+  --border-card: #e5e7eb;
+  --border-input: #8a919c; /* corrected for 3:1 input borders */
+  --danger: #b42318;
+  --success: #1e7b4f;
+  --warning-text: #8a5a00;
+  --warning-surface: #fff4db;
+  --radius: 12px;
+}

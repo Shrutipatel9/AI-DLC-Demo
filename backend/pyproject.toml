@@ -1,0 +1,332 @@
+[project]
+name = "facial-analysis-api"
+version = "0.1.0"
+description = "Backend API for the AI Facial Analysis Platform (FastAPI + SQLAlchemy + PostgreSQL)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy>=2.0.36",
+    "psycopg[binary]>=3.2",
+    "alembic>=1.14",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "argon2-cffi>=23.1",
+    "pyjwt>=2.10",
+    "jinja2>=3.1",
+    "prometheus-client>=0.21",
+    "anyio>=4.6",
+    "mediapipe>=0.10.14",
+    "pillow>=11.0",
+    "pillow-heif>=0.18",
+    "python-multipart>=0.0.20",
+    "stripe>=12",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "pytest-socket>=0.7",
+    "httpx>=0.28",
+    "aiosmtpd>=1.4",
+    "mypy>=1.13",
+    "ruff>=0.8",
+    "import-linter>=2.1",
+    "pip-audit>=2.7",
+]
+
+[tool.uv]
+package = false
+
+# ---------------------------------------------------------------------------
+# Ruff: lint + format (team Code Style). `S` = flake8-bandit security rules,
+# `D` = docstrings (NFR7.3). `S101` (assert) is allowed only under tests/.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "S", "D", "N", "C4", "SIM", "RUF", "PT", "ASYNC"]
+ignore = [
+    "D105", # magic methods document themselves
+    "D107", # __init__ is documented on the class
+    "RUF001", # the masked-email bullet character is intentional
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "S311", "D", "PT011"]
+"alembic/**" = ["D"]
+
+# ---------------------------------------------------------------------------
+# mypy (strict on app/)
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["prometheus_client.*", "aiosmtpd.*", "mediapipe.*"]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# pytest. Sockets are blocked except localhost (NFR8.2, BR8.7).
+# Integration tests use the real PostgreSQL test database `app_test`.
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers --disable-socket --allow-hosts=127.0.0.1,localhost,::1"
+markers = [
+    "perf: latency and timing checks (U1 NFR9.1-NFR9.3, U2 NFR9.1-NFR9.5 and the anti-enumeration timing test); excluded from the coverage run",
+]
+filterwarnings = ["error::DeprecationWarning:app.*"]
+
+[tool.coverage.run]
+source = ["app"]
+branch = false
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+# ---------------------------------------------------------------------------
+# import-linter: backend layering (BR8.8, AC1.3.5, NFR7.2)
+# ---------------------------------------------------------------------------
+[tool.importlinter]
+root_package = "app"
+
+[[tool.importlinter.contracts]]
+name = "Route handlers never import the JWT/OTP services or repositories directly"
+type = "forbidden"
+source_modules = ["app.identity.routes", "app.identity.dependencies", "app.health.routes"]
+forbidden_modules = [
+    "app.identity.tokens",
+    "app.identity.codes",
+    "app.identity.shadow",
+    "app.identity.repositories",
+    "app.identity.models",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Identity layers: routes -> services -> repositories"
+type = "layers"
+layers = [
+    "app.identity.routes",
+    "app.identity.dependencies",
+    "app.identity.services | app.identity.cleanup",
+    "app.identity.password_reset | app.identity.password_change",
+    "app.identity.sessions | app.identity.shadow | app.identity.delivery",
+    "app.identity.codes | app.identity.tokens | app.identity.passwords | app.identity.cookies",
+    "app.identity.repositories",
+    "app.identity.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Platform never depends on feature modules"
+type = "forbidden"
+source_modules = ["app.platform"]
+forbidden_modules = [
+    "app.identity",
+    "app.onboarding",
+    "app.health",
+    "app.main",
+    "app.media",
+    "app.face",
+    "app.photos",
+    "app.payments",
+]
+
+[[tool.importlinter.contracts]]
+name = "Outside identity, only identity.public is imported"
+type = "forbidden"
+source_modules = ["app.main", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments"]
+forbidden_modules = [
+    "app.identity.services",
+    "app.identity.codes",
+    "app.identity.tokens",
+    "app.identity.passwords",
+    "app.identity.repositories",
+    "app.identity.models",
+    "app.identity.routes",
+    "app.identity.dependencies",
+    "app.identity.cookies",
+    "app.identity.sessions",
+    "app.identity.shadow",
+    "app.identity.delivery",
+    "app.identity.password_reset",
+    "app.identity.password_change",
+    "app.identity.cleanup",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Onboarding layers: routes -> services -> definition/repositories -> models"
+type = "layers"
+layers = [
+    "app.onboarding.public",
+    "app.onboarding.routes",
+    "app.onboarding.dependencies",
+    "app.onboarding.services",
+    "app.onboarding.repositories",
+    "app.onboarding.definition",
+    "app.onboarding.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Onboarding route handlers never import repositories or models directly"
+type = "forbidden"
+source_modules = ["app.onboarding.routes", "app.onboarding.dependencies"]
+forbidden_modules = ["app.onboarding.repositories", "app.onboarding.models"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside onboarding, only onboarding.public is imported (ADR-007)"
+type = "forbidden"
+source_modules = ["app.main", "app.health", "app.identity", "app.photos", "app.payments"]
+forbidden_modules = [
+    "app.onboarding.services",
+    "app.onboarding.repositories",
+    "app.onboarding.models",
+    "app.onboarding.definition",
+    "app.onboarding.routes",
+    "app.onboarding.dependencies",
+    "app.onboarding.schemas",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Media layers: public -> routes -> services -> repositories/storage -> models"
+type = "layers"
+layers = [
+    "app.media.public",
+    "app.media.routes",
+    "app.media.dependencies",
+    "app.media.services",
+    "app.media.repositories | app.media.storage | app.media.images",
+    "app.media.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Media route handlers never import repositories, storage or models directly"
+type = "forbidden"
+source_modules = ["app.media.routes", "app.media.dependencies"]
+forbidden_modules = ["app.media.repositories", "app.media.storage", "app.media.models"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Face geometry layers: public -> adapters -> geometry/model"
+type = "layers"
+layers = [
+    "app.face.public",
+    "app.face.overrides | app.face.mediapipe_landmarker",
+    "app.face.geometry | app.face.model",
+]
+
+[[tool.importlinter.contracts]]
+name = "Photo intake layers: public -> routes -> services -> checks/identity -> catalog -> models"
+type = "layers"
+layers = [
+    "app.photos.public",
+    "app.photos.routes",
+    "app.photos.dependencies",
+    "app.photos.services",
+    "app.photos.repositories | app.photos.checks | app.photos.identity",
+    "app.photos.catalog | app.photos.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Photo route handlers never import repositories or models directly"
+type = "forbidden"
+source_modules = ["app.photos.routes", "app.photos.dependencies"]
+forbidden_modules = ["app.photos.repositories", "app.photos.models"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside media and face, only their public modules are imported (C8, FaceGeometry)"
+type = "forbidden"
+source_modules = ["app.main", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments"]
+forbidden_modules = [
+    "app.media.services",
+    "app.media.repositories",
+    "app.media.models",
+    "app.media.storage",
+    "app.media.images",
+    "app.media.routes",
+    "app.face.mediapipe_landmarker",
+    "app.face.overrides",
+    "app.face.model",
+    "app.face.geometry",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside photos, only photos.public is imported (C4)"
+type = "forbidden"
+source_modules = ["app.main", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments"]
+forbidden_modules = [
+    "app.photos.services",
+    "app.photos.repositories",
+    "app.photos.models",
+    "app.photos.identity",
+    "app.photos.checks",
+    "app.photos.catalog",
+    "app.photos.routes",
+    "app.photos.dependencies",
+    "app.photos.schemas",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Payments layers: public -> routes -> services -> repositories/adapters -> port/models"
+type = "layers"
+layers = [
+    "app.payments.public",
+    "app.payments.routes | app.payments.fake_routes",
+    "app.payments.dependencies",
+    "app.payments.services",
+    "app.payments.repositories | app.payments.stripe_gateway | app.payments.fake_gateway",
+    "app.payments.gateway | app.payments.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Payment route handlers never import repositories, models or the Stripe SDK adapter"
+type = "forbidden"
+source_modules = ["app.payments.routes", "app.payments.dependencies"]
+forbidden_modules = [
+    "app.payments.repositories",
+    "app.payments.models",
+    "app.payments.stripe_gateway",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside payments, only payments.public is imported (C5)"
+type = "forbidden"
+source_modules = ["app.main", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health"]
+forbidden_modules = [
+    "app.payments.services",
+    "app.payments.repositories",
+    "app.payments.models",
+    "app.payments.gateway",
+    "app.payments.stripe_gateway",
+    "app.payments.fake_gateway",
+    "app.payments.fake_routes",
+    "app.payments.routes",
+    "app.payments.dependencies",
+    "app.payments.schemas",
+]
+allow_indirect_imports = true

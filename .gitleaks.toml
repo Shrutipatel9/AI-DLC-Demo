@@ -1,0 +1,25 @@
+# Gitleaks configuration (BR8.9, NFR6.1).
+# Extends the default rule set. The allow-list covers only placeholder files, lockfile
+# integrity hashes, and git-ignored dependency/build folders (relevant to local working-tree
+# scans by scripts/verify.sh; they are never committed). Application code is never allowed.
+title = "AI Facial Analysis Platform"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Placeholder files, lockfile hashes and git-ignored dependency/build output"
+paths = [
+  '''(^|/)\.env\.example$''',
+  '''(^|/)pnpm-lock\.yaml$''',
+  '''(^|/)uv\.lock$''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.venv/''',
+  '''(^|/)\.next/''',
+  '''(^|/)\.pnpm-store/''',
+  '''(^|/)(coverage|htmlcov|playwright-report|test-results|blob-report)/''',
+  '''(^|/)\.(mypy|ruff|pytest|import_linter)_cache/''',
+  '''(^|/)__pycache__/''',
+  '''(^|/)\.verify/''',
+  '''(^|/)\.git/''',
+]

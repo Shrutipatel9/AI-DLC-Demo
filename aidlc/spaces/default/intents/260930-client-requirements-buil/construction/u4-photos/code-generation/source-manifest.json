@@ -1,0 +1,289 @@
+{
+  "stage": "code-generation",
+  "unit": "u4-photos",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "README.md"
+    },
+    {
+      "path": "backend/.env.example"
+    },
+    {
+      "path": "backend/README.md"
+    },
+    {
+      "path": "backend/alembic/env.py"
+    },
+    {
+      "path": "backend/alembic/versions/0004_u4_photos.py"
+    },
+    {
+      "path": "backend/app/face/__init__.py"
+    },
+    {
+      "path": "backend/app/face/geometry.py"
+    },
+    {
+      "path": "backend/app/face/mediapipe_landmarker.py"
+    },
+    {
+      "path": "backend/app/face/model.py"
+    },
+    {
+      "path": "backend/app/face/overrides.py"
+    },
+    {
+      "path": "backend/app/face/public.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/photos/__init__.py"
+    },
+    {
+      "path": "backend/app/photos/catalog.py"
+    },
+    {
+      "path": "backend/app/photos/checks.py"
+    },
+    {
+      "path": "backend/app/photos/data/catalog_v1.json"
+    },
+    {
+      "path": "backend/app/photos/dependencies.py"
+    },
+    {
+      "path": "backend/app/photos/identity.py"
+    },
+    {
+      "path": "backend/app/photos/models.py"
+    },
+    {
+      "path": "backend/app/photos/public.py"
+    },
+    {
+      "path": "backend/app/photos/repositories.py"
+    },
+    {
+      "path": "backend/app/photos/routes.py"
+    },
+    {
+      "path": "backend/app/photos/schemas.py"
+    },
+    {
+      "path": "backend/app/photos/services.py"
+    },
+    {
+      "path": "backend/app/platform/errors.py"
+    },
+    {
+      "path": "backend/app/platform/middleware.py"
+    },
+    {
+      "path": "backend/app/platform/settings.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/tests/face/__init__.py"
+    },
+    {
+      "path": "backend/tests/face/conftest.py"
+    },
+    {
+      "path": "backend/tests/face/test_face_geometry.py"
+    },
+    {
+      "path": "backend/tests/faces.py"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/no-face.png"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/overrides.json"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/person-a-front.png"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/person-a-left.png"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/person-a-right.png"
+    },
+    {
+      "path": "backend/tests/fixtures/faces/person-b-left.png"
+    },
+    {
+      "path": "backend/tests/helpers.py"
+    },
+    {
+      "path": "backend/tests/photos/__init__.py"
+    },
+    {
+      "path": "backend/tests/photos/conftest.py"
+    },
+    {
+      "path": "backend/tests/photos/test_catalog_and_settings.py"
+    },
+    {
+      "path": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "path": "backend/tests/photos/test_identity_decision.py"
+    },
+    {
+      "path": "backend/tests/photos/test_identity_service.py"
+    },
+    {
+      "path": "backend/tests/photos/test_migration.py"
+    },
+    {
+      "path": "backend/tests/photos/test_photos_api.py"
+    },
+    {
+      "path": "backend/tests/photos/test_photos_config.py"
+    },
+    {
+      "path": "backend/tools/fetch_face_model.py"
+    },
+    {
+      "path": "backend/tools/make_face_fixtures.py"
+    },
+    {
+      "path": "backend/uv.lock"
+    },
+    {
+      "path": "frontend/README.md"
+    },
+    {
+      "path": "frontend/e2e/fixtures/photos/no-face.png"
+    },
+    {
+      "path": "frontend/e2e/fixtures/photos/person-a-front.png"
+    },
+    {
+      "path": "frontend/e2e/fixtures/photos/person-a-left.png"
+    },
+    {
+      "path": "frontend/e2e/fixtures/photos/person-a-right.png"
+    },
+    {
+      "path": "frontend/e2e/fixtures/photos/person-b-left.png"
+    },
+    {
+      "path": "frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/photos.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/session.spec.ts"
+    },
+    {
+      "path": "frontend/scripts/size-check.mjs"
+    },
+    {
+      "path": "frontend/src/app/home/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/photos/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/photos/page.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/home-view.tsx"
+    },
+    {
+      "path": "frontend/src/components/onboarding/onboarding-flow.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/onboarding/onboarding-flow.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/angle-step.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/camera-capture.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/illustrations.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/messages.ts"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-flow.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-thumbnail.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-thumbnail.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/requirements-screen.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/review-screen.tsx"
+    },
+    {
+      "path": "frontend/src/lib/api/client.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/client.u4.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/errors.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/config/csp.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/config/csp.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/camera.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/files.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/index.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/photo-set.ts"
+    },
+    {
+      "path": "frontend/src/lib/photos/photos.test.ts"
+    },
+    {
+      "path": "frontend/src/test-utils/fetch-mock.ts"
+    },
+    {
+      "path": "frontend/src/test-utils/photos-server.ts"
+    },
+    {
+      "path": "scripts/verify-skeleton.sh"
+    },
+    {
+      "path": "scripts/verify.sh"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "photos-v1",
+  "source": "[PC] photo_capture_spec.md §1-§3 (FR-005, ASM-005). Pose ranges and the 9 guidance items are initial values set during development (ASM-002).",
+  "rules": [
+    { "id": "no_glasses_hat", "text": "No glasses or hat" },
+    { "id": "even_light", "text": "Natural, even light" },
+    { "id": "white_background", "text": "Plain white background" },
+    { "id": "hair_back", "text": "Hair tied back" },
+    { "id": "no_makeup", "text": "No makeup" },
+    { "id": "no_neck_cover", "text": "No clothing covering your neck" },
+    { "id": "no_filters", "text": "No filters" }
+  ],
+  "guidance": [
+    "Look straight at the camera, or at the angle shown for this step",
+    "Keep a neutral expression",
+    "Move hair and anything else away from your face",
+    "Hold the camera about an arm's length away",
+    "Only your head should be in the photo",
+    "Keep your whole head and neck in the frame",
+    "Keep the camera steady so the photo isn't blurry",
+    "Use even lighting",
+    "Use a plain, clear background"
+  ],
+  "angles": [
+    {
+      "id": "front",
+      "label": "Front",
+      "instruction": "Face the camera head-on with a neutral expression.",
+      "turnHint": "Look straight at the camera, with your nose pointing at the lens.",
+      "illustration": "front",
+      "yawRange": [-12, 12]
+    },
+    {
+      "id": "left_3q",
+      "label": "Left 3/4",
+      "instruction": "Turn your head to your right, about 45 degrees, so your left cheek faces the camera.",
+      "turnHint": "Turn your head to your right, about 45 degrees, so your left cheek faces the camera.",
+      "illustration": "left",
+      "yawRange": [-60, -15]
+    },
+    {
+      "id": "right_3q",
+      "label": "Right 3/4",
+      "instruction": "Turn your head to your left, about 45 degrees, so your right cheek faces the camera.",
+      "turnHint": "Turn your head to your left, about 45 degrees, so your right cheek faces the camera.",
+      "illustration": "right",
+      "yawRange": [15, 60]
+    }
+  ]
+}

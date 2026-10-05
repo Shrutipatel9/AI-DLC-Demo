@@ -1,0 +1,6 @@
+{
+  "version": "consent-v1",
+  "note": "[Decided by delivery team — requirements Q2] Wording to be confirmed by the client. Replace this file (or point ONBOARDING_CONSENT_FILE at another one) with a new version to change it.",
+  "text": "How we use your photos and answers\nYour photos and facial measurements are used only to create your report.\nHealth-related answers never leave the platform or go to the AI service.",
+  "agreement": "I agree to the processing of my facial images, measurements and answers for my report."
+}

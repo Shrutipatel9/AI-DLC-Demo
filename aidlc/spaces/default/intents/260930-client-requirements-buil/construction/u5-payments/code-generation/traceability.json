@@ -1,0 +1,116 @@
+{
+  "stage": "code-generation",
+  "unit": "u5-payments",
+  "upstream_ids": [
+    "AC6.1.1",
+    "AC6.1.2",
+    "AC6.1.3",
+    "AC6.2.1",
+    "AC6.2.2",
+    "AC6.2.3",
+    "AC6.3.1",
+    "AC6.3.2",
+    "AC6.3.3",
+    "AC6.4.1",
+    "AC6.4.2",
+    "AC6.4.3",
+    "AC6.5.1",
+    "AC6.5.2",
+    "AC6.5.3",
+    "FR-015",
+    "FR-016",
+    "BR-001"
+  ],
+  "coverage": [
+    {
+      "id": "AC6.1.1",
+      "status": "OK",
+      "target": "frontend/src/components/payments/payment-screen.test.tsx"
+    },
+    {
+      "id": "AC6.1.2",
+      "status": "OK",
+      "target": "frontend/src/components/payments/payment-screen.test.tsx"
+    },
+    {
+      "id": "AC6.1.3",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payments_api.py"
+    },
+    {
+      "id": "AC6.2.1",
+      "status": "OK",
+      "target": "backend/tests/payments/test_stripe_gateway.py"
+    },
+    {
+      "id": "AC6.2.2",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payments_api.py"
+    },
+    {
+      "id": "AC6.2.3",
+      "status": "OK",
+      "target": "frontend/e2e/payments.spec.ts"
+    },
+    {
+      "id": "AC6.3.1",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "id": "AC6.3.2",
+      "status": "OK",
+      "target": "backend/tests/payments/test_webhook_concurrency.py"
+    },
+    {
+      "id": "AC6.3.3",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payments_api.py"
+    },
+    {
+      "id": "AC6.4.1",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "id": "AC6.4.2",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "id": "AC6.4.3",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "id": "AC6.5.1",
+      "status": "OK",
+      "target": "frontend/src/components/payments/payment-confirmation.test.tsx"
+    },
+    {
+      "id": "AC6.5.2",
+      "status": "OK",
+      "target": "frontend/src/components/payments/payment-confirmation.test.tsx"
+    },
+    {
+      "id": "AC6.5.3",
+      "status": "OK",
+      "target": "frontend/src/components/payments/payment-confirmation.test.tsx"
+    },
+    {
+      "id": "FR-015",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "id": "FR-016",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payments_api.py"
+    },
+    {
+      "id": "BR-001",
+      "status": "OK",
+      "target": "backend/tests/payments/test_payment_service.py"
+    }
+  ]
+}

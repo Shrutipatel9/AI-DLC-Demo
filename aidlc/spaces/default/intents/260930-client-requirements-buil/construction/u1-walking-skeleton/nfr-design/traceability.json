@@ -1,0 +1,356 @@
+{
+  "stage": "nfr-design",
+  "unit": "u1-walking-skeleton",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR2.4",
+    "NFR2.5",
+    "NFR2.6",
+    "NFR2.7",
+    "NFR2.8",
+    "NFR2.9",
+    "NFR2.10",
+    "NFR2.11",
+    "NFR2.12",
+    "NFR2.13",
+    "NFR2.14",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR3.3",
+    "NFR3.4",
+    "NFR3.5",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR5.7",
+    "NFR5.8",
+    "NFR5.9",
+    "NFR5.10",
+    "NFR5.11",
+    "NFR5.12",
+    "NFR5.13",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR7.3",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR8.3",
+    "NFR8.4",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR9.5",
+    "NFR9.6",
+    "NFR9.7",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4",
+    "NFR11.5",
+    "NFR12.1",
+    "NFR12.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "logical-components.md §4: separate api and web processes; CI builds each"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "performance-design.md §2 indexes in the U1 Alembic migration; reliability-design.md §4 start-up checks migrations at head"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "security-design.md §7 lockfile deny-list script in CI"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "security-design.md §7 deny-list; custom Identity module (logical-components.md §1)"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "OK",
+      "target": "security-design.md §2 PasswordHasher port, Argon2id adapter with rehash on login"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "OK",
+      "target": "security-design.md §2 PasswordPolicy value object with bundled 10k list"
+    },
+    {
+      "id": "NFR2.4",
+      "status": "OK",
+      "target": "security-design.md §2 dummy-hash verify on every login"
+    },
+    {
+      "id": "NFR2.5",
+      "status": "OK",
+      "target": "security-design.md §2 CSPRNG code, HMAC bound to user and purpose, compare_digest, locked attempt counter"
+    },
+    {
+      "id": "NFR2.6",
+      "status": "OK",
+      "target": "security-design.md §3 TokenService HS256 with kid map, strict decode, rotation procedure"
+    },
+    {
+      "id": "NFR2.7",
+      "status": "OK",
+      "target": "security-design.md §3 refresh cookie tokenId.secret, sha256 stored, attributes from settings"
+    },
+    {
+      "id": "NFR2.8",
+      "status": "OK",
+      "target": "security-design.md §1 secure-by-default router dependency and PUBLIC_ROUTES start-up assertion"
+    },
+    {
+      "id": "NFR2.9",
+      "status": "OK",
+      "target": "security-design.md §4 RateLimiter port, PostgreSQL adapter on its own session, trusted-proxy IP, Retry-After"
+    },
+    {
+      "id": "NFR2.10",
+      "status": "OK",
+      "target": "security-design.md §2 verify transaction with SELECT FOR UPDATE and conditional consume"
+    },
+    {
+      "id": "NFR2.11",
+      "status": "OK",
+      "target": "security-design.md §1 current_user dependency reads role claim"
+    },
+    {
+      "id": "NFR2.12",
+      "status": "OK",
+      "target": "security-design.md §1 CORSMiddleware with single origin; §5 apiClient headers"
+    },
+    {
+      "id": "NFR2.13",
+      "status": "OK",
+      "target": "security-design.md §1 security-headers middleware; §5 nonce CSP via Next.js middleware"
+    },
+    {
+      "id": "NFR2.14",
+      "status": "OK",
+      "target": "security-design.md §5 Zustand store without persist, setters import-restricted"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "security-design.md §6 SecretStr for restricted keys; logical-components.md §3 shared secrets"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "security-design.md §6 allow-list JSON formatter and mask_email; observability-design.md §2"
+    },
+    {
+      "id": "NFR3.3",
+      "status": "OK",
+      "target": "security-design.md §1 exception handlers map to the C11 envelope, stack traces logged only"
+    },
+    {
+      "id": "NFR3.4",
+      "status": "OK",
+      "target": "security-design.md §6 require_owner helper returning 404"
+    },
+    {
+      "id": "NFR3.5",
+      "status": "OK",
+      "target": "security-design.md §1 HSTS and §6 settings validator rejecting insecure cookies outside development"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "reliability-design.md §2 RetryPolicy: 3 attempts, backoff with jitter, retryable classes"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "reliability-design.md §2 commit, send, compensate (tx2 marks code superseded), 502/504"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "reliability-design.md §2 25 s budget, per-attempt timeout min(10 s, remaining), 2 s floor"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "reliability-design.md §3 session per request, rollback on exception, one transaction per command"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "reliability-design.md §4 /health, /health/ready, lifespan fail-fast"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "observability-design.md §2 JsonFormatter with field allow-list"
+    },
+    {
+      "id": "NFR5.7",
+      "status": "OK",
+      "target": "observability-design.md §1 RequestIdMiddleware with contextvar, header and error body"
+    },
+    {
+      "id": "NFR5.8",
+      "status": "OK",
+      "target": "observability-design.md §3 event catalogue"
+    },
+    {
+      "id": "NFR5.9",
+      "status": "OK",
+      "target": "observability-design.md §3 vendor.retry, vendor.failed, http.unhandled"
+    },
+    {
+      "id": "NFR5.10",
+      "status": "OK",
+      "target": "observability-design.md §4 opt-in /metrics with CIDR allow-list and named series"
+    },
+    {
+      "id": "NFR5.11",
+      "status": "OK",
+      "target": "observability-design.md §1 apiClient attaches requestId to ApiError for the error boundary"
+    },
+    {
+      "id": "NFR5.12",
+      "status": "OK",
+      "target": "observability-design.md §2 LOG_LEVEL setting, no auth bodies at any level"
+    },
+    {
+      "id": "NFR5.13",
+      "status": "OK",
+      "target": "reliability-design.md §2 send outside transactions, thread pool set to 40; logical-components.md §3"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "security-design.md §6 pydantic-settings SecretStr validators, Gitleaks, .env.example"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "security-design.md §6 validator rejects EMAIL_BACKEND=fake in production"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "logical-components.md §2 lint and type gates; tech stack Ruff, mypy, ESLint, Prettier, tsc"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "logical-components.md §2 import-linter contracts and frontend no-restricted-imports"
+    },
+    {
+      "id": "NFR7.3",
+      "status": "OK",
+      "target": "logical-components.md §4 per-app run commands documented in each README"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "performance-design.md §3 perf marker separate from the 80% coverage run"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "reliability-design.md §5 recording fake email backend in tests"
+    },
+    {
+      "id": "NFR8.3",
+      "status": "OK",
+      "target": "security-design.md §2 and §3: TokenService and code services built test-first"
+    },
+    {
+      "id": "NFR8.4",
+      "status": "OK",
+      "target": "logical-components.md §1 and §4 Mailpit HTTP API read by Playwright"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "performance-design.md §1 latency budgets and §3 perf test"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "performance-design.md §1 /auth/me primary-key read"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "performance-design.md §1 and reliability-design.md §4 /health with no I/O"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "OK",
+      "target": "performance-design.md §2 frontend techniques and §3 Lighthouse at checkpoint"
+    },
+    {
+      "id": "NFR9.5",
+      "status": "OK",
+      "target": "performance-design.md §3 bundle-size script"
+    },
+    {
+      "id": "NFR9.6",
+      "status": "OK",
+      "target": "performance-design.md §3 axe in the Playwright journey"
+    },
+    {
+      "id": "NFR9.7",
+      "status": "OK",
+      "target": "performance-design.md §3 two Playwright viewport projects"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "scalability-design.md §1 stateless processes, state in PostgreSQL"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "scalability-design.md §2 limiter port with PostgreSQL adapter, Redis swap path"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "scalability-design.md §2 row locks and unique index"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "scalability-design.md §4 configuration-only differences"
+    },
+    {
+      "id": "NFR11.5",
+      "status": "OK",
+      "target": "scalability-design.md §3 capacity at the planning assumption and scale triggers"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "reliability-design.md §5 EMAIL_BACKEND smtp or fake, Mailpit in development"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "reliability-design.md §5 plain-text and HTML templates, no images or links"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "stage": "code-generation",
+  "unit": "u5-payments",
+  "version": 1,
+  "writes": [
+    {
+      "path": "backend/app/payments/__init__.py"
+    },
+    {
+      "path": "backend/app/payments/models.py"
+    },
+    {
+      "path": "backend/app/payments/gateway.py"
+    },
+    {
+      "path": "backend/app/payments/stripe_gateway.py"
+    },
+    {
+      "path": "backend/app/payments/fake_gateway.py"
+    },
+    {
+      "path": "backend/app/payments/fake_routes.py"
+    },
+    {
+      "path": "backend/app/payments/repositories.py"
+    },
+    {
+      "path": "backend/app/payments/services.py"
+    },
+    {
+      "path": "backend/app/payments/schemas.py"
+    },
+    {
+      "path": "backend/app/payments/dependencies.py"
+    },
+    {
+      "path": "backend/app/payments/routes.py"
+    },
+    {
+      "path": "backend/app/payments/public.py"
+    },
+    {
+      "path": "backend/alembic/versions/0005_u5_payments.py"
+    },
+    {
+      "path": "backend/tests/payments/__init__.py"
+    },
+    {
+      "path": "backend/tests/payments/conftest.py"
+    },
+    {
+      "path": "backend/tests/payments/test_gateway.py"
+    },
+    {
+      "path": "backend/tests/payments/test_fake_gateway.py"
+    },
+    {
+      "path": "backend/tests/payments/test_stripe_gateway.py"
+    },
+    {
+      "path": "backend/tests/payments/test_payment_service.py"
+    },
+    {
+      "path": "backend/tests/payments/test_migration.py"
+    },
+    {
+      "path": "backend/tests/payments/test_webhook_concurrency.py"
+    },
+    {
+      "path": "backend/tests/payments/test_payments_api.py"
+    },
+    {
+      "path": "backend/tests/payments/test_payments_settings.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/platform/settings.py"
+    },
+    {
+      "path": "backend/app/platform/errors.py"
+    },
+    {
+      "path": "backend/app/platform/routing.py"
+    },
+    {
+      "path": "backend/app/platform/middleware.py"
+    },
+    {
+      "path": "backend/alembic/env.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/uv.lock"
+    },
+    {
+      "path": "backend/.env.example"
+    },
+    {
+      "path": "backend/README.md"
+    },
+    {
+      "path": "backend/tools/export_openapi.py"
+    },
+    {
+      "path": "backend/tests/helpers.py"
+    },
+    {
+      "path": "backend/tests/identity/test_me_and_routes.py"
+    },
+    {
+      "path": "backend/tests/photos/test_catalog_and_settings.py"
+    },
+    {
+      "path": "frontend/src/lib/payments/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/payments/format.ts"
+    },
+    {
+      "path": "frontend/src/lib/payments/confirmation.ts"
+    },
+    {
+      "path": "frontend/src/lib/payments/index.ts"
+    },
+    {
+      "path": "frontend/src/lib/payments/payments.test.ts"
+    },
+    {
+      "path": "frontend/src/components/payments/messages.ts"
+    },
+    {
+      "path": "frontend/src/components/payments/payment-screen.tsx"
+    },
+    {
+      "path": "frontend/src/components/payments/payment-confirmation.tsx"
+    },
+    {
+      "path": "frontend/src/components/payments/payment-screen.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/payments/payment-confirmation.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/success/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/cancel/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/test-utils/payments-server.ts"
+    },
+    {
+      "path": "frontend/e2e/payments.spec.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/errors.ts"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-flow.tsx"
+    },
+    {
+      "path": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "path": "frontend/e2e/photos.spec.ts"
+    },
+    {
+      "path": "frontend/scripts/size-check.mjs"
+    },
+    {
+      "path": "frontend/README.md"
+    },
+    {
+      "path": "scripts/ci-env.sh"
+    },
+    {
+      "path": "scripts/verify.sh"
+    },
+    {
+      "path": "scripts/verify-skeleton.sh"
+    },
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "README.md"
+    }
+  ]
+}

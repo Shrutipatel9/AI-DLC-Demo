@@ -1,0 +1,902 @@
+{
+  "stage": "code-generation",
+  "unit": "u1-walking-skeleton",
+  "upstream_ids": [
+    "AC1.1.1",
+    "AC1.1.2",
+    "AC1.1.3",
+    "AC1.2.1",
+    "AC1.2.2",
+    "AC1.2.3",
+    "AC1.2.4",
+    "AC1.3.1",
+    "AC1.3.2",
+    "AC1.3.3",
+    "AC1.3.4",
+    "AC1.3.5",
+    "AC1.4.1",
+    "AC1.4.2",
+    "AC1.4.3",
+    "AC1.4.4",
+    "AC1.5.1",
+    "AC1.5.2",
+    "AC1.5.3",
+    "AC1.5.4",
+    "AC1.6.1",
+    "AC1.6.2",
+    "AC1.6.3",
+    "AC1.6.4",
+    "AC1.8.1",
+    "AC1.8.2",
+    "AC1.8.3",
+    "AC1.9.1",
+    "AC1.9.2",
+    "AC1.9.3",
+    "AC3.1.1",
+    "AC3.1.2",
+    "AC3.1.3",
+    "AC3.1.4",
+    "AC3.1.5",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.2.4",
+    "AC3.2.5",
+    "AC3.2.6",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.8.1",
+    "AC3.8.2",
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR2.4",
+    "NFR2.5",
+    "NFR2.6",
+    "NFR2.7",
+    "NFR2.8",
+    "NFR2.9",
+    "NFR2.10",
+    "NFR2.11",
+    "NFR2.12",
+    "NFR2.13",
+    "NFR2.14",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR3.3",
+    "NFR3.4",
+    "NFR3.5",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR5.7",
+    "NFR5.8",
+    "NFR5.9",
+    "NFR5.10",
+    "NFR5.11",
+    "NFR5.12",
+    "NFR5.13",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR7.3",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR8.3",
+    "NFR8.4",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR9.5",
+    "NFR9.6",
+    "NFR9.7",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4",
+    "NFR11.5",
+    "NFR12.1",
+    "NFR12.2",
+    "BR1.1",
+    "BR1.2",
+    "BR1.3",
+    "BR1.4",
+    "BR1.5",
+    "BR1.6",
+    "BR1.7",
+    "BR2.1",
+    "BR2.2",
+    "BR2.3",
+    "BR2.4",
+    "BR2.5",
+    "BR2.6",
+    "BR2.7",
+    "BR2.8",
+    "BR3.1",
+    "BR3.2",
+    "BR3.3",
+    "BR4.1",
+    "BR4.2",
+    "BR4.3",
+    "BR4.4",
+    "BR5.1",
+    "BR5.2",
+    "BR5.3",
+    "BR5.4",
+    "BR6.1",
+    "BR6.2",
+    "BR6.3",
+    "BR7.1",
+    "BR7.2",
+    "BR7.3",
+    "BR7.4",
+    "BR7.5",
+    "BR7.6",
+    "BR8.1",
+    "BR8.2",
+    "BR8.3",
+    "BR8.4",
+    "BR8.5",
+    "BR8.6",
+    "BR8.7",
+    "BR8.8",
+    "BR8.9",
+    "BR8.10"
+  ],
+  "coverage": [
+    {
+      "id": "AC1.1.1",
+      "status": "OK",
+      "target": "README.md (points to backend/README.md and frontend/README.md; HTTP is the only link)"
+    },
+    {
+      "id": "AC1.1.2",
+      "status": "OK",
+      "target": "scripts/check-app-independence.sh (CI security job + scripts/verify.sh); separate pyproject.toml/uv.lock and package.json/pnpm-lock.yaml"
+    },
+    {
+      "id": "AC1.1.3",
+      "status": "OK",
+      "target": ".gitignore (project block: .env*, !.env.example, *.pem/*.key, __pycache__/.venv, .next/, coverage, uploads/media/storage)"
+    },
+    {
+      "id": "AC1.2.1",
+      "status": "OK",
+      "target": "docker-compose.yml; backend/.env.example; tests: backend/tests/platform/test_db_and_migrations.py::test_engine_and_session_factory_from_settings"
+    },
+    {
+      "id": "AC1.2.2",
+      "status": "OK",
+      "target": "backend/alembic/versions/0001_u1_identity.py; test: backend/tests/platform/test_db_and_migrations.py::test_migration_upgrade_downgrade_upgrade; CI e2e round-trip step"
+    },
+    {
+      "id": "AC1.2.3",
+      "status": "OK",
+      "target": "No hosting SDK in backend/pyproject.toml or frontend/package.json; settings from env only (backend/app/platform/settings.py)"
+    },
+    {
+      "id": "AC1.2.4",
+      "status": "OK",
+      "target": "backend/alembic/versions/0001_u1_identity.py (U1 schema ships as a migration; alembic check shows no model drift)"
+    },
+    {
+      "id": "AC1.3.1",
+      "status": "OK",
+      "target": ".github/workflows/ci.yml jobs backend (ruff, mypy, pytest --cov-fail-under=80) and frontend (eslint, prettier, tsc, vitest lines 80)"
+    },
+    {
+      "id": "AC1.3.2",
+      "status": "Deferred",
+      "target": "Branch protection is a repository setting applied by an admin after the first push; exact settings and gh commands in docs/branch-protection.md (plan D9). The four CI jobs it requires exist in .github/workflows/ci.yml."
+    },
+    {
+      "id": "AC1.3.3",
+      "status": "OK",
+      "target": "backend/pyproject.toml addopts --disable-socket --allow-hosts; frontend/vitest.setup.ts unhandled-fetch stub; frontend/src/test-utils/fetch-mock.ts"
+    },
+    {
+      "id": "AC1.3.4",
+      "status": "OK",
+      "target": "frontend/eslint.config.mjs no-restricted-imports/globals for src/app and src/components (seeded violation fails lint)"
+    },
+    {
+      "id": "AC1.3.5",
+      "status": "OK",
+      "target": "backend/pyproject.toml [tool.importlinter] contract 'Route handlers never import the JWT/OTP services' (seeded violation breaks lint-imports)"
+    },
+    {
+      "id": "AC1.4.1",
+      "status": "OK",
+      "target": ".pre-commit-config.yaml (gitleaks hook); .gitleaks.toml; seeded token detected by gitleaks"
+    },
+    {
+      "id": "AC1.4.2",
+      "status": "OK",
+      "target": "backend/pyproject.toml Ruff S rules; frontend/eslint.config.mjs eslint-plugin-security; .github/workflows/ci.yml security job (pip-audit on uv.lock, pnpm audit)"
+    },
+    {
+      "id": "AC1.4.3",
+      "status": "OK",
+      "target": ".github/dependabot.yml (uv, npm, github-actions, docker-compose)"
+    },
+    {
+      "id": "AC1.4.4",
+      "status": "OK",
+      "target": "scripts/check-denylist.sh (seeded @supabase/supabase-js fails); CI security job"
+    },
+    {
+      "id": "AC1.5.1",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py; test: backend/tests/platform/test_settings.py::test_valid_settings_decode_keys_and_defaults"
+    },
+    {
+      "id": "AC1.5.2",
+      "status": "OK",
+      "target": "backend/tests/platform/test_settings.py::test_smtp_secret_required_only_when_real_adapter_uses_it, ::test_load_settings_names_missing_values_but_never_prints_secrets"
+    },
+    {
+      "id": "AC1.5.3",
+      "status": "OK",
+      "target": "backend/tests/platform/test_settings.py::test_smtp_secret_required_only_when_real_adapter_uses_it (fake adapter needs no secret)"
+    },
+    {
+      "id": "AC1.5.4",
+      "status": "OK",
+      "target": "Gitleaks scan (scripts/verify.sh, CI security job); every key/limit read from settings.py; .env.example placeholders only"
+    },
+    {
+      "id": "AC1.6.1",
+      "status": "OK",
+      "target": "backend/app/platform/email/__init__.py build_email_sender; test: backend/tests/platform/test_email_fake_and_dispatch.py::test_adapter_is_selected_by_configuration"
+    },
+    {
+      "id": "AC1.6.2",
+      "status": "OK",
+      "target": "backend/app/platform/email/smtp.py; tests: backend/tests/platform/test_smtp.py (timeouts, watchdog, typed errors)"
+    },
+    {
+      "id": "AC1.6.3",
+      "status": "OK",
+      "target": "backend/app/platform/email/fake.py; tests: test_email_fake_and_dispatch.py::test_fake_cannot_be_enabled_outside_tests, ::test_fake_records_codes_for_the_harness; identity/test_ownership_throttle_and_logs.py log canary"
+    },
+    {
+      "id": "AC1.6.4",
+      "status": "OK",
+      "target": "backend/.env.example (SMTP 127.0.0.1:1025 = Mailpit); frontend/e2e/skeleton.spec.ts reads codes from Mailpit"
+    },
+    {
+      "id": "AC1.8.1",
+      "status": "OK",
+      "target": "backend/app/identity/dependencies.py require_owner; test: backend/tests/identity/test_ownership_throttle_and_logs.py::test_other_users_record_is_404"
+    },
+    {
+      "id": "AC1.8.2",
+      "status": "OK",
+      "target": "backend/app/platform/middleware.py CatchAllMiddleware + errors.py; test: backend/tests/platform/test_errors.py::test_unhandled_error_is_generic_500_and_logged_with_trace"
+    },
+    {
+      "id": "AC1.8.3",
+      "status": "OK",
+      "target": "backend/app/platform/logging.py allow-list; test: backend/tests/identity/test_ownership_throttle_and_logs.py::test_logs_never_contain_passwords_codes_tokens_or_full_emails (answer text and image bytes arrive in U3/U4)"
+    },
+    {
+      "id": "AC1.9.1",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts; test: frontend/src/lib/auth/store.test.ts (memory only, no Web Storage)"
+    },
+    {
+      "id": "AC1.9.2",
+      "status": "OK",
+      "target": "frontend/src/lib/api/client.ts; test: frontend/src/lib/api/client.test.ts"
+    },
+    {
+      "id": "AC1.9.3",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/hooks.ts + index.ts (selectors only); frontend/eslint.config.mjs; test: store.test.ts 'exposes selectors without the token'"
+    },
+    {
+      "id": "AC3.1.1",
+      "status": "OK",
+      "target": "backend/tests/identity/test_register_api.py::test_register_returns_202_with_masked_email_and_no_token; frontend/e2e/skeleton.spec.ts"
+    },
+    {
+      "id": "AC3.1.2",
+      "status": "OK",
+      "target": "backend/tests/identity/test_register_api.py::test_verified_email_cannot_sign_up_again; frontend/src/components/auth/signup-form.test.tsx"
+    },
+    {
+      "id": "AC3.1.3",
+      "status": "OK",
+      "target": "backend/tests/identity/test_register_api.py::test_re_sign_up_of_unverified_email_respects_cooldown_then_resends"
+    },
+    {
+      "id": "AC3.1.4",
+      "status": "OK",
+      "target": "backend/tests/identity/test_passwords.py::test_password_rule_table; test_register_api.py::test_invalid_input_is_refused_per_field; frontend signup-form.test.tsx (live rules)"
+    },
+    {
+      "id": "AC3.1.5",
+      "status": "OK",
+      "target": "backend/tests/identity/test_register_api.py::test_new_user_is_unverified_with_hashed_password; test_passwords.py::test_hash_uses_argon2id_owasp_parameters"
+    },
+    {
+      "id": "AC3.2.1",
+      "status": "OK",
+      "target": "backend/tests/identity/test_codes.py::test_code_is_valid_at_nine_fifty_nine; test_login_verify_api.py::test_signup_verify_signs_in_and_sets_refresh_cookie"
+    },
+    {
+      "id": "AC3.2.2",
+      "status": "OK",
+      "target": "backend/tests/identity/test_codes.py::test_code_is_expired_at_ten_minutes_and_not_counted; frontend verify-form.test.tsx (offers to start again)"
+    },
+    {
+      "id": "AC3.2.3",
+      "status": "OK",
+      "target": "backend/tests/identity/test_codes.py::test_a_code_can_be_used_once; test_login_verify_api.py::test_purpose_mismatch_and_reuse_are_refused"
+    },
+    {
+      "id": "AC3.2.4",
+      "status": "OK",
+      "target": "backend/tests/identity/test_codes.py::test_signup_code_is_refused_for_login"
+    },
+    {
+      "id": "AC3.2.5",
+      "status": "OK",
+      "target": "backend/tests/identity/test_codes.py::test_only_the_hash_is_stored, ::test_hash_is_bound_to_user_and_purpose"
+    },
+    {
+      "id": "AC3.2.6",
+      "status": "OK",
+      "target": "frontend/src/components/auth/verify-form.test.tsx 'shows the masked address and a numeric one-time-code field'; e2e skeleton.spec.ts"
+    },
+    {
+      "id": "AC3.4.1",
+      "status": "OK",
+      "target": "backend/tests/identity/test_login_verify_api.py::test_login_emails_a_code_and_issues_no_token"
+    },
+    {
+      "id": "AC3.4.2",
+      "status": "OK",
+      "target": "backend/tests/identity/test_login_verify_api.py::test_login_failures_are_generic; frontend login-form.test.tsx"
+    },
+    {
+      "id": "AC3.4.3",
+      "status": "OK",
+      "target": "backend/tests/identity/test_login_verify_api.py::test_login_then_code_signs_in; frontend/e2e/skeleton.spec.ts (log in again)"
+    },
+    {
+      "id": "AC3.8.1",
+      "status": "OK",
+      "target": "backend/tests/identity/test_me_and_routes.py::test_me_returns_the_profile; frontend/src/app/home/page.test.tsx; e2e 'Hi, {name}'"
+    },
+    {
+      "id": "AC3.8.2",
+      "status": "OK",
+      "target": "backend/tests/identity/test_me_and_routes.py::test_me_refuses_every_bad_token, ::test_every_non_public_route_requires_a_token; test_tokens.py"
+    },
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "Separate backend/ and frontend/ apps, built in separate CI jobs; scripts/check-app-independence.sh"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "backend/alembic/versions/0001_u1_identity.py; test_db_and_migrations.py::test_migration_upgrade_downgrade_upgrade; CI e2e round-trip"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "scripts/check-denylist.sh"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "scripts/check-denylist.sh; custom auth in backend/app/identity/"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "OK",
+      "target": "backend/app/identity/passwords.py; tests/identity/test_passwords.py"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "OK",
+      "target": "backend/app/identity/passwords.py PasswordPolicy + data/common-passwords.txt (10k); test_passwords.py::test_password_rule_table"
+    },
+    {
+      "id": "NFR2.4",
+      "status": "OK",
+      "target": "backend/app/identity/services.py dummy verify; test_login_verify_api.py::test_login_failures_are_generic"
+    },
+    {
+      "id": "NFR2.5",
+      "status": "OK",
+      "target": "backend/app/identity/codes.py; tests/identity/test_codes.py (test-first)"
+    },
+    {
+      "id": "NFR2.6",
+      "status": "OK",
+      "target": "backend/app/identity/tokens.py; tests/identity/test_tokens.py (test-first)"
+    },
+    {
+      "id": "NFR2.7",
+      "status": "OK",
+      "target": "backend/app/identity/cookies.py; test_login_verify_api.py::test_signup_verify_signs_in_and_sets_refresh_cookie; test_repositories.py::test_refresh_session_stores_hash_only"
+    },
+    {
+      "id": "NFR2.8",
+      "status": "OK",
+      "target": "backend/app/platform/routing.py; app/main.py; test_me_and_routes.py (route enumeration, docs, metrics)"
+    },
+    {
+      "id": "NFR2.9",
+      "status": "OK",
+      "target": "backend/app/platform/ratelimit.py; tests/platform/test_ratelimit.py; identity/test_ownership_throttle_and_logs.py throttle tests"
+    },
+    {
+      "id": "NFR2.10",
+      "status": "OK",
+      "target": "backend/app/identity/codes.py row lock; test_codes.py::test_parallel_wrong_guesses_count_exactly_five, ::test_two_parallel_correct_submissions_give_one_success"
+    },
+    {
+      "id": "NFR2.11",
+      "status": "OK",
+      "target": "backend/app/identity/dependencies.py require_role; test_ownership_throttle_and_logs.py::test_role_dependency_reads_the_token_role"
+    },
+    {
+      "id": "NFR2.12",
+      "status": "OK",
+      "target": "backend/app/platform/middleware.py CORS; test_security_headers_and_body_guard.py::test_cors_allows_only_the_frontend_origin"
+    },
+    {
+      "id": "NFR2.13",
+      "status": "OK",
+      "target": "backend middleware.py SecurityHeadersMiddleware; frontend/src/proxy.ts + lib/config/csp.ts + next.config.ts; tests csp.test.ts, test_security_headers_and_body_guard.py, e2e CSP assertion"
+    },
+    {
+      "id": "NFR2.14",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts; store.test.ts; e2e storage-empty assertion"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "Data classification in nfr-design/security-design.md section 6; SecretStr settings; masked emails in logs"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "backend/app/platform/logging.py; test_logging.py; log canary test"
+    },
+    {
+      "id": "NFR3.3",
+      "status": "OK",
+      "target": "backend/app/platform/middleware.py CatchAllMiddleware; test_errors.py::test_unhandled_error_is_generic_500_and_logged_with_trace"
+    },
+    {
+      "id": "NFR3.4",
+      "status": "OK",
+      "target": "backend/app/identity/dependencies.py require_owner; test_ownership_throttle_and_logs.py"
+    },
+    {
+      "id": "NFR3.5",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py validators; test_settings.py::test_insecure_cookie_is_refused_in_production, ::test_production_requires_tls_for_smtp"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "backend/app/platform/retry.py + email/smtp.py; tests test_retry.py, test_smtp.py"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "backend/app/identity/services.py _deliver/_compensate; test_register_api.py::test_email_failure_supersedes_the_code_and_resend_works"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "backend/app/platform/email/smtp.py watchdog + dispatch.py budget; test_smtp.py::test_stall_after_data_returns_by_the_budget, ::test_watchdog_cuts_a_single_stalled_attempt_at_the_deadline"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "backend/app/platform/db.py get_session; test_db_and_migrations.py::test_get_session_rolls_back_on_error"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "backend/app/main.py lifespan; app/health/routes.py; tests/health/test_health.py"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "backend/app/platform/logging.py + middleware.py AccessLogMiddleware; test_logging.py, test_request_id_and_access_log.py"
+    },
+    {
+      "id": "NFR5.7",
+      "status": "OK",
+      "target": "backend/app/platform/request_id.py; test_request_id_and_access_log.py"
+    },
+    {
+      "id": "NFR5.8",
+      "status": "OK",
+      "target": "backend/app/identity/services.py auth.* events; log canary test asserts the event names"
+    },
+    {
+      "id": "NFR5.9",
+      "status": "OK",
+      "target": "middleware.py http.unhandled + dispatch.py vendor.failed + retry.py vendor.retry; test_errors.py, test_email_fake_and_dispatch.py"
+    },
+    {
+      "id": "NFR5.10",
+      "status": "OK",
+      "target": "backend/app/platform/metrics.py; test_metrics.py; test_me_and_routes.py::test_metrics_is_404_when_disabled_and_403_outside_allow_list"
+    },
+    {
+      "id": "NFR5.11",
+      "status": "OK",
+      "target": "frontend/src/components/app/error-view.tsx + app/error.tsx; error.test.tsx; ApiError.requestId in client.test.ts"
+    },
+    {
+      "id": "NFR5.12",
+      "status": "OK",
+      "target": "settings.py LOG_LEVEL; logging.py never logs bodies; test_logging.py::test_configure_logging_is_idempotent_and_disables_uvicorn_access"
+    },
+    {
+      "id": "NFR5.13",
+      "status": "OK",
+      "target": "backend/app/identity/services.py commit -> send -> compensate; email/dispatch.py bulkhead; test_email_bulkhead.py"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "settings.py SecretStr + key validators; .env.example placeholders; Gitleaks; test_settings.py"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py + email/fake.py; test_settings.py::test_fake_email_is_refused_outside_test_and_development"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "Ruff, mypy --strict, ESLint, Prettier, tsc in .github/workflows/ci.yml and scripts/verify.sh"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "backend/pyproject.toml import-linter contracts; frontend/eslint.config.mjs (seeded violations fail both)"
+    },
+    {
+      "id": "NFR7.3",
+      "status": "OK",
+      "target": "backend/README.md, frontend/README.md, README.md; Ruff D rules (docstrings) on all of backend/app"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "--cov-fail-under=80 (backend) and vitest thresholds.lines 80 (frontend)"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "pytest-socket addopts; vitest.setup.ts fetch stub; recording email fake"
+    },
+    {
+      "id": "NFR8.3",
+      "status": "OK",
+      "target": "Red runs recorded in code-summary.md for test_codes.py and test_tokens.py before codes.py/tokens.py were implemented"
+    },
+    {
+      "id": "NFR8.4",
+      "status": "OK",
+      "target": "frontend/e2e/skeleton.spec.ts (codes read from the Mailpit API)"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "backend/tests/identity/test_perf_auth.py register/login/verify p95 <= 500 ms"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "backend/tests/identity/test_perf_auth.py::test_me_p95_within_100ms"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "backend/tests/health/test_perf_health.py::test_health_p95_within_50ms"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "Deferred",
+      "target": "Lighthouse LCP on a mid-range phone profile is a manual check at the skeleton checkpoint (performance design section 3); its result is recorded in Build and Test."
+    },
+    {
+      "id": "NFR9.5",
+      "status": "OK",
+      "target": "frontend/scripts/size-check.mjs (auth routes <= 200 KB gzipped)"
+    },
+    {
+      "id": "NFR9.6",
+      "status": "OK",
+      "target": "frontend/e2e/skeleton.spec.ts axe WCAG 2.1 AA on sign-up, code, home and log-in screens"
+    },
+    {
+      "id": "NFR9.7",
+      "status": "OK",
+      "target": "frontend/playwright.config.ts projects phone 390x844 and desktop 1280x800"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "Stateless API: all session/code/limiter state in PostgreSQL (backend/app/identity/models.py, platform/ratelimit_models.py)"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "backend/app/platform/ratelimit.py RateLimiter port with PostgreSQL and in-memory adapters; test_ratelimit.py"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "uq_users_email_lower and uq_one_time_codes_live indexes; counter row lock; test_repositories.py, test_codes.py concurrency tests"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py (all environment differences are settings); frontend API_ORIGIN read at request time"
+    },
+    {
+      "id": "NFR11.5",
+      "status": "Deferred",
+      "target": "Planning assumption (100 sign-ups/hour, 50 concurrent users) recorded in nfr-requirements; defaults (pool 5+5, one process) sized for it; reviewed in Operation."
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "backend/app/platform/email/__init__.py build_email_sender; test_adapter_is_selected_by_configuration"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "OK",
+      "target": "backend/app/platform/email/templates/*; test_email_fake_and_dispatch.py::test_templates_hold_code_and_expiry_without_images_or_links"
+    },
+    {
+      "id": "BR1.1",
+      "status": "OK",
+      "target": "backend/app/identity/schemas.py normalise_email/normalise_name; test_register_api.py::test_invalid_input_is_refused_per_field; frontend components/auth/schemas.ts"
+    },
+    {
+      "id": "BR1.2",
+      "status": "OK",
+      "target": "backend/app/identity/passwords.py PasswordPolicy; test_passwords.py::test_password_rule_table"
+    },
+    {
+      "id": "BR1.3",
+      "status": "OK",
+      "target": "services.py _register_tx; test_register_api.py::test_verified_email_cannot_sign_up_again"
+    },
+    {
+      "id": "BR1.4",
+      "status": "OK",
+      "target": "services.py _register_tx; test_register_api.py::test_re_sign_up_of_unverified_email_respects_cooldown_then_resends"
+    },
+    {
+      "id": "BR1.5",
+      "status": "OK",
+      "target": "passwords.py PasswordHasher; test_register_api.py::test_new_user_is_unverified_with_hashed_password"
+    },
+    {
+      "id": "BR1.6",
+      "status": "OK",
+      "target": "repositories.py add_user role 'user'; DB check constraint; test_repositories.py"
+    },
+    {
+      "id": "BR1.7",
+      "status": "OK",
+      "target": "routes.py register/login return CodeSentResponse only; test_register_api.py, test_login_verify_api.py::test_login_emails_a_code_and_issues_no_token"
+    },
+    {
+      "id": "BR2.1",
+      "status": "OK",
+      "target": "codes.py generate_code; test_codes.py::test_generated_codes_are_six_digits_from_secrets"
+    },
+    {
+      "id": "BR2.2",
+      "status": "OK",
+      "target": "codes.py hash_code; test_codes.py::test_only_the_hash_is_stored"
+    },
+    {
+      "id": "BR2.3",
+      "status": "OK",
+      "target": "codes.py verify; test_codes.py::test_code_is_valid_at_nine_fifty_nine, ::test_code_is_expired_at_ten_minutes_and_not_counted"
+    },
+    {
+      "id": "BR2.4",
+      "status": "OK",
+      "target": "repositories.py consume_code; test_codes.py::test_a_code_can_be_used_once"
+    },
+    {
+      "id": "BR2.5",
+      "status": "OK",
+      "target": "codes.py purpose-bound lookup and HMAC; test_codes.py::test_signup_code_is_refused_for_login"
+    },
+    {
+      "id": "BR2.6",
+      "status": "OK",
+      "target": "codes.py issue cooldown + supersede; test_codes.py::test_resend_cooldown_then_new_code_supersedes_old"
+    },
+    {
+      "id": "BR2.7",
+      "status": "OK",
+      "target": "codes.py _fail/_reset_expired_lock; test_codes.py lockout tests"
+    },
+    {
+      "id": "BR2.8",
+      "status": "OK",
+      "target": "platform/logging.py mask_email; test_logging.py::test_mask_email; test_register_api.py masked email"
+    },
+    {
+      "id": "BR3.1",
+      "status": "OK",
+      "target": "services.py _login_tx + passwords.verify_dummy; test_login_verify_api.py::test_login_failures_are_generic"
+    },
+    {
+      "id": "BR3.2",
+      "status": "OK",
+      "target": "services.py login; test_login_verify_api.py::test_login_emails_a_code_and_issues_no_token"
+    },
+    {
+      "id": "BR3.3",
+      "status": "OK",
+      "target": "services.py _verify_tx; test_login_verify_api.py::test_signup_verify_signs_in_and_sets_refresh_cookie"
+    },
+    {
+      "id": "BR4.1",
+      "status": "OK",
+      "target": "tokens.py issue_access; test_tokens.py::test_access_token_claims_and_header"
+    },
+    {
+      "id": "BR4.2",
+      "status": "OK",
+      "target": "cookies.py + routes.py verify; test_login_verify_api.py cookie attributes; test_repositories.py::test_refresh_session_stores_hash_only"
+    },
+    {
+      "id": "BR4.3",
+      "status": "OK",
+      "target": "dependencies.py current_user + tokens.py verify_access; test_me_and_routes.py; test_tokens.py"
+    },
+    {
+      "id": "BR4.4",
+      "status": "OK",
+      "target": "services.py account + routes.py me; test_me_and_routes.py::test_me_returns_the_profile"
+    },
+    {
+      "id": "BR5.1",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts; store.test.ts"
+    },
+    {
+      "id": "BR5.2",
+      "status": "OK",
+      "target": "frontend/src/lib/api/client.ts; client.test.ts"
+    },
+    {
+      "id": "BR5.3",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/hooks.ts; eslint.config.mjs layering rules"
+    },
+    {
+      "id": "BR5.4",
+      "status": "OK",
+      "target": "frontend/src/components/app/home-view.tsx guard; app/home/page.test.tsx; e2e reload signs out"
+    },
+    {
+      "id": "BR6.1",
+      "status": "OK",
+      "target": "backend/app/platform/errors.py + middleware.py; test_errors.py"
+    },
+    {
+      "id": "BR6.2",
+      "status": "OK",
+      "target": "dependencies.py require_owner; test_ownership_throttle_and_logs.py::test_other_users_record_is_404"
+    },
+    {
+      "id": "BR6.3",
+      "status": "OK",
+      "target": "platform/logging.py allow-list; log canary test"
+    },
+    {
+      "id": "BR7.1",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py; test_settings.py"
+    },
+    {
+      "id": "BR7.2",
+      "status": "OK",
+      "target": "settings.py _validate_cross_field_rules; test_settings.py::test_smtp_secret_required_only_when_real_adapter_uses_it"
+    },
+    {
+      "id": "BR7.3",
+      "status": "OK",
+      "target": "Gitleaks scan; no literal keys/prices/models in source (all from settings)"
+    },
+    {
+      "id": "BR7.4",
+      "status": "OK",
+      "target": "email/__init__.py build_email_sender + smtp.py + dispatch.py; test_smtp.py, test_email_fake_and_dispatch.py"
+    },
+    {
+      "id": "BR7.5",
+      "status": "OK",
+      "target": "email/fake.py FakeNotAllowedError + settings validator; test_email_fake_and_dispatch.py::test_fake_cannot_be_enabled_outside_tests"
+    },
+    {
+      "id": "BR7.6",
+      "status": "OK",
+      "target": "backend/.env.example SMTP to Mailpit; docker-compose.yml mailpit; e2e"
+    },
+    {
+      "id": "BR8.1",
+      "status": "OK",
+      "target": "Repository layout; scripts/check-app-independence.sh"
+    },
+    {
+      "id": "BR8.2",
+      "status": "OK",
+      "target": ".gitignore"
+    },
+    {
+      "id": "BR8.3",
+      "status": "OK",
+      "target": "docker-compose.yml; README.md"
+    },
+    {
+      "id": "BR8.4",
+      "status": "OK",
+      "target": "alembic migration + round-trip test + CI e2e step"
+    },
+    {
+      "id": "BR8.5",
+      "status": "OK",
+      "target": "No hosting SDK or host-specific configuration in either app"
+    },
+    {
+      "id": "BR8.6",
+      "status": "OK",
+      "target": ".github/workflows/ci.yml; docs/branch-protection.md"
+    },
+    {
+      "id": "BR8.7",
+      "status": "OK",
+      "target": "pytest-socket; vitest fetch stub"
+    },
+    {
+      "id": "BR8.8",
+      "status": "OK",
+      "target": "import-linter contracts; ESLint layering rules"
+    },
+    {
+      "id": "BR8.9",
+      "status": "OK",
+      "target": ".pre-commit-config.yaml; Ruff S; eslint-plugin-security; pip-audit; pnpm audit; .github/dependabot.yml"
+    },
+    {
+      "id": "BR8.10",
+      "status": "OK",
+      "target": "scripts/check-denylist.sh"
+    }
+  ]
+}

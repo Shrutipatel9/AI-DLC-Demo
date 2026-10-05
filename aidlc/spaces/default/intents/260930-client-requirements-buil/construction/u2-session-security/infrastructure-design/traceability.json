@@ -1,0 +1,21 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u2-session-security",
+  "upstream_ids": ["NFR1.1", "NFR2.5", "NFR2.13", "NFR5.6", "NFR5.10", "NFR6.1", "NFR8.2", "NFR8.3", "NFR9.1", "NFR9.6", "NFR9.7", "NFR9.8", "NFR11.1", "NFR11.3"],
+  "coverage": [
+    { "id": "NFR1.1", "status": "OK", "target": "infrastructure-specification.md Deployment storage row; cicd-pipeline.md e2e migration round-trip with 0002" },
+    { "id": "NFR2.5", "status": "OK", "target": "infrastructure-specification.md networking row (SameSite=Lax) and REFRESH_COOKIE_PATH setting" },
+    { "id": "NFR2.13", "status": "OK", "target": "infrastructure-specification.md REFRESH_RATE_LIMIT_PER_MINUTE setting" },
+    { "id": "NFR5.6", "status": "OK", "target": "infrastructure-specification.md Background tasks row" },
+    { "id": "NFR5.10", "status": "OK", "target": "monitoring-design.md Metrics and KPIs" },
+    { "id": "NFR6.1", "status": "OK", "target": "infrastructure-specification.md New configuration table; cicd-pipeline.md Secrets" },
+    { "id": "NFR8.2", "status": "OK", "target": "cicd-pipeline.md backend and frontend jobs (coverage gates unchanged)" },
+    { "id": "NFR8.3", "status": "OK", "target": "cicd-pipeline.md e2e job session.spec.ts and verification command" },
+    { "id": "NFR9.1", "status": "OK", "target": "cicd-pipeline.md backend perf step; monitoring-design.md refresh latency SLI" },
+    { "id": "NFR9.6", "status": "OK", "target": "cicd-pipeline.md e2e session.spec.ts restore timing" },
+    { "id": "NFR9.7", "status": "OK", "target": "cicd-pipeline.md e2e session.spec.ts two-tab timing" },
+    { "id": "NFR9.8", "status": "OK", "target": "cicd-pipeline.md frontend bundle size check" },
+    { "id": "NFR11.1", "status": "OK", "target": "infrastructure-specification.md Deployment compute row (stateless processes unchanged)" },
+    { "id": "NFR11.3", "status": "OK", "target": "infrastructure-specification.md Operational command (cleanup)" }
+  ]
+}

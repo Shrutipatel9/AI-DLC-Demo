@@ -1,0 +1,764 @@
+{
+  "stage": "code-generation",
+  "unit": "u2-session-security",
+  "upstream_ids": [
+    "AC11.7.1",
+    "AC11.7.2",
+    "AC11.7.3",
+    "AC11.7.4",
+    "AC11.7.5",
+    "AC3.3.1",
+    "AC3.3.2",
+    "AC3.3.3",
+    "AC3.3.4",
+    "AC3.5.1",
+    "AC3.5.2",
+    "AC3.5.3",
+    "AC3.5.4",
+    "AC3.5.5",
+    "AC3.6.1",
+    "AC3.6.2",
+    "AC3.6.3",
+    "AC3.6.4",
+    "AC3.7.1",
+    "AC3.7.2",
+    "AC3.7.3",
+    "AC3.7.4",
+    "AC3.9.1",
+    "AC3.9.2",
+    "AC3.9.3",
+    "AC3.9.4",
+    "AC3.9.5",
+    "AC3.10.1",
+    "AC3.10.2",
+    "AC3.10.3",
+    "AC3.10.4",
+    "AC3.10.5",
+    "AC3.11.1",
+    "AC11.5.1",
+    "AC11.5.2",
+    "AC11.5.3",
+    "BR1.1",
+    "BR1.2",
+    "BR1.3",
+    "BR1.4",
+    "BR1.5",
+    "BR1.6",
+    "BR2.1",
+    "BR2.2",
+    "BR2.3",
+    "BR2.4",
+    "BR2.5",
+    "BR2.6",
+    "BR2.7",
+    "BR2.8",
+    "BR3.1",
+    "BR3.2",
+    "BR3.3",
+    "BR3.4",
+    "BR4.1",
+    "BR4.2",
+    "BR4.3",
+    "BR4.4",
+    "BR4.5",
+    "BR4.6",
+    "BR5.1",
+    "BR5.2",
+    "BR5.3",
+    "BR6.1",
+    "BR6.2",
+    "BR6.3",
+    "BR6.4",
+    "BR6.5",
+    "BR6.6",
+    "BR6.7",
+    "BR6.8",
+    "BR7.1",
+    "BR7.2",
+    "BR7.3",
+    "BR7.4",
+    "BR7.5",
+    "NFR1.1",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR2.4",
+    "NFR2.5",
+    "NFR2.6",
+    "NFR2.7",
+    "NFR2.8",
+    "NFR2.9",
+    "NFR2.10",
+    "NFR2.11",
+    "NFR2.12",
+    "NFR2.13",
+    "NFR2.14",
+    "NFR2.15",
+    "NFR2.16",
+    "NFR2.17",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR5.7",
+    "NFR5.8",
+    "NFR5.9",
+    "NFR5.10",
+    "NFR5.11",
+    "NFR5.12",
+    "NFR6.1",
+    "NFR7.1",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR8.3",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR9.5",
+    "NFR9.6",
+    "NFR9.7",
+    "NFR9.8",
+    "NFR9.9",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4"
+  ],
+  "coverage": [
+    {
+      "id": "AC11.7.1",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/toast.tsx (tests: frontend/src/components/feedback/toast.test.tsx, frontend/src/components/auth/forgot-password-form.test.tsx, frontend/src/components/settings/change-password-form.test.tsx, frontend/src/components/auth/reset-password-form.test.tsx)"
+    },
+    {
+      "id": "AC11.7.2",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/toast.tsx (tests: frontend/src/components/feedback/toast.test.tsx)"
+    },
+    {
+      "id": "AC11.7.3",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/confirm-dialog.tsx (tests: frontend/src/components/feedback/confirm-dialog.test.tsx, frontend/src/app/home/page.test.tsx, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC11.7.4",
+      "status": "OK",
+      "target": "frontend/src/components/ui/form-field.tsx (tests: frontend/src/components/auth/forgot-password-form.test.tsx, frontend/src/components/auth/reset-password-form.test.tsx, frontend/src/components/settings/change-password-form.test.tsx)"
+    },
+    {
+      "id": "AC11.7.5",
+      "status": "OK",
+      "target": "frontend/src/components/ui/toaster.tsx (tests: frontend/src/components/feedback/toast.test.tsx)"
+    },
+    {
+      "id": "AC3.3.1",
+      "status": "OK",
+      "target": "frontend/src/components/auth/resend-code-button.tsx (tests: frontend/src/components/auth/resend-code-button.test.tsx, backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "AC3.3.2",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "AC3.3.3",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py, frontend/src/components/auth/resend-code-button.test.tsx)"
+    },
+    {
+      "id": "AC3.3.4",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "AC3.5.1",
+      "status": "OK",
+      "target": "frontend/src/components/app/protected-route.tsx (tests: frontend/src/components/app/protected-route.test.tsx, frontend/src/lib/auth/store.u2.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC3.5.2",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, frontend/src/lib/auth/store.u2.test.ts, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.5.3",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.5.4",
+      "status": "OK",
+      "target": "backend/app/identity/cookies.py (tests: backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.5.5",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts (tests: frontend/src/lib/auth/store.u2.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC3.6.1",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.6.2",
+      "status": "OK",
+      "target": "backend/app/platform/csrf.py (tests: backend/tests/identity/test_csrf_cors.py)"
+    },
+    {
+      "id": "AC3.6.3",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.6.4",
+      "status": "OK",
+      "target": "frontend/src/components/auth/security-notice.tsx (tests: frontend/src/components/auth/security-notice.test.tsx, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "AC3.7.1",
+      "status": "OK",
+      "target": "frontend/src/components/app/user-menu.tsx (tests: frontend/src/app/home/page.test.tsx, frontend/src/components/feedback/confirm-dialog.test.tsx, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC3.7.2",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "AC3.7.3",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_session_routes.py, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC3.7.4",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/session.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/auth/store.u2.test.ts); no lifecycle handler touches the session"
+    },
+    {
+      "id": "AC3.9.1",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, frontend/src/components/auth/forgot-password-form.test.tsx, backend/tests/identity/test_perf_enumeration.py)"
+    },
+    {
+      "id": "AC3.9.2",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "AC3.9.3",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py, frontend/src/components/auth/reset-password-form.test.tsx)"
+    },
+    {
+      "id": "AC3.9.4",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC3.9.5",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py, frontend/src/components/auth/reset-password-form.test.tsx)"
+    },
+    {
+      "id": "AC3.10.1",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "AC3.10.2",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/api/client.u2.test.ts)"
+    },
+    {
+      "id": "AC3.10.3",
+      "status": "OK",
+      "target": "frontend/src/lib/api/client.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/api/client.u2.test.ts)"
+    },
+    {
+      "id": "AC3.10.4",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "AC3.10.5",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "AC3.11.1",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC11.5.1",
+      "status": "OK",
+      "target": "backend/app/identity/password_change.py (tests: backend/tests/identity/test_change_password.py, frontend/src/components/settings/change-password-form.test.tsx, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "AC11.5.2",
+      "status": "OK",
+      "target": "frontend/src/components/settings/change-password-form.tsx (tests: frontend/src/components/settings/change-password-form.test.tsx)"
+    },
+    {
+      "id": "AC11.5.3",
+      "status": "OK",
+      "target": "backend/app/identity/password_change.py (tests: backend/tests/identity/test_change_password.py, frontend/src/components/settings/change-password-form.test.tsx)"
+    },
+    {
+      "id": "BR1.1",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py, frontend/src/components/auth/resend-code-button.test.tsx)"
+    },
+    {
+      "id": "BR1.2",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "BR1.3",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "BR1.4",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "BR1.5",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "BR1.6",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py, backend/tests/identity/test_password_reset.py)"
+    },
+    {
+      "id": "BR2.1",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "BR2.2",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "BR2.3",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "BR2.4",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "BR2.5",
+      "status": "OK",
+      "target": "backend/app/platform/csrf.py (tests: backend/tests/identity/test_csrf_cors.py)"
+    },
+    {
+      "id": "BR2.6",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "BR2.7",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "BR2.8",
+      "status": "OK",
+      "target": "backend/app/identity/cookies.py (tests: backend/tests/identity/test_session_routes.py, backend/tests/platform/test_settings_u2.py)"
+    },
+    {
+      "id": "BR3.1",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "BR3.2",
+      "status": "OK",
+      "target": "frontend/src/components/app/user-menu.tsx (tests: frontend/src/app/home/page.test.tsx, frontend/src/components/feedback/confirm-dialog.test.tsx)"
+    },
+    {
+      "id": "BR3.3",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/session.ts (tests: frontend/src/lib/auth/store.u2.test.ts); no unload/visibility handler exists"
+    },
+    {
+      "id": "BR3.4",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/auth/store.u2.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "BR4.1",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, frontend/src/components/auth/forgot-password-form.test.tsx, backend/tests/identity/test_perf_enumeration.py)"
+    },
+    {
+      "id": "BR4.2",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py)"
+    },
+    {
+      "id": "BR4.3",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py)"
+    },
+    {
+      "id": "BR4.4",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "BR4.5",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_change_password.py, frontend/src/components/auth/reset-password-form.test.tsx)"
+    },
+    {
+      "id": "BR4.6",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py)"
+    },
+    {
+      "id": "BR5.1",
+      "status": "OK",
+      "target": "backend/app/identity/password_change.py (tests: backend/tests/identity/test_change_password.py, frontend/src/components/settings/change-password-form.test.tsx)"
+    },
+    {
+      "id": "BR5.2",
+      "status": "OK",
+      "target": "frontend/src/components/settings/change-password-form.tsx (tests: frontend/src/components/settings/change-password-form.test.tsx, frontend/src/components/auth/reset-password-form.test.tsx)"
+    },
+    {
+      "id": "BR5.3",
+      "status": "OK",
+      "target": "backend/app/identity/password_change.py (tests: backend/tests/identity/test_change_password.py)"
+    },
+    {
+      "id": "BR6.1",
+      "status": "OK",
+      "target": "frontend/src/components/app/protected-route.tsx (tests: frontend/src/components/app/protected-route.test.tsx, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "BR6.2",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "BR6.3",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/api/client.u2.test.ts)"
+    },
+    {
+      "id": "BR6.4",
+      "status": "OK",
+      "target": "frontend/src/lib/api/client.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/api/client.u2.test.ts)"
+    },
+    {
+      "id": "BR6.5",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "BR6.6",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "BR6.7",
+      "status": "OK",
+      "target": "frontend/src/components/auth/security-notice.tsx (tests: frontend/src/components/auth/security-notice.test.tsx, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "BR6.8",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts (tests: frontend/src/lib/auth/store.u2.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "BR7.1",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/toast.tsx (tests: frontend/src/components/feedback/toast.test.tsx, frontend/src/components/auth/forgot-password-form.test.tsx)"
+    },
+    {
+      "id": "BR7.2",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/toast.tsx (tests: frontend/src/components/feedback/toast.test.tsx)"
+    },
+    {
+      "id": "BR7.3",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/confirm-dialog.tsx (tests: frontend/src/components/feedback/confirm-dialog.test.tsx)"
+    },
+    {
+      "id": "BR7.4",
+      "status": "OK",
+      "target": "frontend/src/components/ui/form-field.tsx (tests: frontend/src/components/auth/forgot-password-form.test.tsx, frontend/src/components/auth/reset-password-form.test.tsx, frontend/src/components/settings/change-password-form.test.tsx)"
+    },
+    {
+      "id": "BR7.5",
+      "status": "OK",
+      "target": "frontend/src/components/ui/toaster.tsx (tests: frontend/src/components/feedback/toast.test.tsx)"
+    },
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "backend/alembic/versions/0002_u2_session_security.py (tests: backend/tests/identity/test_session_routes.py); round-trip in scripts/verify.sh, scripts/verify-skeleton.sh, CI e2e job"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR2.4",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR2.5",
+      "status": "OK",
+      "target": "backend/app/identity/cookies.py (tests: backend/tests/identity/test_session_routes.py, backend/tests/platform/test_settings_u2.py)"
+    },
+    {
+      "id": "NFR2.6",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR2.7",
+      "status": "OK",
+      "target": "backend/app/platform/csrf.py (tests: backend/tests/identity/test_csrf_cors.py)"
+    },
+    {
+      "id": "NFR2.8",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_sessions.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "NFR2.9",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_session_routes.py)"
+    },
+    {
+      "id": "NFR2.10",
+      "status": "OK",
+      "target": "backend/app/identity/password_change.py (tests: backend/tests/identity/test_change_password.py, backend/tests/identity/test_password_reset.py)"
+    },
+    {
+      "id": "NFR2.11",
+      "status": "OK",
+      "target": "backend/app/identity/services.py (tests: backend/tests/identity/test_resend_lockout.py, backend/tests/identity/test_perf_enumeration.py)"
+    },
+    {
+      "id": "NFR2.12",
+      "status": "OK",
+      "target": "backend/app/identity/shadow.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "NFR2.13",
+      "status": "OK",
+      "target": "backend/app/platform/ratelimit.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "NFR2.14",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/store.ts (tests: frontend/src/lib/auth/store.u2.test.ts, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "NFR2.15",
+      "status": "OK",
+      "target": "frontend/src/lib/api/client.ts (tests: frontend/src/lib/api/client.u2.test.ts, frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR2.16",
+      "status": "OK",
+      "target": "frontend/src/components/auth/forgot-password-form.tsx (tests: frontend/src/components/auth/forgot-password-form.test.tsx, backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "NFR2.17",
+      "status": "OK",
+      "target": "backend/app/platform/middleware.py (tests: backend/tests/identity/test_csrf_cors.py, backend/tests/platform/test_settings_u2.py)"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "backend/app/platform/logging.py (tests: backend/tests/identity/test_u2_logs_metrics.py)"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "backend/app/platform/db.py, backend/app/platform/logging.py (tests: backend/tests/identity/test_u2_logs_metrics.py)"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, frontend/src/lib/auth/store.u2.test.ts)"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts, backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "backend/app/identity/delivery.py (tests: backend/tests/identity/test_resend_lockout.py)"
+    },
+    {
+      "id": "NFR5.7",
+      "status": "OK",
+      "target": "backend/app/identity/password_reset.py (tests: backend/tests/identity/test_password_reset.py, backend/tests/identity/test_change_password.py)"
+    },
+    {
+      "id": "NFR5.8",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR5.9",
+      "status": "OK",
+      "target": "backend/app/platform/logging.py (tests: backend/tests/identity/test_u2_logs_metrics.py)"
+    },
+    {
+      "id": "NFR5.10",
+      "status": "OK",
+      "target": "backend/app/platform/metrics.py (tests: backend/tests/identity/test_u2_logs_metrics.py, backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR5.11",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/session-log.ts (tests: frontend/src/components/auth/security-notice.test.tsx)"
+    },
+    {
+      "id": "NFR5.12",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_u2_logs_metrics.py)"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "backend/app/platform/settings.py (tests: backend/tests/platform/test_settings_u2.py)"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "backend/pyproject.toml import-linter contracts; frontend/eslint.config.mjs (lint gates in scripts/verify.sh)"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "code-summary.md Red evidence (Steps 4, 6, 13)"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "backend --cov-fail-under=80; frontend vitest thresholds.lines 80 (scripts/verify.sh)"
+    },
+    {
+      "id": "NFR8.3",
+      "status": "OK",
+      "target": "frontend/e2e/session.spec.ts, frontend/e2e/skeleton.spec.ts (scripts/verify-skeleton.sh, scripts/verify.sh, CI e2e)"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "backend/app/identity/routes.py (tests: backend/tests/identity/test_perf_sessions.py)"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "backend/app/identity/routes.py (tests: backend/tests/identity/test_perf_sessions.py)"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "backend/app/identity/routes.py (tests: backend/tests/identity/test_perf_sessions.py)"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "OK",
+      "target": "backend/app/identity/routes.py (tests: backend/tests/identity/test_perf_sessions.py)"
+    },
+    {
+      "id": "NFR9.5",
+      "status": "OK",
+      "target": "backend/app/identity/routes.py (tests: backend/tests/identity/test_perf_sessions.py)"
+    },
+    {
+      "id": "NFR9.6",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/session.ts (tests: frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "NFR9.7",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "NFR9.8",
+      "status": "OK",
+      "target": "frontend/scripts/size-check.mjs (all auth routes incl. the four new ones)"
+    },
+    {
+      "id": "NFR9.9",
+      "status": "OK",
+      "target": "frontend/src/components/feedback/confirm-dialog.tsx (tests: frontend/src/components/feedback/confirm-dialog.test.tsx, frontend/src/components/feedback/toast.test.tsx, frontend/e2e/session.spec.ts)"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "backend/app/identity/sessions.py (tests: backend/tests/identity/test_session_routes.py, backend/tests/identity/test_sessions.py)"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "frontend/src/lib/auth/refresh-coordinator.ts (tests: frontend/src/lib/auth/refresh-coordinator.test.ts)"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "backend/app/identity/cleanup.py (tests: backend/tests/identity/test_cleanup.py)"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "backend/alembic/versions/0002_u2_session_security.py (tests: backend/tests/identity/test_session_routes.py)"
+    }
+  ]
+}

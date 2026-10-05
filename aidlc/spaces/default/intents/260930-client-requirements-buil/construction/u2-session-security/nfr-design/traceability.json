@@ -1,0 +1,296 @@
+{
+  "stage": "nfr-design",
+  "unit": "u2-session-security",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR2.4",
+    "NFR2.5",
+    "NFR2.6",
+    "NFR2.7",
+    "NFR2.8",
+    "NFR2.9",
+    "NFR2.10",
+    "NFR2.11",
+    "NFR2.12",
+    "NFR2.13",
+    "NFR2.14",
+    "NFR2.15",
+    "NFR2.16",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR5.7",
+    "NFR5.8",
+    "NFR5.9",
+    "NFR5.10",
+    "NFR5.11",
+    "NFR5.12",
+    "NFR6.1",
+    "NFR7.1",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR8.3",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR9.5",
+    "NFR9.6",
+    "NFR9.7",
+    "NFR9.8",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "logical-components.md §1 migration 0002; performance-design.md §2 indexes"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "security-design.md §1 rotation into a child in the same family"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "OK",
+      "target": "security-design.md §1 rotated parent replay revokes family (reuse_detected)"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "OK",
+      "target": "security-design.md §1 attempt_ok recovery; §7 client attempt id"
+    },
+    {
+      "id": "NFR2.4",
+      "status": "OK",
+      "target": "security-design.md §1 SELECT FOR UPDATE on the presented session; scalability-design.md lock contention"
+    },
+    {
+      "id": "NFR2.5",
+      "status": "OK",
+      "target": "security-design.md §2 and §3 cookie Path=/auth validator, SameSite rule"
+    },
+    {
+      "id": "NFR2.6",
+      "status": "OK",
+      "target": "security-design.md §1 sha256 secret hash with compare_digest"
+    },
+    {
+      "id": "NFR2.7",
+      "status": "OK",
+      "target": "security-design.md §3 require_csrf dependency"
+    },
+    {
+      "id": "NFR2.8",
+      "status": "OK",
+      "target": "security-design.md §2 logout revokes the whole family of the cookie"
+    },
+    {
+      "id": "NFR2.9",
+      "status": "OK",
+      "target": "security-design.md §4 reset token issue and atomic consume"
+    },
+    {
+      "id": "NFR2.10",
+      "status": "OK",
+      "target": "security-design.md §2 revocation table for reset and change"
+    },
+    {
+      "id": "NFR2.11",
+      "status": "OK",
+      "target": "security-design.md §5 non-revealing handlers and shadow counters"
+    },
+    {
+      "id": "NFR2.12",
+      "status": "OK",
+      "target": "security-design.md §5 shadow counter lockout; U1 counter transaction"
+    },
+    {
+      "id": "NFR2.13",
+      "status": "OK",
+      "target": "security-design.md §6 throttling table"
+    },
+    {
+      "id": "NFR2.14",
+      "status": "OK",
+      "target": "security-design.md §7 BroadcastChannel payload, no storage"
+    },
+    {
+      "id": "NFR2.15",
+      "status": "OK",
+      "target": "security-design.md §7 401 handler matches NOT_AUTHENTICATED only"
+    },
+    {
+      "id": "NFR2.16",
+      "status": "OK",
+      "target": "security-design.md §5 identical 202 CodeSent responses"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "OK",
+      "target": "security-design.md §8 restricted values never logged; canary"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "OK",
+      "target": "security-design.md §8 hide_parameters=True"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "OK",
+      "target": "reliability-design.md §1 network/5xx keep the user signed in"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "OK",
+      "target": "reliability-design.md §1 lost response retry with the same attempt id"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "OK",
+      "target": "reliability-design.md §1 10 s AbortController timeout"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "OK",
+      "target": "reliability-design.md §1 single flight in tab and across tabs, retry budget"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "reliability-design.md §1 idempotent signOut per generation"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "reliability-design.md §2 BackgroundTasks email after the response"
+    },
+    {
+      "id": "NFR5.7",
+      "status": "OK",
+      "target": "reliability-design.md §2 atomic credential changes"
+    },
+    {
+      "id": "NFR5.8",
+      "status": "OK",
+      "target": "reliability-design.md §1 BroadcastChannel claim fallback, per-tab last resort"
+    },
+    {
+      "id": "NFR5.9",
+      "status": "OK",
+      "target": "observability-design.md event catalogue and allow-list additions"
+    },
+    {
+      "id": "NFR5.10",
+      "status": "OK",
+      "target": "observability-design.md metrics"
+    },
+    {
+      "id": "NFR5.11",
+      "status": "OK",
+      "target": "observability-design.md frontend sessionLog"
+    },
+    {
+      "id": "NFR5.12",
+      "status": "OK",
+      "target": "observability-design.md security event catalogue"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "security-design.md §3 and §6 settings (CSRF_ALLOWED_ORIGINS, rate limits); §5 EMAIL_HASH_KEY"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "logical-components.md §2 dependency direction"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "logical-components.md §4 test-first modules"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "logical-components.md §4; U1 CI coverage gates unchanged"
+    },
+    {
+      "id": "NFR8.3",
+      "status": "OK",
+      "target": "logical-components.md §4 Playwright session journey"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "performance-design.md §1 refresh budget"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "performance-design.md §1 logout budget"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "performance-design.md §1 resend budget"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "OK",
+      "target": "performance-design.md §1 forgot and verify-code budget"
+    },
+    {
+      "id": "NFR9.5",
+      "status": "OK",
+      "target": "performance-design.md §1 reset and change budget"
+    },
+    {
+      "id": "NFR9.6",
+      "status": "OK",
+      "target": "performance-design.md §2 client restore"
+    },
+    {
+      "id": "NFR9.7",
+      "status": "OK",
+      "target": "performance-design.md §2 cross-tab refresh"
+    },
+    {
+      "id": "NFR9.8",
+      "status": "OK",
+      "target": "performance-design.md §2 bundle"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "scalability-design.md stateless API"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "OK",
+      "target": "scalability-design.md client-only coordination"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "OK",
+      "target": "reliability-design.md §2 cleanup command; scalability-design.md row growth"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "performance-design.md §2 index plan; scalability-design.md"
+    }
+  ]
+}

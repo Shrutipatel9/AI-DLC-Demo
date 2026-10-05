@@ -1,0 +1,343 @@
+{
+  "stage": "code-generation",
+  "unit": "u2-session-security",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "backend/.env.example"
+    },
+    {
+      "path": "backend/README.md"
+    },
+    {
+      "path": "backend/alembic/versions/0002_u2_session_security.py"
+    },
+    {
+      "path": "backend/app/identity/cleanup.py"
+    },
+    {
+      "path": "backend/app/identity/codes.py"
+    },
+    {
+      "path": "backend/app/identity/cookies.py"
+    },
+    {
+      "path": "backend/app/identity/delivery.py"
+    },
+    {
+      "path": "backend/app/identity/models.py"
+    },
+    {
+      "path": "backend/app/identity/password_change.py"
+    },
+    {
+      "path": "backend/app/identity/password_reset.py"
+    },
+    {
+      "path": "backend/app/identity/public.py"
+    },
+    {
+      "path": "backend/app/identity/repositories.py"
+    },
+    {
+      "path": "backend/app/identity/routes.py"
+    },
+    {
+      "path": "backend/app/identity/schemas.py"
+    },
+    {
+      "path": "backend/app/identity/services.py"
+    },
+    {
+      "path": "backend/app/identity/sessions.py"
+    },
+    {
+      "path": "backend/app/identity/shadow.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/platform/csrf.py"
+    },
+    {
+      "path": "backend/app/platform/db.py"
+    },
+    {
+      "path": "backend/app/platform/email/port.py"
+    },
+    {
+      "path": "backend/app/platform/email/templates/password_reset_code.html"
+    },
+    {
+      "path": "backend/app/platform/email/templates/password_reset_code.subject.txt"
+    },
+    {
+      "path": "backend/app/platform/email/templates/password_reset_code.txt"
+    },
+    {
+      "path": "backend/app/platform/errors.py"
+    },
+    {
+      "path": "backend/app/platform/logging.py"
+    },
+    {
+      "path": "backend/app/platform/metrics.py"
+    },
+    {
+      "path": "backend/app/platform/middleware.py"
+    },
+    {
+      "path": "backend/app/platform/ratelimit.py"
+    },
+    {
+      "path": "backend/app/platform/routing.py"
+    },
+    {
+      "path": "backend/app/platform/settings.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/tests/factories.py"
+    },
+    {
+      "path": "backend/tests/helpers.py"
+    },
+    {
+      "path": "backend/tests/identity/conftest.py"
+    },
+    {
+      "path": "backend/tests/identity/test_change_password.py"
+    },
+    {
+      "path": "backend/tests/identity/test_cleanup.py"
+    },
+    {
+      "path": "backend/tests/identity/test_csrf_cors.py"
+    },
+    {
+      "path": "backend/tests/identity/test_password_reset.py"
+    },
+    {
+      "path": "backend/tests/identity/test_perf_enumeration.py"
+    },
+    {
+      "path": "backend/tests/identity/test_perf_sessions.py"
+    },
+    {
+      "path": "backend/tests/identity/test_resend_lockout.py"
+    },
+    {
+      "path": "backend/tests/identity/test_session_routes.py"
+    },
+    {
+      "path": "backend/tests/identity/test_sessions.py"
+    },
+    {
+      "path": "backend/tests/identity/test_u2_logs_metrics.py"
+    },
+    {
+      "path": "backend/tests/platform/test_settings_u2.py"
+    },
+    {
+      "path": "backend/tools/export_openapi.py"
+    },
+    {
+      "path": "frontend/README.md"
+    },
+    {
+      "path": "frontend/e2e/session.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/skeleton.spec.ts"
+    },
+    {
+      "path": "frontend/scripts/size-check.mjs"
+    },
+    {
+      "path": "frontend/src/app/forgot-password/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/forgot-password/verify/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/home/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/home/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/layout.tsx"
+    },
+    {
+      "path": "frontend/src/app/login/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/reset-password/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/settings/password/page.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/app-header.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/app-shell.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/auth-bootstrap.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/full-page-loader.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/home-view.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/protected-route.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/protected-route.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/user-menu.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/forgot-password-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/forgot-password-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/login-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/login-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/resend-code-button.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/resend-code-button.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/reset-password-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/reset-password-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/schemas.ts"
+    },
+    {
+      "path": "frontend/src/components/auth/security-notice.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/security-notice.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/signup-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/signup-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/verify-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/verify-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/feedback/confirm-dialog.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/feedback/confirm-dialog.tsx"
+    },
+    {
+      "path": "frontend/src/components/feedback/confirm.ts"
+    },
+    {
+      "path": "frontend/src/components/feedback/toast.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/feedback/toast.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/change-password-form.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/change-password-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/ui/button.tsx"
+    },
+    {
+      "path": "frontend/src/components/ui/form-field.tsx"
+    },
+    {
+      "path": "frontend/src/components/ui/toaster.tsx"
+    },
+    {
+      "path": "frontend/src/lib/api/client.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/client.u2.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/errors.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/actions.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/hooks.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/index.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/refresh-coordinator.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/refresh-coordinator.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/session-log.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/session.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/store.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/store.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/store.u2.test.ts"
+    },
+    {
+      "path": "frontend/src/lib/auth/test-utils.ts"
+    },
+    {
+      "path": "scripts/ci-env.sh"
+    },
+    {
+      "path": "scripts/verify-skeleton.sh"
+    },
+    {
+      "path": "scripts/verify.sh"
+    }
+  ]
+}

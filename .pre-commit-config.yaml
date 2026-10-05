@@ -1,0 +1,8 @@
+# Pre-commit hooks (BR8.9, AC1.4.1).
+# Install once per clone:  pipx install pre-commit && pre-commit install
+# Gitleaks scans the staged changes and blocks a commit that contains a secret.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+    hooks:
+      - id: gitleaks

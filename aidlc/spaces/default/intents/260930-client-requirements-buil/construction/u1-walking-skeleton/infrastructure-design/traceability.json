@@ -1,0 +1,356 @@
+{
+  "stage": "infrastructure-design",
+  "unit": "u1-walking-skeleton",
+  "upstream_ids": [
+    "NFR1.1",
+    "NFR1.2",
+    "NFR1.3",
+    "NFR2.1",
+    "NFR2.2",
+    "NFR2.3",
+    "NFR2.4",
+    "NFR2.5",
+    "NFR2.6",
+    "NFR2.7",
+    "NFR2.8",
+    "NFR2.9",
+    "NFR2.10",
+    "NFR2.11",
+    "NFR2.12",
+    "NFR2.13",
+    "NFR2.14",
+    "NFR3.1",
+    "NFR3.2",
+    "NFR3.3",
+    "NFR3.4",
+    "NFR3.5",
+    "NFR5.1",
+    "NFR5.2",
+    "NFR5.3",
+    "NFR5.4",
+    "NFR5.5",
+    "NFR5.6",
+    "NFR5.7",
+    "NFR5.8",
+    "NFR5.9",
+    "NFR5.10",
+    "NFR5.11",
+    "NFR5.12",
+    "NFR5.13",
+    "NFR6.1",
+    "NFR6.2",
+    "NFR7.1",
+    "NFR7.2",
+    "NFR7.3",
+    "NFR8.1",
+    "NFR8.2",
+    "NFR8.3",
+    "NFR8.4",
+    "NFR9.1",
+    "NFR9.2",
+    "NFR9.3",
+    "NFR9.4",
+    "NFR9.5",
+    "NFR9.6",
+    "NFR9.7",
+    "NFR11.1",
+    "NFR11.2",
+    "NFR11.3",
+    "NFR11.4",
+    "NFR11.5",
+    "NFR12.1",
+    "NFR12.2"
+  ],
+  "coverage": [
+    {
+      "id": "NFR1.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md Deployment (api and web as separate processes); cicd-pipeline.md separate backend and frontend jobs"
+    },
+    {
+      "id": "NFR1.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md e2e step 2 Alembic round-trip; PostgreSQL 16 service in infrastructure-specification.md"
+    },
+    {
+      "id": "NFR1.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md security step 3 deny-list script"
+    },
+    {
+      "id": "NFR2.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md security step 3 deny-list script"
+    },
+    {
+      "id": "NFR2.2",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.4",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.5",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.6",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.7",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.8",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.9",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.10",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.11",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.12",
+      "status": "OK",
+      "target": "infrastructure-specification.md Networking: two localhost origins with CORS on FRONTEND_ORIGIN"
+    },
+    {
+      "id": "NFR2.13",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR2.14",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR3.1",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR3.2",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR3.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR3.4",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR3.5",
+      "status": "OK",
+      "target": "infrastructure-specification.md TLS row: no TLS only in development or test, refused elsewhere at start-up"
+    },
+    {
+      "id": "NFR5.1",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.2",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.4",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md e2e step 3 waits on /health/ready; Compose healthchecks in infrastructure-specification.md"
+    },
+    {
+      "id": "NFR5.6",
+      "status": "OK",
+      "target": "monitoring-design.md Logs and Tracing: JSON on stdout, CI artifact upload"
+    },
+    {
+      "id": "NFR5.7",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.8",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.9",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.10",
+      "status": "OK",
+      "target": "monitoring-design.md Metrics and KPIs and the metrics scraping row"
+    },
+    {
+      "id": "NFR5.11",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR5.12",
+      "status": "OK",
+      "target": "monitoring-design.md Logs and Tracing: log fields and retention"
+    },
+    {
+      "id": "NFR5.13",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR6.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md §4 throwaway keys per run and Gitleaks; infrastructure-specification.md .env.example"
+    },
+    {
+      "id": "NFR6.2",
+      "status": "OK",
+      "target": "infrastructure-specification.md Email provider row: fake or Mailpit only in development and CI"
+    },
+    {
+      "id": "NFR7.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md §3 lint, format and type gates"
+    },
+    {
+      "id": "NFR7.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md §3 layering gate"
+    },
+    {
+      "id": "NFR7.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR8.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md §3 coverage gate per app"
+    },
+    {
+      "id": "NFR8.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md backend step 5 pytest-socket"
+    },
+    {
+      "id": "NFR8.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR8.4",
+      "status": "OK",
+      "target": "cicd-pipeline.md e2e job with Mailpit; infrastructure-specification.md Mailpit service"
+    },
+    {
+      "id": "NFR9.1",
+      "status": "OK",
+      "target": "cicd-pipeline.md backend step 6 perf run; monitoring-design.md latency metric"
+    },
+    {
+      "id": "NFR9.2",
+      "status": "OK",
+      "target": "cicd-pipeline.md backend step 6 perf run"
+    },
+    {
+      "id": "NFR9.3",
+      "status": "OK",
+      "target": "cicd-pipeline.md backend step 6 perf run"
+    },
+    {
+      "id": "NFR9.4",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR9.5",
+      "status": "OK",
+      "target": "cicd-pipeline.md frontend step 5 size check"
+    },
+    {
+      "id": "NFR9.6",
+      "status": "OK",
+      "target": "cicd-pipeline.md e2e step 5 axe checks"
+    },
+    {
+      "id": "NFR9.7",
+      "status": "OK",
+      "target": "cicd-pipeline.md e2e step 5 two viewports"
+    },
+    {
+      "id": "NFR11.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md Deployment compute row (stateless processes)"
+    },
+    {
+      "id": "NFR11.2",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR11.3",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    },
+    {
+      "id": "NFR11.4",
+      "status": "OK",
+      "target": "infrastructure-specification.md Configuration row: environment variables only"
+    },
+    {
+      "id": "NFR11.5",
+      "status": "OK",
+      "target": "infrastructure-specification.md Resource sizing row"
+    },
+    {
+      "id": "NFR12.1",
+      "status": "OK",
+      "target": "infrastructure-specification.md Mailpit and Email provider rows"
+    },
+    {
+      "id": "NFR12.2",
+      "status": "N/A",
+      "target": "Application-level design in nfr-design; needs no infrastructure resource or configuration"
+    }
+  ]
+}

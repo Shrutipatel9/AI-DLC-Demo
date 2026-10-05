@@ -1,0 +1,28 @@
+# Dependabot (BR8.9, AC1.4.3): weekly update pull requests for both apps and the CI actions.
+version: 2
+updates:
+  - package-ecosystem: uv
+    directory: /backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels: [dependencies, backend]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels: [dependencies, frontend]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: [dependencies, ci]
+
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+    labels: [dependencies, infrastructure]

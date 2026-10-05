@@ -1,0 +1,248 @@
+{
+  "stage": "code-generation",
+  "unit": "u4-photos",
+  "upstream_ids": [
+    "AC1.10.1",
+    "AC1.10.2",
+    "AC1.10.3",
+    "AC1.11.1",
+    "AC1.11.2",
+    "AC1.11.3",
+    "AC5.1.1",
+    "AC5.1.2",
+    "AC5.2.1",
+    "AC5.2.2",
+    "AC5.2.3",
+    "AC5.2.4",
+    "AC5.2.5",
+    "AC5.2.6",
+    "AC5.2.7",
+    "AC5.3.1",
+    "AC5.3.2",
+    "AC5.3.3",
+    "AC5.3.4",
+    "AC5.5.1",
+    "AC5.5.2",
+    "AC5.5.3",
+    "AC5.5.4",
+    "AC5.6.1",
+    "AC5.6.2",
+    "AC5.6.3",
+    "AC5.6.4",
+    "AC5.6.5",
+    "AC5.8.1",
+    "AC5.9.1",
+    "AC5.9.2",
+    "AC5.10.1",
+    "AC5.10.2",
+    "AC5.11.1",
+    "AC5.11.2",
+    "AC5.11.3",
+    "AC5.11.4",
+    "AC5.11.5",
+    "BR-004",
+    "BR-005"
+  ],
+  "coverage": [
+    {
+      "id": "AC1.10.1",
+      "status": "OK",
+      "target": "backend/tests/media/test_storage.py"
+    },
+    {
+      "id": "AC1.10.2",
+      "status": "OK",
+      "target": "backend/tests/media/test_media_store.py"
+    },
+    {
+      "id": "AC1.10.3",
+      "status": "OK",
+      "target": "backend/tests/media/test_media_store.py"
+    },
+    {
+      "id": "AC1.11.1",
+      "status": "OK",
+      "target": "backend/tests/face/test_face_geometry.py"
+    },
+    {
+      "id": "AC1.11.2",
+      "status": "OK",
+      "target": "backend/tests/face/test_face_geometry.py"
+    },
+    {
+      "id": "AC1.11.3",
+      "status": "OK",
+      "target": "backend/tests/face/test_face_geometry.py"
+    },
+    {
+      "id": "AC5.1.1",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.1.2",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.2.1",
+      "status": "OK",
+      "target": "backend/tests/photos/test_photos_config.py"
+    },
+    {
+      "id": "AC5.2.2",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.2.3",
+      "status": "OK",
+      "target": "backend/tests/photos/test_photos_api.py"
+    },
+    {
+      "id": "AC5.2.4",
+      "status": "OK",
+      "target": "backend/tests/photos/test_photos_api.py"
+    },
+    {
+      "id": "AC5.2.5",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.2.6",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.2.7",
+      "status": "OK",
+      "target": "backend/tests/media/test_media_store.py"
+    },
+    {
+      "id": "AC5.3.1",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.3.2",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.3.3",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.3.4",
+      "status": "OK",
+      "target": "frontend/src/components/photos/camera-capture.tsx"
+    },
+    {
+      "id": "AC5.5.1",
+      "status": "OK",
+      "target": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "id": "AC5.5.2",
+      "status": "OK",
+      "target": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "id": "AC5.5.3",
+      "status": "OK",
+      "target": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "id": "AC5.5.4",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-thumbnail.test.tsx"
+    },
+    {
+      "id": "AC5.6.1",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_decision.py"
+    },
+    {
+      "id": "AC5.6.2",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_decision.py"
+    },
+    {
+      "id": "AC5.6.3",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_decision.py"
+    },
+    {
+      "id": "AC5.6.4",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_decision.py"
+    },
+    {
+      "id": "AC5.6.5",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_service.py"
+    },
+    {
+      "id": "AC5.8.1",
+      "status": "OK",
+      "target": "backend/tests/media/test_images.py"
+    },
+    {
+      "id": "AC5.9.1",
+      "status": "OK",
+      "target": "backend/tests/photos/test_catalog_and_settings.py"
+    },
+    {
+      "id": "AC5.9.2",
+      "status": "OK",
+      "target": "backend/tests/photos/test_catalog_and_settings.py"
+    },
+    {
+      "id": "AC5.10.1",
+      "status": "OK",
+      "target": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "id": "AC5.10.2",
+      "status": "OK",
+      "target": "backend/tests/photos/test_checks.py"
+    },
+    {
+      "id": "AC5.11.1",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.11.2",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.11.3",
+      "status": "OK",
+      "target": "frontend/src/lib/photos/photos.test.ts"
+    },
+    {
+      "id": "AC5.11.4",
+      "status": "OK",
+      "target": "frontend/src/components/photos/photo-flow.test.tsx"
+    },
+    {
+      "id": "AC5.11.5",
+      "status": "OK",
+      "target": "frontend/e2e/photos.spec.ts"
+    },
+    {
+      "id": "BR-004",
+      "status": "OK",
+      "target": "backend/tests/photos/test_photos_api.py"
+    },
+    {
+      "id": "BR-005",
+      "status": "OK",
+      "target": "backend/tests/photos/test_identity_decision.py"
+    }
+  ]
+}

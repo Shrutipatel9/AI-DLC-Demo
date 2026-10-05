@@ -1,0 +1,129 @@
+{
+  "stage": "code-generation",
+  "unit": "u3-onboarding",
+  "upstream_ids": [
+    "AC4.1.1",
+    "AC4.1.2",
+    "AC4.1.3",
+    "AC4.2.1",
+    "AC4.2.2",
+    "AC4.2.3",
+    "AC4.2.4",
+    "AC4.2.5",
+    "AC4.2.6",
+    "AC4.2.7",
+    "AC4.3.1",
+    "AC4.3.2",
+    "AC4.3.3",
+    "AC4.3.4",
+    "AC4.4.1",
+    "AC4.4.2",
+    "AC4.4.3",
+    "AC4.4.4",
+    "AC4.4.5"
+  ],
+  "coverage": [
+    {
+      "id": "AC4.1.1",
+      "status": "OK",
+      "target": "backend/app/onboarding/services.py (require_consent); frontend/src/components/onboarding/consent-step.tsx; tests: backend/tests/onboarding/test_consent.py, frontend/src/components/onboarding/onboarding-flow.test.tsx"
+    },
+    {
+      "id": "AC4.1.2",
+      "status": "OK",
+      "target": "backend/app/onboarding/repositories.py (record_consent); backend/app/onboarding/models.py (ConsentRecord); tests: backend/tests/onboarding/test_consent.py"
+    },
+    {
+      "id": "AC4.1.3",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/consent_v1.json; backend/app/platform/settings.py (ONBOARDING_CONSENT_FILE); tests: backend/tests/onboarding/test_consent_config.py"
+    },
+    {
+      "id": "AC4.2.1",
+      "status": "OK",
+      "target": "backend/app/onboarding/definition.py (visible_questions); frontend/src/components/onboarding/questionnaire-wizard.tsx (Question N of M); tests: backend/tests/onboarding/test_questionnaire_api.py, frontend/src/components/onboarding/onboarding-flow.test.tsx"
+    },
+    {
+      "id": "AC4.2.2",
+      "status": "OK",
+      "target": "backend/app/onboarding/definition.py (showIf); tests: backend/tests/onboarding/test_definition.py, backend/tests/onboarding/test_questionnaire_api.py, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.2.3",
+      "status": "OK",
+      "target": "backend/app/onboarding/definition.py (visible_questions); tests: backend/tests/onboarding/test_questionnaire_api.py, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.2.4",
+      "status": "OK",
+      "target": "backend/app/onboarding/definition.py (FollowUp, validate_answer); frontend/src/components/onboarding/question-step.tsx; tests: backend/tests/onboarding/test_answer_validation.py, frontend/src/components/onboarding/onboarding-flow.test.tsx"
+    },
+    {
+      "id": "AC4.2.5",
+      "status": "OK",
+      "target": "frontend/src/components/onboarding/questionnaire-wizard.tsx (Back keeps drafts); backend/app/onboarding/services.py (save_answer); tests: frontend/src/components/onboarding/onboarding-flow.test.tsx, backend/tests/onboarding/test_questionnaire_api.py"
+    },
+    {
+      "id": "AC4.2.6",
+      "status": "OK",
+      "target": "backend/app/onboarding/routes.py (GET /onboarding/response); frontend/src/lib/onboarding/answers.ts (resumeIndex); tests: backend/tests/onboarding/test_questionnaire_api.py, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.2.7",
+      "status": "OK",
+      "target": "backend/app/onboarding/services.py (stored answer with questionText and medical); tests: backend/tests/onboarding/test_submit.py"
+    },
+    {
+      "id": "AC4.3.1",
+      "status": "OK",
+      "target": "frontend/src/components/onboarding/questionnaire-wizard.tsx, frontend/src/components/onboarding/disclaimer-gate.tsx; tests: frontend/src/components/onboarding/onboarding-flow.test.tsx, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.3.2",
+      "status": "Deferred",
+      "target": "Submission is marked (backend/app/onboarding/services.py submit; tests: backend/tests/onboarding/test_submit.py). Moving to the photo requirements screen waits for U4; until then the submitted state links home (frontend/src/components/onboarding/onboarding-flow.tsx)"
+    },
+    {
+      "id": "AC4.3.3",
+      "status": "OK",
+      "target": "backend/app/onboarding/services.py (DisclaimerRequired); tests: backend/tests/onboarding/test_submit.py"
+    },
+    {
+      "id": "AC4.3.4",
+      "status": "OK",
+      "target": "frontend/src/components/onboarding/disclaimer-gate.tsx (SupportPanel; link only when ONBOARDING_SUPPORT_URL is set); tests: frontend/src/components/onboarding/onboarding-flow.test.tsx, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.4.1",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/questionnaire_v1.json; tests: backend/tests/onboarding/test_definition.py"
+    },
+    {
+      "id": "AC4.4.2",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/questionnaire_v1.json (q19 showIf); tests: backend/tests/onboarding/test_definition.py, frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "id": "AC4.4.3",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/questionnaire_v1.json (medical on q8-q12); backend/app/onboarding/services.py (non_medical_answers); tests: backend/tests/onboarding/test_definition.py, backend/tests/onboarding/test_public_port.py"
+    },
+    {
+      "id": "AC4.4.4",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/questionnaire_v1.json (disclaimerText); tests: backend/tests/onboarding/test_definition.py"
+    },
+    {
+      "id": "AC4.4.5",
+      "status": "OK",
+      "target": "backend/app/onboarding/data/questionnaire_v1.json ([Open — client] notes, server-side only); tests: backend/tests/onboarding/test_definition.py"
+    }
+  ],
+  "reverse": [
+    {
+      "id": "QUESTIONNAIRE_ALREADY_SUBMITTED",
+      "status": "N/A",
+      "target": "Error code for the 409 that contract C1 documents without a C11 code; [Decided by delivery team]"
+    }
+  ]
+}

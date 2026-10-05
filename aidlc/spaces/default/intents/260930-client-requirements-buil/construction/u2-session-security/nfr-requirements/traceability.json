@@ -1,0 +1,19 @@
+{
+  "stage": "nfr-requirements",
+  "unit": "u2-session-security",
+  "upstream_ids": ["NFR1", "NFR2", "NFR3", "NFR4", "NFR5", "NFR6", "NFR7", "NFR8", "NFR9", "NFR10", "NFR11", "NFR12"],
+  "coverage": [
+    { "id": "NFR1", "status": "OK", "target": "NFR1.1" },
+    { "id": "NFR2", "status": "OK", "target": "NFR2.1, NFR2.2, NFR2.3, NFR2.4, NFR2.5, NFR2.6, NFR2.7, NFR2.8, NFR2.9, NFR2.10, NFR2.11, NFR2.12, NFR2.13, NFR2.14, NFR2.15, NFR2.16" },
+    { "id": "NFR3", "status": "OK", "target": "NFR3.1, NFR3.2" },
+    { "id": "NFR4", "status": "N/A", "target": "Analysis time; no analysis in this unit (U6)" },
+    { "id": "NFR5", "status": "OK", "target": "NFR5.1, NFR5.2, NFR5.3, NFR5.4, NFR5.5, NFR5.6, NFR5.7, NFR5.8, NFR5.9, NFR5.10, NFR5.11, NFR5.12" },
+    { "id": "NFR6", "status": "OK", "target": "NFR6.1" },
+    { "id": "NFR7", "status": "OK", "target": "NFR7.1" },
+    { "id": "NFR8", "status": "OK", "target": "NFR8.1, NFR8.2, NFR8.3" },
+    { "id": "NFR9", "status": "OK", "target": "NFR9.1, NFR9.2, NFR9.3, NFR9.4, NFR9.5, NFR9.6, NFR9.7, NFR9.8" },
+    { "id": "NFR10", "status": "N/A", "target": "Cost control of paid AI usage; no OpenAI calls in this unit" },
+    { "id": "NFR11", "status": "OK", "target": "NFR11.1, NFR11.2, NFR11.3, NFR11.4" },
+    { "id": "NFR12", "status": "N/A", "target": "Email delivery adapter unchanged from U1 (U1 NFR12.1-NFR12.2); U2 only reuses it, sending after the response per NFR5.6" }
+  ]
+}

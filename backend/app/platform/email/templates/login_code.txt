@@ -1,0 +1,10 @@
+Hello{% if full_name %} {{ full_name }}{% endif %},
+
+Your code to sign in is:
+
+    {{ code }}
+
+It is valid for {{ expires_minutes }} minutes and can be used once.
+
+Didn't ask for this? Someone may have your password. You can ignore this email, and we
+recommend changing your password.

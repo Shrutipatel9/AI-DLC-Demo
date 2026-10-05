@@ -1,0 +1,48 @@
+# Local supporting services for development, tests and CI (BR8.3, AC1.2.1, AC1.2.3).
+# The apps themselves run as normal processes (infrastructure answer Q1).
+#
+#   docker compose up -d --wait postgres mailpit
+#
+# Credentials default to local-only, non-secret values so CI needs no .env file.
+# Override them with POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB if you like.
+# Every port is bound to 127.0.0.1 only. Images are pinned by digest; Dependabot
+# does not track Compose digests, so bump them deliberately.
+
+name: facial-analysis
+
+services:
+  postgres:
+    # postgres:16 (16.15)
+    image: postgres:16@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  mailpit:
+    # axllent/mailpit v1.31.3 — local email catcher (development and CI only)
+    image: axllent/mailpit@sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d
+    environment:
+      MP_MAX_MESSAGES: 500
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  pgdata:

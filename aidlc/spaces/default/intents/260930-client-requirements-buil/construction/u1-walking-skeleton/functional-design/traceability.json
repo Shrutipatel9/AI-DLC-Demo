@@ -1,0 +1,301 @@
+{
+  "stage": "functional-design",
+  "unit": "u1-walking-skeleton",
+  "upstream_ids": [
+    "AC1.1.1",
+    "AC1.1.2",
+    "AC1.1.3",
+    "AC1.2.1",
+    "AC1.2.2",
+    "AC1.2.3",
+    "AC1.2.4",
+    "AC1.3.1",
+    "AC1.3.2",
+    "AC1.3.3",
+    "AC1.3.4",
+    "AC1.3.5",
+    "AC1.4.1",
+    "AC1.4.2",
+    "AC1.4.3",
+    "AC1.4.4",
+    "AC1.5.1",
+    "AC1.5.2",
+    "AC1.5.3",
+    "AC1.5.4",
+    "AC1.6.1",
+    "AC1.6.2",
+    "AC1.6.3",
+    "AC1.6.4",
+    "AC1.8.1",
+    "AC1.8.2",
+    "AC1.8.3",
+    "AC1.9.1",
+    "AC1.9.2",
+    "AC1.9.3",
+    "AC3.1.1",
+    "AC3.1.2",
+    "AC3.1.3",
+    "AC3.1.4",
+    "AC3.1.5",
+    "AC3.2.1",
+    "AC3.2.2",
+    "AC3.2.3",
+    "AC3.2.4",
+    "AC3.2.5",
+    "AC3.2.6",
+    "AC3.4.1",
+    "AC3.4.2",
+    "AC3.4.3",
+    "AC3.8.1",
+    "AC3.8.2"
+  ],
+  "coverage": [
+    {
+      "id": "AC1.1.1",
+      "status": "OK",
+      "target": "BR8.1"
+    },
+    {
+      "id": "AC1.1.2",
+      "status": "OK",
+      "target": "BR8.1"
+    },
+    {
+      "id": "AC1.1.3",
+      "status": "OK",
+      "target": "BR8.2"
+    },
+    {
+      "id": "AC1.2.1",
+      "status": "OK",
+      "target": "BR8.3, BR7.6"
+    },
+    {
+      "id": "AC1.2.2",
+      "status": "OK",
+      "target": "BR8.4"
+    },
+    {
+      "id": "AC1.2.3",
+      "status": "OK",
+      "target": "BR8.5"
+    },
+    {
+      "id": "AC1.2.4",
+      "status": "OK",
+      "target": "BR8.4"
+    },
+    {
+      "id": "AC1.3.1",
+      "status": "OK",
+      "target": "BR8.6"
+    },
+    {
+      "id": "AC1.3.2",
+      "status": "OK",
+      "target": "BR8.6"
+    },
+    {
+      "id": "AC1.3.3",
+      "status": "OK",
+      "target": "BR8.7"
+    },
+    {
+      "id": "AC1.3.4",
+      "status": "OK",
+      "target": "BR8.8, BR5.3"
+    },
+    {
+      "id": "AC1.3.5",
+      "status": "OK",
+      "target": "BR8.8"
+    },
+    {
+      "id": "AC1.4.1",
+      "status": "OK",
+      "target": "BR8.9"
+    },
+    {
+      "id": "AC1.4.2",
+      "status": "OK",
+      "target": "BR8.9"
+    },
+    {
+      "id": "AC1.4.3",
+      "status": "OK",
+      "target": "BR8.9"
+    },
+    {
+      "id": "AC1.4.4",
+      "status": "OK",
+      "target": "BR8.10"
+    },
+    {
+      "id": "AC1.5.1",
+      "status": "OK",
+      "target": "BR7.1"
+    },
+    {
+      "id": "AC1.5.2",
+      "status": "OK",
+      "target": "BR7.2"
+    },
+    {
+      "id": "AC1.5.3",
+      "status": "OK",
+      "target": "BR7.2"
+    },
+    {
+      "id": "AC1.5.4",
+      "status": "OK",
+      "target": "BR7.3"
+    },
+    {
+      "id": "AC1.6.1",
+      "status": "OK",
+      "target": "BR7.4"
+    },
+    {
+      "id": "AC1.6.2",
+      "status": "OK",
+      "target": "BR7.4"
+    },
+    {
+      "id": "AC1.6.3",
+      "status": "OK",
+      "target": "BR7.5"
+    },
+    {
+      "id": "AC1.6.4",
+      "status": "OK",
+      "target": "BR7.6"
+    },
+    {
+      "id": "AC1.8.1",
+      "status": "OK",
+      "target": "BR6.2"
+    },
+    {
+      "id": "AC1.8.2",
+      "status": "OK",
+      "target": "BR6.1"
+    },
+    {
+      "id": "AC1.8.3",
+      "status": "OK",
+      "target": "BR6.3"
+    },
+    {
+      "id": "AC1.9.1",
+      "status": "OK",
+      "target": "BR5.1"
+    },
+    {
+      "id": "AC1.9.2",
+      "status": "OK",
+      "target": "BR5.2"
+    },
+    {
+      "id": "AC1.9.3",
+      "status": "OK",
+      "target": "BR5.3"
+    },
+    {
+      "id": "AC3.1.1",
+      "status": "OK",
+      "target": "BR1.1, BR1.7"
+    },
+    {
+      "id": "AC3.1.2",
+      "status": "OK",
+      "target": "BR1.3"
+    },
+    {
+      "id": "AC3.1.3",
+      "status": "OK",
+      "target": "BR1.4, BR2.6"
+    },
+    {
+      "id": "AC3.1.4",
+      "status": "OK",
+      "target": "BR1.2"
+    },
+    {
+      "id": "AC3.1.5",
+      "status": "OK",
+      "target": "BR1.5, BR1.6"
+    },
+    {
+      "id": "AC3.2.1",
+      "status": "OK",
+      "target": "BR2.3, BR3.3, BR4.1, BR4.2"
+    },
+    {
+      "id": "AC3.2.2",
+      "status": "OK",
+      "target": "BR2.3"
+    },
+    {
+      "id": "AC3.2.3",
+      "status": "OK",
+      "target": "BR2.4"
+    },
+    {
+      "id": "AC3.2.4",
+      "status": "OK",
+      "target": "BR2.5"
+    },
+    {
+      "id": "AC3.2.5",
+      "status": "OK",
+      "target": "BR2.2"
+    },
+    {
+      "id": "AC3.2.6",
+      "status": "OK",
+      "target": "BR2.8"
+    },
+    {
+      "id": "AC3.4.1",
+      "status": "OK",
+      "target": "BR3.2, BR1.7"
+    },
+    {
+      "id": "AC3.4.2",
+      "status": "OK",
+      "target": "BR3.1"
+    },
+    {
+      "id": "AC3.4.3",
+      "status": "OK",
+      "target": "BR3.3, BR5.1"
+    },
+    {
+      "id": "AC3.8.1",
+      "status": "OK",
+      "target": "BR4.4"
+    },
+    {
+      "id": "AC3.8.2",
+      "status": "OK",
+      "target": "BR4.3"
+    }
+  ],
+  "reverse": [
+    {
+      "id": "BR2.1",
+      "status": "N/A",
+      "target": "Code format decided in this unit (FD Q1); tested by the code-issue unit tests"
+    },
+    {
+      "id": "BR2.7",
+      "status": "N/A",
+      "target": "Attempt counting is built here so a resend cannot reset it; its acceptance criteria (AC3.3.2-AC3.3.4) belong to U2 US3.3"
+    },
+    {
+      "id": "BR5.4",
+      "status": "N/A",
+      "target": "Interim behaviour until U2 session restore (FD Q3); no acceptance criterion by design"
+    }
+  ]
+}
