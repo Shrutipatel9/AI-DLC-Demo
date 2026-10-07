@@ -74,6 +74,10 @@ _ci_env_export EMAIL_FROM "no-reply@example.test"
 _ci_env_export SMTP_HOST "${SMTP_HOST:-127.0.0.1}"
 _ci_env_export SMTP_PORT "${SMTP_PORT:-1025}"
 _ci_env_export SMTP_STARTTLS "false"
+# The local mail catcher needs no login; blank any real-provider credentials a developer
+# keeps in backend/.env so they are never sent to Mailpit (plaintext AUTH is refused).
+_ci_env_export SMTP_USERNAME ""
+_ci_env_export SMTP_PASSWORD ""
 _ci_env_export RATE_LIMIT_BACKEND "postgres"
 # Test environments only (U2 infrastructure post-review R-02): the e2e journeys make many
 # auth calls from one address. Production defaults stay 20 and 60; the limiter's own tests
