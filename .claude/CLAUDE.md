@@ -1,5 +1,15 @@
 @.claude/rules/aidlc.md
 
+## Working rules (token budget — read first)
+
+- **Approved docs are frozen.** Ideation and Inception docs under `aidlc/spaces/default/intents/*/` are approved and read-only. Do not review, reformat or rewrite any existing doc unless the user explicitly asks. No extra documents beyond what a stage strictly requires; keep required ones (plan, test instructions, code summary) short.
+- **Read only what the step needs.** In Construction read `aidlc-state.md`, the current unit's `code-generation-plan.md` and only the 2–3 source/story sections the step names. Never open the audit log (`<record>/audit/`); it is append-only and tool-owned.
+- **Code-first for remaining units.** U6–U10 skip Functional/NFR/Infrastructure design and go straight to Code Generation; open design points are decided in the plan and labelled `[Decided by delivery team]`.
+- **No optional reviews.** Do not run reviewer passes or "verify consistency" rewrites unless the workflow requires them or the user asks. Proof is the browser checkpoint (`bash scripts/verify-skeleton.sh`) plus lint/type/test/coverage.
+- **Model per phase.** Dispatch code-generation subagents with `model: sonnet`; reserve Opus for planning, architecture and hard debugging.
+- **One unit per session.** After a unit's checkpoint is approved: commit, then `/clear` and resume with `/aidlc --resume`. If a step needs more than one session, split the unit first.
+- **Execute quietly.** Agree the plan once, then build without narration. Report only when done or blocked, and end every response with a 3-line status: **Done / Next / Blockers**.
+
 <!--
   The @-line above pulls the AIDLC method into Claude's ambient context. It is
   the first hop of a reference chain (NOT a copy): CLAUDE.md → @.claude/rules/
