@@ -82,7 +82,8 @@ jobs:
         run: |
           source ../scripts/ci-env.sh
           uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-            tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report -m "not perf" \
+            tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report \
+            tests/journey tests/settings tests/traceability tests/chat -m "not perf" \
             --cov=app --cov-report=term-missing --cov-fail-under=80
       - name: Requirement-to-test map (every FR, AUTH, BR and FE ID is mapped; US1.13)
         run: uv run python ../scripts/check-requirement-map.py ..
@@ -215,9 +216,10 @@ jobs:
           WEB_BASE_URL: http://localhost:3000
           AI_FAKE_CONTROL_DIR: ${{ github.workspace }}/.verify/ai-control
         run: |
-          pnpm exec playwright install --with-deps chromium
+          pnpm exec playwright install --with-deps chromium webkit firefox
           pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-            e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts
+            e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts \
+            e2e/journey.spec.ts e2e/settings.spec.ts
       - name: Upload Playwright report and API log
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

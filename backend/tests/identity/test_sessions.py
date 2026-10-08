@@ -389,8 +389,7 @@ def test_revoke_user_sessions_keeps_only_the_named_family(
     user_id = add_user(db_session, frozen_clock.now())
     keep, other_a, other_b = (session_cookie(service, db_session, user_id) for _ in range(3))
     reason = RevokedReason.PASSWORD_CHANGED
-    kept = keep.family_id
-    count = service.revoke_user_sessions(db_session, user_id, reason, keep_family=kept)
+    count = service.revoke_user_sessions(db_session, user_id, reason, keep_family=keep.family_id)
     assert count == 2
     ok(service.refresh(db_session, keep.value, None))
     for revoked in (other_a, other_b):

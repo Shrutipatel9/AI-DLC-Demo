@@ -92,7 +92,8 @@ uv run lint-imports
 
 step "Backend: tests with coverage (>= 80%), no network"
 uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report \n  tests/journey tests/settings tests/traceability -m "not perf" \
+  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report \
+  tests/journey tests/settings tests/traceability tests/chat -m "not perf" \
   --cov=app --cov-report=term-missing --cov-fail-under=80 -q
 
 step "Backend: latency targets (p95; one automatic re-run per target, D10)"
@@ -102,7 +103,7 @@ uv run pytest tests/identity/test_perf_auth.py tests/health/test_perf_health.py 
 # --------------------------------------------------------------------------- frontend
 step "Requirement-to-test map (every FR, AUTH, BR and FE ID is mapped; US1.13)"
 cd "$ROOT/backend"
-uv run python "$ROOT/scripts/check-requirement-map.py" "$ROOT"
+uv run python ../scripts/check-requirement-map.py ..
 
 step "Frontend: install, lint, format, types"
 cd "$ROOT/frontend"
@@ -157,9 +158,10 @@ WEB_PID="$(API_ORIGIN="$API_ORIGIN" start_background "$LOG_DIR/web.log" pnpm sta
 bash "$ROOT/scripts/wait-for.sh" "http://localhost:3000/login" 60
 
 step "E2E: Playwright skeleton, session, onboarding, photo, payment and analysis journeys (phone + desktop, axe)"
-pnpm exec playwright install chromium
+pnpm exec playwright install chromium webkit firefox
 pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts
+  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts \
+  e2e/journey.spec.ts e2e/settings.spec.ts
 cleanup
 API_PID=""
 WEB_PID=""

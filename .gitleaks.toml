@@ -11,6 +11,10 @@ useDefault = true
 description = "Placeholder files, lockfile hashes and git-ignored dependency/build output"
 paths = [
   '''(^|/)\.env\.example$''',
+  # A developer's own git-ignored local secrets (`.gitignore` `**/.env`, `.env.*`); never
+  # committed, and the pre-commit Gitleaks hook still blocks them from any commit.
+  '''(^|/)\.env$''',
+  '''(^|/)\.env\.local$''',
   '''(^|/)pnpm-lock\.yaml$''',
   '''(^|/)uv\.lock$''',
   '''(^|/)node_modules/''',
