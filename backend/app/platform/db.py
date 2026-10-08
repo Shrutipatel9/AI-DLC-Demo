@@ -14,12 +14,14 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
 
+from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
 from fastapi import Request
 from sqlalchemy import Engine, MetaData, create_engine, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
+from alembic import command
 from app.platform.settings import Settings
 
 ALEMBIC_DIR = Path(__file__).resolve().parents[2] / "alembic"
@@ -80,6 +82,20 @@ def check_database(engine: Engine) -> None:
             conn.execute(text("SELECT 1"))
     except Exception as exc:
         raise DatabaseNotReadyError(f"Database is unreachable: {type(exc).__name__}") from exc
+
+
+def upgrade_to_head(database_url: str, script_location: Path = ALEMBIC_DIR) -> None:
+    """Apply every pending Alembic migration (development auto-migrate, ``DB_AUTO_MIGRATE``).
+
+    Schema changes still come only from the Alembic revisions (NFR-003); this just runs
+    ``alembic upgrade head`` for the developer at start-up. Alembic's own logging setup is
+    skipped so the app's JSON logging stays in place.
+    """
+    config = Config(str(script_location.parent / "alembic.ini"))
+    config.set_main_option("script_location", str(script_location))
+    config.set_main_option("sqlalchemy.url", database_url.replace("%", "%%"))
+    config.attributes["configure_logger"] = False
+    command.upgrade(config, "head")
 
 
 def check_migrations_at_head(engine: Engine, script_location: Path = ALEMBIC_DIR) -> None:

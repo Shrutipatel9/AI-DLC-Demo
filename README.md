@@ -26,7 +26,7 @@ cp backend/.env.example backend/.env           # then fill in the placeholders
 cp frontend/.env.example frontend/.env.local
 (cd backend && uv sync && uv run python -m tools.fetch_face_model && uv run alembic upgrade head)
 (cd frontend && pnpm install)
-bash scripts/dev.sh                            # API on :8000, web on :3000
+bash scripts/dev.sh                            # API on :8000, web on :3000 (or see below)
 ```
 
 Open http://localhost:3000, sign up, and read your code in Mailpit at http://localhost:8025.

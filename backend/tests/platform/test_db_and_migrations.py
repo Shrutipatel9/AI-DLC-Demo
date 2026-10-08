@@ -22,6 +22,7 @@ from app.platform.db import (
     create_session_factory,
     get_session,
     ping,
+    upgrade_to_head,
 )
 from tests.conftest import alembic_config
 from tests.helpers import make_settings
@@ -101,3 +102,16 @@ def test_get_session_rolls_back_on_error(engine: Engine) -> None:
     with TestClient(app) as client:
         assert client.get("/fail").status_code == 409
     assert not seen["session"].in_transaction()
+
+
+def test_auto_migrate_builds_an_empty_database_to_head(scratch_database: str) -> None:
+    """DB_AUTO_MIGRATE: an empty database created by hand (e.g. in pgAdmin) is brought to head."""
+    engine = create_engine(scratch_database)
+    try:
+        upgrade_to_head(scratch_database)
+        assert set(inspect(engine).get_table_names()) >= U1_TABLES
+        check_migrations_at_head(engine)
+        upgrade_to_head(scratch_database)  # already at head: a no-op
+        check_migrations_at_head(engine)
+    finally:
+        engine.dispose()

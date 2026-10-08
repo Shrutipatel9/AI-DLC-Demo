@@ -2,7 +2,9 @@
 
 Run locally::
 
-    uv run uvicorn app.main:create_app --factory --port 8000 --timeout-graceful-shutdown 10
+    uvicorn app.main:app --reload --port 8000
+
+(``uvicorn app.main:create_app --factory`` also works.)
 
 Start-up (lifespan) fails fast, and the process exits non-zero, when the settings are
 invalid, the database is unreachable, migrations are not at head (NFR5.5), or the pinned
@@ -61,6 +63,7 @@ from app.platform.db import (
     check_migrations_at_head,
     create_db_engine,
     create_session_factory,
+    upgrade_to_head,
 )
 from app.platform.email import build_email_sender
 from app.platform.email.dispatch import EmailDispatcher
@@ -182,6 +185,8 @@ def create_app(
     async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
         if settings.check_migrations_at_startup:
             check_database(engine)
+            if settings.db_auto_migrate and settings.app_env == "development":
+                upgrade_to_head(settings.database_url.get_secret_value())
             check_migrations_at_head(engine)
         if settings.face_model_preload:
             geometry.load()  # once per process; a missing or wrong model fails start-up
@@ -252,3 +257,16 @@ def create_app(
     if settings.metrics_enabled:
         app.mount("/metrics", MetricsEndpoint(metrics, settings.metrics_allow_cidrs))
     return app
+
+
+def __getattr__(name: str) -> FastAPI:
+    """Expose ``app`` for ``uvicorn app.main:app``, built from the settings on first access.
+
+    Built lazily (PEP 562) so importing this module stays free of side effects; tests and
+    tools keep calling ``create_app()`` with their own settings.
+    """
+    if name == "app":
+        application = create_app()
+        globals()["app"] = application
+        return application
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

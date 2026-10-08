@@ -198,6 +198,9 @@ class Settings(BaseSettings):
     db_pool_timeout_seconds: float = Field(default=5.0, gt=0, alias="DB_POOL_TIMEOUT")
     db_pool_recycle_seconds: int = Field(default=1800, gt=0, alias="DB_POOL_RECYCLE")
     check_migrations_at_startup: bool = Field(default=True, alias="CHECK_MIGRATIONS_AT_STARTUP")
+    # Development convenience: run `alembic upgrade head` at start-up. Ignored outside
+    # APP_ENV=development, where migrations stay an explicit deploy step.
+    db_auto_migrate: bool = Field(default=False, alias="DB_AUTO_MIGRATE")
 
     # --- HTTP / CORS ---------------------------------------------------------------
     frontend_origin: str = Field(alias="FRONTEND_ORIGIN")
