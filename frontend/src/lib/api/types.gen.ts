@@ -284,6 +284,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/chat/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Conversation history and today's remaining messages
+         * @description 402 without payment; 404 ``REPORT_NOT_READY`` while there is no report.
+         */
+        get: operations["get_chat_chat_messages_get"];
+        put?: never;
+        /**
+         * Send a message; returns the whole reply
+         * @description 429 ``CHAT_DAILY_LIMIT_REACHED`` (no AI call); 502/504 when the model fails (not counted).
+         */
+        post: operations["post_message_chat_messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -881,6 +905,62 @@ export interface components {
             newPassword: string;
         };
         /**
+         * ChatMessageOut
+         * @description One stored message.
+         */
+        ChatMessageOut: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+            /** Text */
+            text: string;
+        };
+        /**
+         * ChatReplyOut
+         * @description The assistant's whole reply.
+         */
+        ChatReplyOut: {
+            /** Remainingtoday */
+            remainingToday: number;
+            /** Reply */
+            reply: string;
+            /**
+             * Resetsat
+             * Format: date-time
+             */
+            resetsAt: string;
+        };
+        /**
+         * ChatSendIn
+         * @description A message to send.
+         */
+        ChatSendIn: {
+            /** Text */
+            text: string;
+        };
+        /**
+         * ChatStateOut
+         * @description The conversation and today's remaining messages.
+         */
+        ChatStateOut: {
+            /** Messages */
+            messages: components["schemas"]["ChatMessageOut"][];
+            /** Remainingtoday */
+            remainingToday: number;
+            /**
+             * Resetsat
+             * Format: date-time
+             */
+            resetsAt: string;
+        };
+        /**
          * CheckoutOut
          * @description ``POST /payments/checkout``: the hosted Checkout URL to send the browser to.
          */
@@ -950,7 +1030,7 @@ export interface components {
          * @description C11 error codes used so far (the full list grows with later units).
          * @enum {string}
          */
-        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "IMAGE_RETRY_NOT_AVAILABLE" | "REPORT_NOT_READY" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
+        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "IMAGE_RETRY_NOT_AVAILABLE" | "REPORT_NOT_READY" | "CHAT_DAILY_LIMIT_REACHED" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
         /**
          * ErrorDetail
          * @description One detail item. ``attemptsLeft`` is sent with ``CODE_INVALID`` (D3).
@@ -2484,6 +2564,140 @@ export interface operations {
             };
             /** @description Error (contract C11) */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_chat_chat_messages_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatStateOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    post_message_chat_messages_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatSendIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatReplyOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            504: {
                 headers: {
                     [name: string]: unknown;
                 };

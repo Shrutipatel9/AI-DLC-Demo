@@ -27,8 +27,11 @@ from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy import Engine
 from starlette.routing import BaseRoute
 
+from app.ai.public import build_text_model
 from app.analysis.public import build_analysis, media_in_use
 from app.analysis.public import router as analysis_router
+from app.chat.public import build_chat
+from app.chat.public import router as chat_router
 from app.face.public import FaceGeometry, build_face_geometry
 from app.health.routes import router as health_router
 from app.identity.public import build_identity, current_user, protected_router, public_router
@@ -163,6 +166,15 @@ def create_app(
     )
     report = build_report(payments=payments, media=media, clock=clock)
     journey = build_journey(onboarding=onboarding, photos=photos, payments=payments)
+    chat = build_chat(
+        settings,
+        text_model=build_text_model(
+            settings.model_copy(update={"ai_text_timeout_seconds": settings.chat_timeout_seconds})
+        ),
+        payments=payments,
+        onboarding=onboarding,
+        clock=clock,
+    )
     # A run keeps the photo files it started with: a retake must not delete them (R-02).
     media.add_reference_check(media_in_use)
 
@@ -209,6 +221,7 @@ def create_app(
     app.state.images = images
     app.state.report = report
     app.state.journey = journey
+    app.state.chat = chat
 
     install_exception_handlers(app)
     install_middleware(app, settings, metrics)
@@ -228,6 +241,7 @@ def create_app(
     app.include_router(images_router, dependencies=[Depends(current_user)])
     app.include_router(report_router, dependencies=[Depends(current_user)])
     app.include_router(journey_router, dependencies=[Depends(current_user)])
+    app.include_router(chat_router, dependencies=[Depends(current_user)])
     app.include_router(settings_router, dependencies=[Depends(current_user)])
     if settings.payment_provider == "fake":
         # Development/test only (settings refuse the fake elsewhere): the browser navigates

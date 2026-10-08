@@ -332,8 +332,13 @@
       "status": "mapped"
     },
     "FR-019": {
-      "status": "Deferred",
-      "reason": "The AI Beauty Assistant (chat) is built in unit U9, which has not been built yet; U9 replaces this entry with its tests."
+      "tests": [
+        "backend/tests/chat/test_chat_api.py",
+        "backend/tests/chat/test_chat_limit_race.py",
+        "frontend/src/components/chat/chat-screen.test.tsx",
+        "frontend/e2e/chat.spec.ts"
+      ],
+      "status": "mapped"
     },
     "FR-020": {
       "tests": [

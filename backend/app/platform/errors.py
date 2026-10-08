@@ -59,6 +59,8 @@ class ErrorCode(StrEnum):
     IMAGE_RETRY_NOT_AVAILABLE = "IMAGE_RETRY_NOT_AVAILABLE"
     #: Contract C11: the paid user has no published report yet.
     REPORT_NOT_READY = "REPORT_NOT_READY"
+    #: Contract C11 (U9): the user has had the configured number of chat replies today.
+    CHAT_DAILY_LIMIT_REACHED = "CHAT_DAILY_LIMIT_REACHED"
     NOT_FOUND = "NOT_FOUND"
     RATE_LIMITED = "RATE_LIMITED"  # [Decided by delivery team] plan decision D3
     UPSTREAM_UNAVAILABLE = "UPSTREAM_UNAVAILABLE"
@@ -348,6 +350,14 @@ class ReportNotReady(AppError):  # noqa: N818  (named after the C11 code)
     status_code = 404
     code = ErrorCode.REPORT_NOT_READY
     default_message = "Your report isn't ready yet."
+
+
+class ChatDailyLimitReached(AppError):  # noqa: N818  (named after the C11 code)
+    """429: the daily chat limit is used up; ``details`` carries when chat reopens (AC10.3.1)."""
+
+    status_code = 429
+    code = ErrorCode.CHAT_DAILY_LIMIT_REACHED
+    default_message = "You've reached today's chat limit. You can chat again tomorrow."
 
 
 class WebhookRejected(AppError):  # noqa: N818  (named like the other C11 errors)

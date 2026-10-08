@@ -1,0 +1,121 @@
+{
+  "stage": "code-generation",
+  "unit": "u9-beauty-assistant",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "backend/.env.example"
+    },
+    {
+      "path": "backend/alembic/versions/0009_u9_chat.py"
+    },
+    {
+      "path": "backend/app/chat/__init__.py"
+    },
+    {
+      "path": "backend/app/chat/grounding.py"
+    },
+    {
+      "path": "backend/app/chat/models.py"
+    },
+    {
+      "path": "backend/app/chat/public.py"
+    },
+    {
+      "path": "backend/app/chat/repositories.py"
+    },
+    {
+      "path": "backend/app/chat/routes.py"
+    },
+    {
+      "path": "backend/app/chat/schemas.py"
+    },
+    {
+      "path": "backend/app/chat/service.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/platform/errors.py"
+    },
+    {
+      "path": "backend/app/platform/settings.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/tests/chat/__init__.py"
+    },
+    {
+      "path": "backend/tests/chat/conftest.py"
+    },
+    {
+      "path": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "path": "backend/tests/chat/test_chat_eval.py"
+    },
+    {
+      "path": "backend/tests/chat/test_chat_limit_race.py"
+    },
+    {
+      "path": "backend/tests/chat/test_chat_migration.py"
+    },
+    {
+      "path": "docs/requirement-test-map.json"
+    },
+    {
+      "path": "frontend/e2e/analysis.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/chat.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/journey.spec.ts"
+    },
+    {
+      "path": "frontend/src/app/chat/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/report/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/app-header.tsx"
+    },
+    {
+      "path": "frontend/src/components/chat/chat-screen.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/chat/chat-screen.tsx"
+    },
+    {
+      "path": "frontend/src/components/chat/messages.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/errors.ts"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/chat/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/chat/hooks.ts"
+    },
+    {
+      "path": "frontend/src/lib/chat/index.ts"
+    },
+    {
+      "path": "scripts/verify-skeleton.sh"
+    },
+    {
+      "path": "scripts/verify.sh"
+    }
+  ]
+}

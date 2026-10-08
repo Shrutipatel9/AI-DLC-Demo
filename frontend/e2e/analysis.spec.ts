@@ -253,6 +253,21 @@ test("start the analysis, watch the worker advance every step, then view the rep
   ]);
   expect(download.suggestedFilename()).toBe("facial-analysis-report.pdf");
 
+  // U9: open Chat from the header, ask about the report and see the (fake) assistant's reply
+  // (AC10.1.1, AC10.1.3, AC10.1.5); focus stays in the input while the reply is announced.
+  if (await page.getByTestId("nav-menu-button").isVisible()) {
+    await page.getByTestId("nav-menu-button").click();
+  }
+  await page.getByTestId("nav-chat").click();
+  await expect(page).toHaveURL(/\/chat$/);
+  await expect(page.getByTestId("chat-empty")).toBeVisible();
+  await expectAccessible(page, "chat");
+  await page.getByTestId("chat-input").fill("What does my symmetry score mean?");
+  await page.getByTestId("chat-send-button").click();
+  await expect(page.getByTestId("chat-log")).toContainText("This is a fake assistant reply.");
+  await expect(page.getByTestId("chat-input")).toBeFocused();
+  await expect(page.getByTestId("chat-remaining")).toHaveText("49 messages left today");
+
   // U10: log out, enter through the landing page's "Sign in" link, and sign-in lands on the next
   // step, which for a finished report is Home (US2.1 AC2.1.2, US11.8).
   await page.getByTestId("user-menu-button").click();

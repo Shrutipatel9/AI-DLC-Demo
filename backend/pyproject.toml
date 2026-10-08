@@ -90,6 +90,7 @@ pythonpath = ["."]
 addopts = "-ra --strict-markers --disable-socket --allow-hosts=127.0.0.1,localhost,::1"
 markers = [
     "perf: latency and timing checks (U1 NFR9.1-NFR9.3, U2 NFR9.1-NFR9.5 and the anti-enumeration timing test); excluded from the coverage run",
+    "eval: opt-in checks against the REAL model (U9 AC10.1.7, AC10.2.2); skipped unless RUN_CHAT_EVAL=1",
 ]
 filterwarnings = ["error::DeprecationWarning:app.*"]
 
@@ -161,6 +162,7 @@ forbidden_modules = [
     "app.worker",
     "app.journey",
     "app.settings",
+    "app.chat",
 ]
 
 [[tool.importlinter.contracts]]
@@ -555,5 +557,50 @@ forbidden_modules = [
     "app.identity.services",
     "app.identity.repositories",
     "app.identity.models",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Chat layers: public -> routes -> service -> grounding/repositories -> schemas/models"
+type = "layers"
+layers = [
+    "app.chat.public",
+    "app.chat.routes",
+    "app.chat.service",
+    "app.chat.grounding | app.chat.repositories",
+    "app.chat.schemas | app.chat.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Chat route handlers never import repositories or models directly"
+type = "forbidden"
+source_modules = ["app.chat.routes"]
+forbidden_modules = ["app.chat.repositories", "app.chat.models"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Chat imports other modules only through their public interface"
+type = "forbidden"
+source_modules = ["app.chat"]
+forbidden_modules = [
+    "app.onboarding.services",
+    "app.onboarding.repositories",
+    "app.onboarding.models",
+    "app.payments.services",
+    "app.payments.repositories",
+    "app.payments.models",
+    "app.analysis.services",
+    "app.analysis.repositories",
+    "app.analysis.models",
+    "app.identity.services",
+    "app.identity.repositories",
+    "app.identity.models",
+    "app.ai.fakes",
+    "app.ai.ports",
+    "app.ai.errors",
+    "app.report_writing.request",
+    "app.report_writing.service",
+    "app.report.service",
+    "app.report.assembly",
 ]
 allow_indirect_imports = true

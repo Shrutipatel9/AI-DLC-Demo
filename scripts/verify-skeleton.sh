@@ -147,6 +147,10 @@ uv sync --frozen --quiet
 uv run --no-sync python -m tools.fetch_face_model >/dev/null
 uv run --no-sync python -m tools.migration_roundtrip
 
+mkdir -p "$LOG_DIR/ai-control"
+rm -f "$LOG_DIR/ai-control/fail-text" "$LOG_DIR/ai-control/fail-image"
+# The control directory is read by the API (chat, U9) as well as by the worker (U6).
+export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
 step "Start the API (SMTP to Mailpit; fresh private media root; E2E landmark overrides)"
 rm -rf "$LOG_DIR/media"
 API_PID="$(DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp MEDIA_ROOT="$LOG_DIR/media" \

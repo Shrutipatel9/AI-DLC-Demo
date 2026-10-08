@@ -5,7 +5,7 @@
 //      report, then Settings.
 // They run on a 360 px phone and a desktop viewport in Chromium, and in WebKit and Firefox
 // (scripts/verify.sh and CI). Not tagged @checkpoint: the checkpoint run keeps its own subset.
-// AI Chat is added to the axe list by unit U9. No paid service is called.
+// The Beauty Assistant (U9) is on the axe list. No paid service is called.
 import { expect, test } from "@playwright/test";
 
 import {
@@ -106,6 +106,19 @@ test("photos, payment, analysis, report and settings", async ({ page }) => {
   await expect(page).toHaveURL(/\/report$/);
   await expect(page.locator('section[data-testid^="feature-"]')).toHaveCount(11);
   await expectAccessible(page, "report");
+
+  // Chat (U9): empty state, then a question and the fake assistant's reply.
+  if (await page.getByTestId("nav-menu-button").isVisible()) {
+    await page.getByTestId("nav-menu-button").click();
+  }
+  await page.getByTestId("nav-chat").click();
+  await expect(page).toHaveURL(/\/chat$/);
+  await expect(page.getByTestId("chat-empty")).toBeVisible();
+  await expectAccessible(page, "chat: empty state");
+  await page.getByTestId("chat-input").fill("What does my symmetry score mean?");
+  await page.getByTestId("chat-send-button").click();
+  await expect(page.getByTestId("chat-log")).toContainText("This is a fake assistant reply.");
+  await expectAccessible(page, "chat: with a reply");
 
   // Settings: Account Info and Billing (US11.4, US11.6), with the paid payment listed.
   await page.getByTestId("user-menu-button").click();

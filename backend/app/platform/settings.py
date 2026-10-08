@@ -428,6 +428,14 @@ class Settings(BaseSettings):
     #: exactly this precision (AC7.9.1).
     report_value_decimals: int = Field(default=2, ge=0, le=4, alias="REPORT_VALUE_DECIMALS")
 
+    # --- Beauty Assistant chat (U9; FR-019, NFR10) ----------------------------------------------
+    #: [Decided by delivery team] Successful replies per user per UTC day (AC10.3.1, AC10.3.4).
+    chat_daily_limit: int = Field(default=50, ge=1, le=10000, alias="CHAT_DAILY_LIMIT")
+    #: [Decided by delivery team] How many of the latest stored messages are sent to the model.
+    chat_history_messages: int = Field(default=20, ge=1, le=100, alias="CHAT_HISTORY_MESSAGES")
+    #: [Decided by delivery team] The chat call's own timeout (the browser waits 60 s, C1).
+    chat_timeout_seconds: float = Field(default=45.0, gt=0, le=60, alias="CHAT_TIMEOUT_SECONDS")
+
     # --- Background worker (U6; US1.7) ------------------------------------------------------
     worker_poll_interval_seconds: float = Field(
         default=1.0, gt=0, alias="WORKER_POLL_INTERVAL_SECONDS"

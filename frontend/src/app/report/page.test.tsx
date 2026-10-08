@@ -57,10 +57,16 @@ describe("report and chat pages", () => {
     expect(screen.getByTestId("nav-report")).toBeInTheDocument();
   });
 
-  it("opens the Chat placeholder from the header link", async () => {
+  it("opens the Beauty Assistant for a signed-in user", async () => {
     act(() => setSession("tok", "2026-10-01T10:15:00Z", USER));
-    mockFetch(route("GET", "/auth/me", () => jsonResponse(200, USER)));
+    mockFetch(
+      route("GET", "/auth/me", () => jsonResponse(200, USER)),
+      route("GET", "/chat/messages", () =>
+        jsonResponse(200, { messages: [], remainingToday: 50, resetsAt: "2026-10-02T00:00:00Z" }),
+      ),
+    );
     render(<ChatPage />);
-    expect(await screen.findByTestId("chat-placeholder")).toHaveTextContent("coming soon");
+    expect(await screen.findByTestId("chat-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("nav-chat")).toBeInTheDocument();
   });
 });

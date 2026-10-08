@@ -188,9 +188,11 @@ jobs:
         run: |
           source scripts/ci-env.sh
           mkdir -p .verify
+          mkdir -p .verify/ai-control
           (cd backend && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \
             MEDIA_ROOT="$GITHUB_WORKSPACE/.verify/media" \
             FACE_LANDMARK_OVERRIDES_FILE=tests/fixtures/faces/overrides.json \
+            AI_FAKE_CONTROL_DIR="$GITHUB_WORKSPACE/.verify/ai-control" \
             nohup uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000 \
             --timeout-graceful-shutdown 10 > ../.verify/api.log 2>&1 &)
           bash scripts/wait-for.sh http://127.0.0.1:8000/health/ready 60
@@ -215,7 +217,7 @@ jobs:
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-            e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts
+            e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts
       - name: Upload Playwright report and API log
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

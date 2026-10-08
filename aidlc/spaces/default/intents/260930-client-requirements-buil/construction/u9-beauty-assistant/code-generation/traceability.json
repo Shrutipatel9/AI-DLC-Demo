@@ -1,0 +1,92 @@
+{
+  "stage": "code-generation",
+  "unit": "u9-beauty-assistant",
+  "upstream_ids": [
+    "AC10.1.1",
+    "AC10.1.2",
+    "AC10.1.3",
+    "AC10.1.4",
+    "AC10.1.5",
+    "AC10.1.6",
+    "AC10.1.7",
+    "AC10.2.1",
+    "AC10.2.2",
+    "AC10.3.1",
+    "AC10.3.2",
+    "AC10.3.3",
+    "AC10.3.4",
+    "FR-019"
+  ],
+  "coverage": [
+    {
+      "id": "AC10.1.1",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "AC10.1.2",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "AC10.1.3",
+      "status": "OK",
+      "target": "frontend/src/components/chat/chat-screen.test.tsx"
+    },
+    {
+      "id": "AC10.1.4",
+      "status": "OK",
+      "target": "frontend/src/components/chat/chat-screen.test.tsx"
+    },
+    {
+      "id": "AC10.1.5",
+      "status": "OK",
+      "target": "frontend/src/components/chat/chat-screen.test.tsx"
+    },
+    {
+      "id": "AC10.1.6",
+      "status": "OK",
+      "target": "frontend/e2e/chat.spec.ts"
+    },
+    {
+      "id": "AC10.1.7",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_eval.py"
+    },
+    {
+      "id": "AC10.2.1",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "AC10.2.2",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_eval.py"
+    },
+    {
+      "id": "AC10.3.1",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "AC10.3.2",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "AC10.3.3",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_limit_race.py"
+    },
+    {
+      "id": "AC10.3.4",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    },
+    {
+      "id": "FR-019",
+      "status": "OK",
+      "target": "backend/tests/chat/test_chat_api.py"
+    }
+  ]
+}

@@ -2,26 +2,17 @@ import type { Metadata } from "next";
 
 import { AppShell } from "@/components/app/app-shell";
 import { ProtectedRoute } from "@/components/app/protected-route";
-import { Card } from "@/components/ui/card";
+import { ChatScreen } from "@/components/chat/chat-screen";
+import { STAGE } from "@/lib/journey";
 
 export const metadata: Metadata = { title: "Chat · AI Facial Analysis" };
 
-// Placeholder until the Beauty Assistant (U9) arrives, so the header's Chat link has a page
-// to open [Decided by delivery team].
+// The Beauty Assistant (US10.1-US10.3). Its own route, so Next.js code-splits it.
 export default function ChatPage() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute stage={STAGE.home}>
       <AppShell>
-        <div className="mx-auto max-w-[900px]">
-          <Card>
-            <h1 className="text-2xl font-bold text-heading" data-testid="chat-placeholder">
-              Chat is coming soon
-            </h1>
-            <p className="mt-2 text-base text-muted">
-              Your Beauty Assistant will be here in a later update.
-            </p>
-          </Card>
-        </div>
+        <ChatScreen />
       </AppShell>
     </ProtectedRoute>
   );

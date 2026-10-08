@@ -131,6 +131,10 @@ uv run alembic -x db=e2e upgrade head
 uv run alembic -x db=e2e downgrade base
 uv run alembic -x db=e2e upgrade head
 
+mkdir -p "$LOG_DIR/ai-control"
+rm -f "$LOG_DIR/ai-control/fail-text" "$LOG_DIR/ai-control/fail-image"
+# The control directory is read by the API (chat, U9) as well as by the worker (U6).
+export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
 step "E2E: start the API (SMTP to Mailpit; fresh media root; E2E overrides) and the web build"
 rm -rf "$LOG_DIR/media"
 API_PID="$(DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp MEDIA_ROOT="$LOG_DIR/media" \
@@ -155,7 +159,7 @@ bash "$ROOT/scripts/wait-for.sh" "http://localhost:3000/login" 60
 step "E2E: Playwright skeleton, session, onboarding, photo, payment and analysis journeys (phone + desktop, axe)"
 pnpm exec playwright install chromium
 pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts
+  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts e2e/chat.spec.ts
 cleanup
 API_PID=""
 WEB_PID=""

@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { UserMenu } from "./user-menu";
-
-// App shell header (US3.8 AC3.8.1; US11.2): the wordmark, Home, Report, AI Visuals and Chat
-// (Chat opens a placeholder until U9), and the user menu (Settings, Change password, Log out).
+// App shell header (US3.8 AC3.8.1; US11.2): the wordmark, Home, Report, AI Visuals and Chat (the
+// Beauty Assistant), and the user menu (Settings, Change password, Log out).
 // On a phone the four links sit behind one "Menu" button, so each is one extra tap away
 // (AC11.2.2); from the tablet width up they are always visible.
 export const NAV_LINKS = [
