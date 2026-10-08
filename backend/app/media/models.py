@@ -19,10 +19,11 @@ from app.platform.db import Base
 
 
 class MediaKind(StrEnum):
-    """What a stored file is (the PDF arrives in U8)."""
+    """What a stored file is."""
 
     PHOTO = "photo"
     AI_IMAGE = "ai_image"
+    REPORT_PDF = "report_pdf"
 
 
 _KINDS = "', '".join(kind.value for kind in MediaKind)

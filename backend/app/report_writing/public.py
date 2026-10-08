@@ -3,6 +3,7 @@
 - ``build_report_writing``: the service from settings and a ``TextModel``.
 - ``fake_report``: the text fake's default responder (composition roots pass it to
   ``build_text_model`` when the provider is the fake).
+- ``classify``: the keyword tier rules (also used when a stored tier is missing or invalid).
 - ``AnswerForAi``: a non-medical answer with its question text.
 - ``ReportWritingFailed``: no attempt produced valid text.
 """
@@ -16,7 +17,7 @@ from app.platform.settings import Settings
 from app.report_writing.fake_responder import fake_report
 from app.report_writing.request import REASSURANCE_INSTRUCTION, AnswerForAi
 from app.report_writing.service import ReportWritingFailed, ReportWritingService, Sleeper
-from app.report_writing.tiers import AT_HOME, IN_CLINIC, OVER_THE_COUNTER, TIERS
+from app.report_writing.tiers import AT_HOME, IN_CLINIC, OVER_THE_COUNTER, TIERS, classify
 
 __all__ = [
     "AT_HOME",
@@ -28,6 +29,7 @@ __all__ = [
     "ReportWritingFailed",
     "ReportWritingService",
     "build_report_writing",
+    "classify",
     "fake_report",
 ]
 

@@ -210,6 +210,36 @@ test("start the analysis, watch the worker advance every step, then view the rep
   await expect(page.getByTestId("analysis-view-report")).toBeVisible();
   await page.getByTestId("analysis-view-report").click();
   await expect(page).toHaveURL(/\/home$/);
+
+  // U8: a user with a report lands on Home Overview (AC11.1.1): stats, priorities, protocol and the
+  // radar chart with its text alternative (AC11.1.2, AC11.1.4); the header links are all there.
+  await expect(page.getByTestId("home-overview")).toBeVisible();
+  await expect(page.getByTestId("home-stat-score")).toContainText("/100");
+  await expect(page.getByTestId("home-protocol")).toContainText("PHASE 01");
+  await expect(page.getByTestId("radar-values")).toContainText("Symmetry");
+  await expect(page.locator('[data-testid^="home-priority-"]')).toHaveCount(3);
+  for (const link of ["home", "report", "visuals", "chat"]) {
+    await expect(page.getByTestId(`nav-${link}`)).toBeVisible();
+  }
+  await expect(page.getByTestId("home-before-image")).toHaveAttribute("data-state", "loaded");
+  await expectAccessible(page, "Home Overview");
+
+  // The report: the preamble first, then the 11 features in order, each with an AI-labelled
+  // "after" image (AC8.1.1, AC8.7.2, AC8.7.4); the PDF downloads (AC8.5.1).
+  await page.getByTestId("home-report-link").click();
+  await expect(page).toHaveURL(/\/report$/);
+  await expect(page.getByTestId("report-preamble")).toBeVisible();
+  await expect(page.locator('section[data-testid^="feature-"]')).toHaveCount(11);
+  await expect(page.getByTestId("feature-after-nose")).toHaveAttribute("data-state", "loaded");
+  await expect(page.getByTestId("feature-ai-label-nose")).toHaveText("AI-generated illustration");
+  await page.getByTestId("toc-jaw").click();
+  await expect(page.getByRole("heading", { level: 3, name: "Jaw" })).toBeFocused();
+  await expectAccessible(page, "report");
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByTestId("report-download-pdf").click(),
+  ]);
+  expect(download.suggestedFilename()).toBe("facial-analysis-report.pdf");
 });
 
 test("a failed analysis is explained and the one free re-run completes it", async ({ page }) => {

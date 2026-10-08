@@ -26,11 +26,12 @@ or is not the pinned version (`FACE_MODEL_PRELOAD`).
 | Types | `uv run mypy --strict app` |
 | Layering contracts | `uv run lint-imports` |
 | Face model and test portrait (once; hash-checked, git-ignored `var/models/`) | `uv run python -m tools.fetch_face_model` |
-| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images -m "not perf" --cov=app --cov-fail-under=80` |
+| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report -m "not perf" --cov=app --cov-fail-under=80` |
 | Photo tests only (U4) | `uv run pytest tests/photos tests/media tests/face -q` |
 | Payment tests only (U5; the Stripe fake, never Stripe) | `uv run pytest tests/payments -q` |
 | Analysis tests only (U6; the AI fakes, never OpenAI) | `uv run pytest tests/jobs tests/ai tests/analysis -q` |
 | AI images tests only (U7; the image fake, never OpenAI) | `uv run pytest tests/images -q` |
+| Report tests only (U8; the AI fakes, no network) | `uv run pytest tests/report -q` |
 | Background worker (runs the analysis; start it next to the API) | `uv run python -m app.worker` |
 | Re-render the synthetic face fixtures (only when the renderer or model pin changes) | `uv run python -m tools.make_face_fixtures --out tests/fixtures/faces --out ../frontend/e2e/fixtures/photos` |
 | Latency checks and anti-enumeration timing | `uv run pytest -m perf tests/identity/test_perf_auth.py tests/health/test_perf_health.py tests/identity/test_perf_sessions.py tests/identity/test_perf_enumeration.py` |
@@ -411,3 +412,28 @@ request. Stack traces go to the logs only.
   the owner-checked `GET /media/{fileId}`, the AI label and `retriesLeft`) and
   `POST /images/{slotId}/retry` (one attempt, at most `AI_IMAGE_MANUAL_RETRY_LIMIT` (3) per slot;
   then 409 `IMAGE_RETRY_NOT_AVAILABLE` with no vendor call; a failed retry still uses one).
+
+## Report, Home and PDF (U8)
+
+- **Where**: `app/report/` (`public -> routes | dependencies -> service -> pdf | home -> assembly ->
+  schemas | template | repositories -> models`). It reads the stored analysis result and the image
+  slots through `analysis.public` (`latest_result_view`), the paywall through `payments.public`
+  (`require_paid`) and files through `media.public`; outside it only `app.report.public` is imported.
+- **Template**: `app/report/template.py` is the versioned seed text (`TEMPLATE_VERSION`): the
+  introduction, the "Understanding Your Results" preamble, limitations, the "consult a qualified
+  professional" copy, tier captions, Skin sub-sections and face-shape descriptions. Items the
+  specification marks TBD (retention window, privacy-policy link, later protocol phases) are left out.
+- **API** (protected, `Cache-Control: no-store`, 402 `PAYMENT_REQUIRED` before payment, 404
+  `REPORT_NOT_READY` while the user has no report of their own, so another user's is never visible):
+  `GET /report` (11 features in order, assessments, three-tier recommendations, image slot states with
+  the AI label and alt text), `GET /home` (key stats, priority features, six-axis radar values, the
+  Phase 01 protocol, before/potential images) and `GET /report/pdf`.
+- **Publishing**: the report is built on request from the stored result, so it exists as soon as the
+  analysis completes (no approval step) and never waits for images.
+- **PDF**: rendered on the server with `fpdf2` (pure Python, no browser), page order per [RD] 5-10.
+  The first download stores it as a private `report_pdf` MediaStore file (`report_pdfs`, migration
+  `0008_u8_report`); it is reused until the fingerprint (template version, front photo, every image
+  slot) changes, then rebuilt and the old file replaced.
+- **Home rules** [Decided by delivery team]: priority features are the three lowest scorable feature
+  scores (distance from the first-pass `REFERENCE` ratios, see `measurement/scoring.py`); a feature
+  with nothing to compare is never scored 0; the Smoothness radar axis is "not measured".

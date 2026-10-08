@@ -57,6 +57,8 @@ class ErrorCode(StrEnum):
     RERUN_NOT_AVAILABLE = "RERUN_NOT_AVAILABLE"
     #: [Decided by delivery team] U7: the image cannot be retried (not failed, or 3 retries used).
     IMAGE_RETRY_NOT_AVAILABLE = "IMAGE_RETRY_NOT_AVAILABLE"
+    #: Contract C11: the paid user has no published report yet.
+    REPORT_NOT_READY = "REPORT_NOT_READY"
     NOT_FOUND = "NOT_FOUND"
     RATE_LIMITED = "RATE_LIMITED"  # [Decided by delivery team] plan decision D3
     UPSTREAM_UNAVAILABLE = "UPSTREAM_UNAVAILABLE"
@@ -338,6 +340,14 @@ class ImageRetryNotAvailable(AppError):  # noqa: N818  (named after the code)
     status_code = 409
     code = ErrorCode.IMAGE_RETRY_NOT_AVAILABLE
     default_message = "This image can't be retried right now."
+
+
+class ReportNotReady(AppError):  # noqa: N818  (named after the C11 code)
+    """404: the user has no published report yet (contract C11 ``REPORT_NOT_READY``)."""
+
+    status_code = 404
+    code = ErrorCode.REPORT_NOT_READY
+    default_message = "Your report isn't ready yet."
 
 
 class WebhookRejected(AppError):  # noqa: N818  (named like the other C11 errors)

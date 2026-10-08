@@ -24,6 +24,7 @@ dependencies = [
     "stripe>=12",
     "httpx>=0.28",
     "numpy>=1.26",
+    "fpdf2>=2.8.9",
 ]
 
 [dependency-groups]
@@ -36,6 +37,7 @@ dev = [
     "ruff>=0.8",
     "import-linter>=2.1",
     "pip-audit>=2.7",
+    "pypdf>=6.19.0",
 ]
 
 [tool.uv]
@@ -155,13 +157,14 @@ forbidden_modules = [
     "app.report_writing",
     "app.analysis",
     "app.images",
+    "app.report",
     "app.worker",
 ]
 
 [[tool.importlinter.contracts]]
 name = "Outside identity, only identity.public is imported"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.report", "app.worker"]
 forbidden_modules = [
     "app.identity.services",
     "app.identity.codes",
@@ -204,7 +207,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside onboarding, only onboarding.public is imported (ADR-007)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement"]
+source_modules = ["app.main", "app.images", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement", "app.report"]
 forbidden_modules = [
     "app.onboarding.services",
     "app.onboarding.repositories",
@@ -266,7 +269,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside media and face, only their public modules are imported (C8, FaceGeometry)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement"]
+source_modules = ["app.main", "app.images", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement", "app.report"]
 forbidden_modules = [
     "app.media.services",
     "app.media.repositories",
@@ -284,7 +287,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside photos, only photos.public is imported (C4)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.report", "app.worker"]
 forbidden_modules = [
     "app.photos.services",
     "app.photos.repositories",
@@ -324,7 +327,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside payments, only payments.public is imported (C5)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.report", "app.worker"]
 forbidden_modules = [
     "app.payments.services",
     "app.payments.repositories",
@@ -370,7 +373,7 @@ name = "Measurement layers: public -> service -> assessments/skin -> features ->
 type = "layers"
 layers = [
     "app.measurement.public",
-    "app.measurement.service",
+    "app.measurement.service | app.measurement.scoring",
     "app.measurement.assessments | app.measurement.skin",
     "app.measurement.features",
     "app.measurement.geometry",
@@ -410,7 +413,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside images, only images.public is imported"
 type = "forbidden"
-source_modules = ["app.main", "app.worker", "app.analysis", "app.media", "app.ai"]
+source_modules = ["app.main", "app.worker", "app.analysis", "app.media", "app.ai", "app.report"]
 forbidden_modules = [
     "app.images.service",
     "app.images.generator",
@@ -444,7 +447,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside their module, only the public modules of jobs, AI, measurement, report writing and analysis are imported"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.worker", "app.analysis", "app.payments", "app.photos", "app.onboarding", "app.media", "app.identity", "app.health"]
+source_modules = ["app.main", "app.images", "app.worker", "app.analysis", "app.payments", "app.photos", "app.onboarding", "app.media", "app.identity", "app.health", "app.report"]
 forbidden_modules = [
     "app.jobs.service",
     "app.jobs.models",
@@ -461,6 +464,7 @@ forbidden_modules = [
     "app.measurement.geometry",
     "app.measurement.landmarks",
     "app.measurement.skin",
+    "app.measurement.scoring",
     "app.report_writing.service",
     "app.report_writing.request",
     "app.report_writing.validation",
@@ -477,5 +481,44 @@ forbidden_modules = [
     "app.analysis.dependencies",
     "app.analysis.schemas",
     "app.analysis.domain",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Report layers: public -> routes -> service -> pdf/home -> assembly -> schemas/template/repositories -> models"
+type = "layers"
+layers = [
+    "app.report.public",
+    "app.report.routes",
+    "app.report.dependencies",
+    "app.report.service",
+    "app.report.pdf | app.report.home",
+    "app.report.assembly",
+    "app.report.schemas | app.report.template | app.report.repositories",
+    "app.report.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Report route handlers never import repositories or models directly"
+type = "forbidden"
+source_modules = ["app.report.routes", "app.report.dependencies"]
+forbidden_modules = ["app.report.repositories", "app.report.models"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside report, only report.public is imported (C9)"
+type = "forbidden"
+source_modules = ["app.main", "app.worker", "app.analysis", "app.images", "app.media", "app.payments", "app.photos"]
+forbidden_modules = [
+    "app.report.service",
+    "app.report.assembly",
+    "app.report.home",
+    "app.report.pdf",
+    "app.report.template",
+    "app.report.schemas",
+    "app.report.repositories",
+    "app.report.models",
+    "app.report.routes",
+    "app.report.dependencies",
 ]
 allow_indirect_imports = true

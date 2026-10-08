@@ -1,6 +1,6 @@
 "use client";
 
-// Header user menu (US3.7, US11.5): the name, "Change password" and "Log out". Log out asks
+// Header user menu (US3.7, US11.2, US11.5): the name, "Settings", "Change password" and "Log out". Log out asks
 // for confirmation in the shared dialog first (BR3.2); cancelling keeps the user signed in
 // and returns focus to the menu button.
 import Link from "next/link";
@@ -65,6 +65,17 @@ export function UserMenu({ userName }: { userName: string }) {
             }
           }}
         >
+          <li role="none">
+            <Link
+              role="menuitem"
+              href="/settings/password"
+              className={ITEM}
+              onClick={() => setOpen(false)}
+              data-testid="user-menu-settings-link"
+            >
+              Settings
+            </Link>
+          </li>
           <li role="none">
             <Link
               role="menuitem"

@@ -324,6 +324,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/home": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Home Overview data: stats, priorities, protocol, radar values
+         * @description 402 without payment; 404 ``REPORT_NOT_READY`` while there is no report (US11.1).
+         */
+        get: operations["get_home_home_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/images": {
         parameters: {
             query?: never;
@@ -628,6 +648,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The published report: template text, assessments, 11 features, recommendations
+         * @description 402 without payment; 404 ``REPORT_NOT_READY`` while there is no report of your own.
+         */
+        get: operations["get_report_report_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/report/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The report PDF: built on first download, then cached
+         * @description Same paywall and ownership as the report (US8.5).
+         */
+        get: operations["get_report_pdf_report_pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -703,6 +763,18 @@ export interface components {
              */
             value: string | boolean | string[];
         };
+        /**
+         * AssessmentsOut
+         * @description The facial assessments.
+         */
+        AssessmentsOut: {
+            dimorphism: components["schemas"]["DimorphismOut"] | null;
+            faceShape: components["schemas"]["FaceShapeOut"] | null;
+            facialThirds: components["schemas"]["ThirdsOut"] | null;
+            /** Prototypicality */
+            prototypicality: number | null;
+            symmetry: components["schemas"]["SymmetryOut"] | null;
+        };
         /** Body_put_photo_photos__angle__put */
         Body_put_photo_photos__angle__put: {
             /** Capturemethod */
@@ -777,11 +849,23 @@ export interface components {
             givenAt?: string | null;
         };
         /**
+         * DimorphismOut
+         * @description Masculine/feminine balance (display only, AC8.8.1).
+         */
+        DimorphismOut: {
+            /** Femininity */
+            femininity: number;
+            /** Label */
+            label: string;
+            /** Masculinity */
+            masculinity: number;
+        };
+        /**
          * ErrorCode
          * @description C11 error codes used so far (the full list grows with later units).
          * @enum {string}
          */
-        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "IMAGE_RETRY_NOT_AVAILABLE" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
+        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "IMAGE_RETRY_NOT_AVAILABLE" | "REPORT_NOT_READY" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
         /**
          * ErrorDetail
          * @description One detail item. ``attemptsLeft`` is sent with ``CODE_INVALID`` (D3).
@@ -817,6 +901,43 @@ export interface components {
          */
         ErrorResponse: {
             error: components["schemas"]["ErrorObject"];
+        };
+        /**
+         * FaceShapeOut
+         * @description The face shape and a plain description (AC8.8.2).
+         */
+        FaceShapeOut: {
+            /** Description */
+            description: string;
+            /** Name */
+            name: string;
+        };
+        /**
+         * FeatureOut
+         * @description One of the 11 feature sections.
+         */
+        FeatureOut: {
+            after: components["schemas"]["ImageOut"];
+            /** Beforealt */
+            beforeAlt: string;
+            /** Beforeimageurl */
+            beforeImageUrl: string | null;
+            /** Key */
+            key: string;
+            /** Metrics */
+            metrics: components["schemas"]["MetricOut"][];
+            /** Narrative */
+            narrative: string;
+            /** Nomeasurementreason */
+            noMeasurementReason: string | null;
+            /** Potentialideas */
+            potentialIdeas: string[];
+            /** Subsections */
+            subSections: components["schemas"]["SubSectionOut"][];
+            /** Summary */
+            summary: string;
+            /** Title */
+            title: string;
         };
         /**
          * FollowUpOut
@@ -861,6 +982,41 @@ export interface components {
             status: "ok" | "unavailable";
         };
         /**
+         * HomeOut
+         * @description Home Overview data (``GET /home``).
+         */
+        HomeOut: {
+            /** Ailabel */
+            aiLabel: string;
+            /** Analysisdurationseconds */
+            analysisDurationSeconds: number | null;
+            /** Beforeimageurl */
+            beforeImageUrl: string | null;
+            /** Evaluatedpoints */
+            evaluatedPoints: number;
+            /** Harmonyprofile */
+            harmonyProfile: components["schemas"]["RadarAxisOut"][];
+            /** Overallscore */
+            overallScore: number | null;
+            /** Pdfurl */
+            pdfUrl: string;
+            /** Potentialimageurl */
+            potentialImageUrl: string | null;
+            /** Priorityfeatures */
+            priorityFeatures: components["schemas"]["PriorityFeatureOut"][];
+            protocol: components["schemas"]["ProtocolOut"];
+            /**
+             * Publishedat
+             * Format: date-time
+             */
+            publishedAt: string;
+            /**
+             * Reportstatus
+             * @constant
+             */
+            reportStatus: "ready";
+        };
+        /**
          * IdentityOut
          * @description The freshly computed same-person result ([IV] §1).
          */
@@ -872,6 +1028,23 @@ export interface components {
              * @enum {string}
              */
             status: "incomplete" | "consistent" | "mismatch";
+        };
+        /**
+         * ImageOut
+         * @description A feature's AI "after" image slot (AC8.1.4, AC8.7.4, AC8.7.5).
+         */
+        ImageOut: {
+            /** Ailabel */
+            aiLabel: string;
+            /** Alt */
+            alt: string;
+            /** Imageurl */
+            imageUrl: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "pending" | "not_available";
         };
         /**
          * ImageSlotOut
@@ -925,6 +1098,20 @@ export interface components {
             email: string;
             /** Password */
             password: string;
+        };
+        /**
+         * MetricOut
+         * @description One stored measurement with its unit (AC8.4.1).
+         */
+        MetricOut: {
+            /** Label */
+            label: string;
+            /** Name */
+            name: string;
+            /** Unit */
+            unit: string;
+            /** Value */
+            value: number;
         };
         /**
          * OfferOut
@@ -1028,6 +1215,58 @@ export interface components {
             requiredAngles: string[];
         };
         /**
+         * PrincipleOut
+         * @description One of the four "Understanding Your Results" points.
+         */
+        PrincipleOut: {
+            /** Text */
+            text: string;
+            /** Title */
+            title: string;
+        };
+        /**
+         * PriorityAttributeOut
+         * @description One plain attribute line under a priority feature.
+         */
+        PriorityAttributeOut: {
+            /** Name */
+            name: string;
+            /** Value */
+            value: string;
+        };
+        /**
+         * PriorityFeatureOut
+         * @description A feature to improve first (the three lowest scores).
+         */
+        PriorityFeatureOut: {
+            /** Attributes */
+            attributes: components["schemas"]["PriorityAttributeOut"][];
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Score */
+            score: number;
+            /** Title */
+            title: string;
+        };
+        /**
+         * ProtocolOut
+         * @description The Treatment Protocol card (Phase 01, [RT] 3.7).
+         */
+        ProtocolOut: {
+            /** Actions */
+            actions: string[];
+            /** Closing */
+            closing: string;
+            /** Phaselabel */
+            phaseLabel: string;
+            /** Timing */
+            timing: string;
+            /** Title */
+            title: string;
+        };
+        /**
          * QuestionOut
          * @description One question as the browser sees it (no medical flag).
          */
@@ -1085,6 +1324,56 @@ export interface components {
             visibleQuestionIds: string[];
         };
         /**
+         * RadarAxisOut
+         * @description One of the six radar axes; ``value`` is ``None`` when not measured (never 0).
+         */
+        RadarAxisOut: {
+            /** Axis */
+            axis: string;
+            /** Value */
+            value: number | null;
+        };
+        /**
+         * RecommendationOut
+         * @description One recommendation, in exactly one tier (AC8.2.1).
+         */
+        RecommendationOut: {
+            /** Feature */
+            feature: string;
+            /** Featuretitle */
+            featureTitle: string;
+            /** Text */
+            text: string;
+        };
+        /**
+         * RecommendationsOut
+         * @description The three tiers, their captions and the static advice (AC8.2.3).
+         */
+        RecommendationsOut: {
+            /** Athome */
+            atHome: components["schemas"]["RecommendationOut"][];
+            /** Inclinic */
+            inClinic: components["schemas"]["RecommendationOut"][];
+            /** Overthecounter */
+            overTheCounter: components["schemas"]["RecommendationOut"][];
+            /** Professionaladvicetext */
+            professionalAdviceText: string;
+            /** Tiercaptions */
+            tierCaptions: {
+                [key: string]: string;
+            };
+        };
+        /**
+         * RegionScoreOut
+         * @description One Regional Balance entry.
+         */
+        RegionScoreOut: {
+            /** Region */
+            region: string;
+            /** Score */
+            score: number;
+        };
+        /**
          * RegisterRequest
          * @description ``POST /auth/register`` body.
          */
@@ -1095,6 +1384,33 @@ export interface components {
             fullName: string;
             /** Password */
             password: string;
+        };
+        /**
+         * ReportOut
+         * @description The published report (``GET /report``).
+         */
+        ReportOut: {
+            /** Ailabel */
+            aiLabel: string;
+            assessments: components["schemas"]["AssessmentsOut"];
+            /** Features */
+            features: components["schemas"]["FeatureOut"][];
+            /** Pdfurl */
+            pdfUrl: string;
+            /**
+             * Publishedat
+             * Format: date-time
+             */
+            publishedAt: string;
+            recommendations: components["schemas"]["RecommendationsOut"];
+            /**
+             * Reportid
+             * Format: uuid
+             */
+            reportId: string;
+            templateSections: components["schemas"]["TemplateSectionsOut"];
+            /** Templateversion */
+            templateVersion: string;
         };
         /**
          * ResendRequest
@@ -1193,6 +1509,16 @@ export interface components {
             state: "done" | "current" | "waiting" | "failed";
         };
         /**
+         * SubSectionOut
+         * @description A named sub-section of a feature (Skin: Skincare Protocol, [RT] 10).
+         */
+        SubSectionOut: {
+            /** Body */
+            body: string;
+            /** Heading */
+            heading: string;
+        };
+        /**
          * SubmitRequest
          * @description ``POST /onboarding/response/submit`` body. Missing means not confirmed (BR-003).
          */
@@ -1202,6 +1528,55 @@ export interface components {
              * @default false
              */
             disclaimerConfirmed: boolean;
+        };
+        /**
+         * SymmetryOut
+         * @description Symmetry score out of 100, its label and the Regional Balance breakdown (AC8.3.2).
+         */
+        SymmetryOut: {
+            /** Label */
+            label: string;
+            /** Regionalbalance */
+            regionalBalance: components["schemas"]["RegionScoreOut"][];
+            /** Score */
+            score: number;
+        };
+        /**
+         * TemplateSectionsOut
+         * @description The configured template text (AC8.7.3).
+         */
+        TemplateSectionsOut: {
+            /** Disclaimerpoints */
+            disclaimerPoints: string[];
+            /** Introduction */
+            introduction: string;
+            /** Limitations */
+            limitations: string;
+            /** Privacypoints */
+            privacyPoints: string[];
+            understandingYourResults: components["schemas"]["UnderstandingOut"];
+        };
+        /**
+         * ThirdsOut
+         * @description The three facial proportions as shares of the face height (they sum to 1).
+         */
+        ThirdsOut: {
+            /** Lower */
+            lower: number;
+            /** Middle */
+            middle: number;
+            /** Upper */
+            upper: number;
+        };
+        /**
+         * UnderstandingOut
+         * @description The preamble shown before any score or feature (AC8.7.2).
+         */
+        UnderstandingOut: {
+            /** Intro */
+            intro: string;
+            /** Principles */
+            principles: components["schemas"]["PrincipleOut"][];
         };
         /**
          * UserResponse
@@ -2049,6 +2424,53 @@ export interface operations {
             };
         };
     };
+    get_home_home_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HomeOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     get_images_state_images_get: {
         parameters: {
             query?: never;
@@ -2783,6 +3205,100 @@ export interface operations {
             };
             /** @description Error (contract C11) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_report_report_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_report_pdf_report_pdf_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The report PDF */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

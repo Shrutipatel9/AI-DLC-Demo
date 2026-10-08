@@ -92,7 +92,7 @@ uv run lint-imports
 
 step "Backend: tests with coverage (>= 80%), no network"
 uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images -m "not perf" \
+  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report -m "not perf" \
   --cov=app --cov-report=term-missing --cov-fail-under=80 -q
 
 step "Backend: latency targets (p95; one automatic re-run per target, D10)"

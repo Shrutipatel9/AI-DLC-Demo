@@ -15,20 +15,21 @@ pnpm dev                        # http://localhost:3000 (the API must run on :80
 
 ## Commands
 
-| Task                                                              | Command                                                                                                  |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Lint (ESLint, security plugin, layering rules)                    | `pnpm lint`                                                                                              |
-| Format / check                                                    | `pnpm format` / `pnpm format:check`                                                                      |
-| Types                                                             | `pnpm typecheck`                                                                                         |
-| Unit and component tests with coverage (lines >= 80%)             | `pnpm exec vitest run --coverage`                                                                        |
-| Production build / run                                            | `pnpm build` / `pnpm start`                                                                              |
-| Bundle budget (auth, onboarding, photo, payment routes <= 200 KB) | `pnpm size-check` (after `pnpm build`)                                                                   |
-| End-to-end journeys (needs Compose, the API, and `pnpm start`)    | `pnpm exec playwright test` (skeleton, session, onboarding, photos, payments, analysis incl. AI Visuals) |
-| Photo tests only (U4)                                             | `pnpm exec vitest run src/components/photos src/lib/photos src/app/photos`                               |
-| Payment tests only (U5)                                           | `pnpm exec vitest run src/components/payments src/lib/payments src/app/payment`                          |
-| Analysis tests only (U6)                                          | `pnpm exec vitest run src/components/analysis src/lib/analysis src/app/analysis`                         |
-| AI Visuals tests only (U7)                                        | `pnpm exec vitest run src/components/visuals src/app/visuals`                                            |
-| Regenerate API types from the backend                             | `bash ../scripts/export-openapi.sh`                                                                      |
+| Task                                                              | Command                                                                                                                        |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Lint (ESLint, security plugin, layering rules)                    | `pnpm lint`                                                                                                                    |
+| Format / check                                                    | `pnpm format` / `pnpm format:check`                                                                                            |
+| Types                                                             | `pnpm typecheck`                                                                                                               |
+| Unit and component tests with coverage (lines >= 80%)             | `pnpm exec vitest run --coverage`                                                                                              |
+| Production build / run                                            | `pnpm build` / `pnpm start`                                                                                                    |
+| Bundle budget (auth, onboarding, photo, payment routes <= 200 KB) | `pnpm size-check` (after `pnpm build`)                                                                                         |
+| End-to-end journeys (needs Compose, the API, and `pnpm start`)    | `pnpm exec playwright test` (skeleton, session, onboarding, photos, payments, analysis incl. AI Visuals)                       |
+| Photo tests only (U4)                                             | `pnpm exec vitest run src/components/photos src/lib/photos src/app/photos`                                                     |
+| Payment tests only (U5)                                           | `pnpm exec vitest run src/components/payments src/lib/payments src/app/payment`                                                |
+| Analysis tests only (U6)                                          | `pnpm exec vitest run src/components/analysis src/lib/analysis src/app/analysis`                                               |
+| AI Visuals tests only (U7)                                        | `pnpm exec vitest run src/components/visuals src/app/visuals`                                                                  |
+| Report, Home and header tests only (U8)                           | `pnpm exec vitest run src/components/report src/components/home src/components/app src/lib/report src/app/report src/app/home` |
+| Regenerate API types from the backend                             | `bash ../scripts/export-openapi.sh`                                                                                            |
 
 Vitest replaces `fetch` with a stub that fails any request a test did not handle, so unit
 tests can never reach the network.
@@ -81,6 +82,9 @@ Other folders:
 - `src/components/analysis`: the progress screen (`/analysis`, U6).
 - `src/lib/images`: the AI image endpoints and the polling hook (`useVisuals`, U7).
 - `src/components/visuals`: the AI Visuals screen (`/visuals`, U7).
+- `src/lib/report`: the report and Home endpoints, the PDF download and the load hook (U8).
+- `src/components/report`: the report page (`/report`): preamble, contents list, assessments, 11 feature sections, tiers (U8).
+- `src/components/home`: Home Overview and the radar chart; `src/components/app/app-header.tsx` carries the Home, Report, AI Visuals and Chat links (U8).
 
 ## Session (U2)
 

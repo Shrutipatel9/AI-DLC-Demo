@@ -32,7 +32,7 @@ logger = logging.getLogger("media")
 #: ``(session, file id) -> bool``: does another module still need this file?
 ReferenceCheck = Callable[[Session, uuid.UUID], bool]
 
-_EXTENSIONS = {"image/jpeg": "jpg", "image/png": "png"}
+_EXTENSIONS = {"image/jpeg": "jpg", "image/png": "png", "application/pdf": "pdf"}
 
 
 @dataclass(frozen=True)

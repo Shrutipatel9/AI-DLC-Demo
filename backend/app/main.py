@@ -67,6 +67,8 @@ from app.platform.middleware import install_middleware
 from app.platform.ratelimit import InMemoryRateLimiter, PostgresRateLimiter, RateLimiter
 from app.platform.routing import assert_fake_payment_routes, assert_public_routes
 from app.platform.settings import Settings, get_settings
+from app.report.public import build_report
+from app.report.public import router as report_router
 
 logger = logging.getLogger("app")
 
@@ -156,6 +158,7 @@ def create_app(
     images = build_image_generation(
         settings, clock=clock, session_factory=session_factory, media=media
     )
+    report = build_report(payments=payments, media=media, clock=clock)
     # A run keeps the photo files it started with: a retake must not delete them (R-02).
     media.add_reference_check(media_in_use)
 
@@ -200,6 +203,7 @@ def create_app(
     app.state.job_queue = queue
     app.state.analysis = analysis
     app.state.images = images
+    app.state.report = report
 
     install_exception_handlers(app)
     install_middleware(app, settings, metrics)
@@ -217,6 +221,7 @@ def create_app(
     app.include_router(payments_router, dependencies=[Depends(current_user)])
     app.include_router(analysis_router, dependencies=[Depends(current_user)])
     app.include_router(images_router, dependencies=[Depends(current_user)])
+    app.include_router(report_router, dependencies=[Depends(current_user)])
     if settings.payment_provider == "fake":
         # Development/test only (settings refuse the fake elsewhere): the browser navigates
         # to the fake's hosted page as it would to Stripe's, so it takes no access token.

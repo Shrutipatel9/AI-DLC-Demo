@@ -14,14 +14,6 @@ from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import create_engine, pool
 
-import app.analysis.models
-import app.identity.models
-import app.jobs.models
-import app.media.models
-import app.onboarding.models
-import app.payments.models
-import app.photos.models
-import app.platform.ratelimit_models  # noqa: F401  (registers rate_limit_hits)
 from alembic import context
 from app.platform.db import Base
 

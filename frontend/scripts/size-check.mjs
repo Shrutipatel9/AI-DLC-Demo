@@ -1,4 +1,4 @@
-// Bundle-size gate for the auth, onboarding, photo, payment and analysis routes (NFR9.5): at most 200 KB of gzipped JavaScript.
+// Bundle-size gate for the auth, onboarding, photo, payment, analysis and report routes (NFR9.5): at most 200 KB of gzipped JavaScript.
 //
 // For each route it sums the gzipped size of the root main files (build-manifest.json)
 // plus every chunk listed in the route's client-reference manifest. Run after `pnpm build`.
@@ -24,6 +24,8 @@ const ROUTES = [
   "/payment/cancel",
   "/analysis",
   "/visuals",
+  "/report",
+  "/chat",
 ];
 const NEXT_DIR = path.resolve(".next");
 

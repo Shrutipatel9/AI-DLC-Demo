@@ -13,7 +13,7 @@ import tempfile
 from pathlib import Path
 from typing import Protocol
 
-_KEY = re.compile(r"[0-9a-f-]{36}/[0-9a-f-]{36}\.(jpg|png)")
+_KEY = re.compile(r"[0-9a-f-]{36}/[0-9a-f-]{36}\.(jpg|png|pdf)")
 
 
 class StorageError(RuntimeError):

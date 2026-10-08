@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { toast } from "@/components/feedback/toast";
+import { HomeOverview } from "@/components/home/home-overview";
 import { Card } from "@/components/ui/card";
 import { useAuth, useAuthActions } from "@/lib/auth";
 import { loadOnboardingStatus, type OnboardingStatus } from "@/lib/onboarding";
+import { useHome } from "@/lib/report";
 
 import { AppShell } from "./app-shell";
 
@@ -19,10 +21,12 @@ function onboardingLinkText(status: OnboardingStatus | null): string {
 // Signed-in home. Rendered inside ProtectedRoute, so the session is restored before it
 // shows (U2 WF-U2-2). The greeting is refreshed from "who am I" (AC3.8.1). Until the
 // questionnaire is submitted it links to onboarding (U3 plan Step 4); after that it links to
-// the photo step (U4 plan Step 8, temporary until the Journey in U10).
+// the photo step (U4 plan Step 8, temporary until the Journey in U10). Once a report exists it
+// becomes the Home Overview (U8, US11.1); a 402/404 from /home keeps the screen below.
 export function HomeView() {
   const { user } = useAuth();
   const { loadCurrentUser } = useAuthActions();
+  const home = useHome();
   const [loaded, setLoaded] = useState(false);
   // `null` while loading or when the status could not be read: the link is still shown,
   // because onboarding itself reports any error.
@@ -50,6 +54,14 @@ export function HomeView() {
       active = false;
     };
   }, [loadCurrentUser]);
+
+  if (home.phase === "ready" && home.data) {
+    return (
+      <AppShell>
+        <HomeOverview home={home.data} name={user?.fullName ?? ""} />
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>

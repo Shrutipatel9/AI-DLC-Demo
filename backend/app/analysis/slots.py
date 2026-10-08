@@ -10,6 +10,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy.orm import Session
 
@@ -139,3 +140,37 @@ def record_manual_result(
     slot.status = SlotStatus.READY.value if media_file_id else SlotStatus.NOT_AVAILABLE_YET.value
     slot.media_file_id = media_file_id
     slot.updated_at = now
+
+
+@dataclass(frozen=True)
+class ResultView:
+    """A finished run's stored result, as the Report module reads it (contract C7, U8)."""
+
+    run_id: uuid.UUID
+    user_id: uuid.UUID
+    result: dict[str, Any]
+    published_at: datetime
+    started_at: datetime
+    completed_at: datetime | None
+    front_file_id: uuid.UUID | None
+    slots: tuple[SlotView, ...]
+
+
+def latest_result_view(session: Session, user_id: uuid.UUID) -> ResultView | None:
+    """The user's newest run's stored result, or ``None`` until one exists (no approval step)."""
+    run = repositories.find_latest_run(session, user_id)
+    if run is None:
+        return None
+    stored = repositories.find_result(session, run.id)
+    if stored is None:
+        return None
+    return ResultView(
+        run_id=run.id,
+        user_id=run.user_id,
+        result=dict(stored.result),
+        published_at=stored.created_at,
+        started_at=run.started_at,
+        completed_at=run.completed_at,
+        front_file_id=repositories.list_photos(session, run.id).get("front"),
+        slots=tuple(_view(slot) for slot in repositories.list_slots(session, run.id)),
+    )

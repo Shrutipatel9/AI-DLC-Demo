@@ -20,11 +20,13 @@ from app.analysis.pipeline import AnalysisPipeline, RunContext, StepHandler, Ste
 from app.analysis.routes import router
 from app.analysis.services import AnalysisService
 from app.analysis.slots import (
+    ResultView,
     RunRef,
     SlotView,
     claim_manual_retry,
     ensure_slots,
     find_slot_view,
+    latest_result_view,
     latest_run_ref,
     list_slot_views,
     record_auto_result,
@@ -50,6 +52,7 @@ __all__ = [
     "STEP_KEYS",
     "AnalysisPipeline",
     "AnalysisService",
+    "ResultView",
     "RunContext",
     "RunRef",
     "RunView",
@@ -61,6 +64,7 @@ __all__ = [
     "claim_manual_retry",
     "ensure_slots",
     "find_slot_view",
+    "latest_result_view",
     "latest_run_ref",
     "list_slot_views",
     "media_in_use",
