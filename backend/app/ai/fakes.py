@@ -13,6 +13,7 @@ A fake is only ever selected in development and test (settings refuse it elsewhe
   (AC7.2.5) without waiting.
 - ``control_dir`` lets a separate worker process be told to fail: a ``fail-text`` file holds
   the number of text calls that must fail; each failing call decrements it (browser journeys).
+  A ``fail-image`` file does the same for image calls.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from __future__ import annotations
 import io
 import json
 import logging
+import threading
 import time
 from collections import deque
 from collections.abc import Callable, Sequence
@@ -36,6 +38,7 @@ logger = logging.getLogger("ai")
 
 PROFILE_FILE = Path(__file__).parent / "data" / "realistic_latency_v1.json"
 FAIL_TEXT_FILE = "fail-text"
+FAIL_IMAGE_FILE = "fail-image"
 
 Responder = Callable[[Sequence[TextMessage], Sequence[ImageInput], dict[str, Any]], dict[str, Any]]
 Sleeper = Callable[[float], None]
@@ -176,18 +179,24 @@ class FakeTextModel:
         return behaviour
 
     def _consume_control_failure(self) -> None:
-        if self._control_dir is None:
-            return
-        marker = self._control_dir / FAIL_TEXT_FILE
-        try:
-            remaining = int(marker.read_text(encoding="utf-8").strip() or "0")
-        except (OSError, ValueError):
-            return
-        if remaining <= 0:
-            return
-        marker.write_text(str(remaining - 1), encoding="utf-8")
-        logger.info("fake text failure injected", extra={"event": "ai.fake.failure"})
-        raise AiUnavailableError("fake failure injected by the control file")
+        if _consume_marker(self._control_dir, FAIL_TEXT_FILE):
+            raise AiUnavailableError("fake failure injected by the control file")
+
+
+def _consume_marker(control_dir: Path | None, name: str) -> bool:
+    """Decrement a control file's count; True when this call must fail."""
+    if control_dir is None:
+        return False
+    marker = control_dir / name
+    try:
+        remaining = int(marker.read_text(encoding="utf-8").strip() or "0")
+    except (OSError, ValueError):
+        return False
+    if remaining <= 0:
+        return False
+    marker.write_text(str(remaining - 1), encoding="utf-8")
+    logger.info("fake failure injected", extra={"event": "ai.fake.failure"})
+    return True
 
 
 def _tiny_png() -> bytes:
@@ -202,13 +211,20 @@ class FakeImageEditor:
     Args:
         profile: Delay of every call (instant by default).
         sleep: Called with each delay.
+        control_dir: Optional directory holding a ``fail-image`` count (see module docs).
     """
 
     def __init__(
-        self, *, profile: LatencyProfile | None = None, sleep: Sleeper = time.sleep
+        self,
+        *,
+        profile: LatencyProfile | None = None,
+        sleep: Sleeper = time.sleep,
+        control_dir: Path | None = None,
     ) -> None:
         self._profile = profile or LatencyProfile()
         self._sleep = sleep
+        self._control_dir = control_dir
+        self._lock = threading.Lock()  # image slots are generated concurrently
         self._script = _Scripted()
         self._image = _tiny_png()
         self.calls: list[RecordedImageCall] = []
@@ -228,12 +244,18 @@ class FakeImageEditor:
     def edit(self, source: ImageInput, instruction: str, fidelity: str) -> bytes:
         """Record the call, then follow the queued behaviour."""
         self.calls.append(RecordedImageCall(source.label, instruction, fidelity, len(source.data)))
-        behaviour = self._script.queue.popleft() if self._script.queue else _Behaviour()
+        with self._lock:
+            behaviour = self._script.queue.popleft() if self._script.queue else _Behaviour()
+            injected = behaviour.error is None and _consume_marker(
+                self._control_dir, FAIL_IMAGE_FILE
+            )
         delay = self._profile.image_seconds + behaviour.delay
         if delay > 0:
             self._sleep(delay)
         if behaviour.error is not None:
             raise behaviour.error
+        if injected:
+            raise AiUnavailableError("fake failure injected by the control file")
         if behaviour.payload is not None:
             return b"not an image"
         return self._image

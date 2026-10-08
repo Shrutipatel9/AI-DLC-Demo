@@ -54,8 +54,14 @@ class StepStatus(StrEnum):
 
 
 class SlotStatus(StrEnum):
-    """Stored image-slot status (U7 adds the others)."""
+    """Stored image-slot status.
 
+    ``pending`` while U7 generates it, ``ready`` once the image is stored, ``not_available_yet``
+    after the automatic attempts (or a manual retry) failed.
+    """
+
+    PENDING = "pending"
+    READY = "ready"
     NOT_AVAILABLE_YET = "not_available_yet"
 
 
@@ -152,3 +158,12 @@ class AnalysisImageSlot(Base):
     slot_key: Mapped[str] = mapped_column(String(32))
     slot_kind: Mapped[str] = mapped_column(String(16))
     status: Mapped[str] = mapped_column(String(24))
+    #: The generated image (U7); private, owned by the run's user.
+    media_file_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("media_files.id", ondelete="SET NULL"), index=True
+    )
+    #: Vendor calls made by the automatic attempts (1 + up to 3 retries, AC9.5.1/AC9.5.2).
+    auto_attempts: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
+    #: Manual retries used (at most three per slot, AC9.5.4).
+    manual_retries: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

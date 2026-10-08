@@ -324,6 +324,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The run's AI images and their state (polled while generating)
+         * @description Slots in report order: ready (with an owner-checked URL), generating or not available.
+         */
+        get: operations["get_images_state_images_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/images/{slotId}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retry one image that is not available yet (at most 3 times per image)
+         * @description One attempt. 409 ``IMAGE_RETRY_NOT_AVAILABLE`` past the limit, with no vendor call.
+         */
+        post: operations["post_retry_images__slotId__retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/media/{fileId}": {
         parameters: {
             query?: never;
@@ -741,7 +781,7 @@ export interface components {
          * @description C11 error codes used so far (the full list grows with later units).
          * @enum {string}
          */
-        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
+        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "IMAGE_RETRY_NOT_AVAILABLE" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
         /**
          * ErrorDetail
          * @description One detail item. ``attemptsLeft`` is sent with ``CODE_INVALID`` (D3).
@@ -832,6 +872,49 @@ export interface components {
              * @enum {string}
              */
             status: "incomplete" | "consistent" | "mismatch";
+        };
+        /**
+         * ImageSlotOut
+         * @description One image slot.
+         */
+        ImageSlotOut: {
+            /** Ailabel */
+            aiLabel: string;
+            /**
+             * Group
+             * @enum {string}
+             */
+            group: "feature" | "hairstyle" | "outfit" | "aging";
+            /** Imageurl */
+            imageUrl?: string | null;
+            /** Retriesleft */
+            retriesLeft: number;
+            /** Slotid */
+            slotId: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "generating" | "ready" | "not_available";
+            /** Title */
+            title: string;
+        };
+        /**
+         * ImagesOut
+         * @description The run's images, in report order.
+         */
+        ImagesOut: {
+            /** Frontphotourl */
+            frontPhotoUrl?: string | null;
+            /** Generating */
+            generating: boolean;
+            /**
+             * Runid
+             * Format: uuid
+             */
+            runId: string;
+            /** Slots */
+            slots: components["schemas"]["ImageSlotOut"][];
         };
         /**
          * LoginRequest
@@ -1962,6 +2045,102 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    get_images_state_images_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImagesOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    post_retry_images__slotId__retry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slotId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageSlotOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

@@ -26,10 +26,11 @@ or is not the pinned version (`FACE_MODEL_PRELOAD`).
 | Types | `uv run mypy --strict app` |
 | Layering contracts | `uv run lint-imports` |
 | Face model and test portrait (once; hash-checked, git-ignored `var/models/`) | `uv run python -m tools.fetch_face_model` |
-| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" --cov=app --cov-fail-under=80` |
+| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images -m "not perf" --cov=app --cov-fail-under=80` |
 | Photo tests only (U4) | `uv run pytest tests/photos tests/media tests/face -q` |
 | Payment tests only (U5; the Stripe fake, never Stripe) | `uv run pytest tests/payments -q` |
 | Analysis tests only (U6; the AI fakes, never OpenAI) | `uv run pytest tests/jobs tests/ai tests/analysis -q` |
+| AI images tests only (U7; the image fake, never OpenAI) | `uv run pytest tests/images -q` |
 | Background worker (runs the analysis; start it next to the API) | `uv run python -m app.worker` |
 | Re-render the synthetic face fixtures (only when the renderer or model pin changes) | `uv run python -m tools.make_face_fixtures --out tests/fixtures/faces --out ../frontend/e2e/fixtures/photos` |
 | Latency checks and anti-enumeration timing | `uv run pytest -m perf tests/identity/test_perf_auth.py tests/health/test_perf_health.py tests/identity/test_perf_sessions.py tests/identity/test_perf_enumeration.py` |
@@ -239,6 +240,11 @@ openai_image | fakes -> openai_http -> ports | errors`), `measurement`, `report_
 `public` module is imported. `app/worker.py` is a second composition root (the background
 process).
 
+AI images (U7): `images` (`public -> routes | dependencies | schemas -> service -> generator ->
+catalog`). It imports `analysis.public` (slots, the pipeline step hook), `ai.public` (the image
+adapter) and `media.public`; `analysis` never imports `images`, and outside it only
+`app.images.public` is imported.
+
 ## Analysis (U6)
 
 - **Start** (`POST /analysis/runs`, 202): payment first (402 `PAYMENT_REQUIRED`), then the photo
@@ -380,3 +386,28 @@ its question id, question text and medical flag.
 Every non-2xx response is `{"error": {"code", "message", "details", "requestId"}}`
 (contract C11). The `X-Request-ID` header matches `requestId` and every log line for the
 request. Stack traces go to the logs only.
+
+## AI images (U7)
+
+- **Where**: `app/images/`. `register_image_step` replaces U6's placeholder `generating_images`
+  step in the worker (`app/worker.py`); the API builds the same service for the manual retry
+  (`app/main.py`). The analysis module keeps the 24 `analysis_image_slots` rows (migration
+  `0007_u7_images` adds the image link, the attempt counters and the `ai_image` media kind) and
+  exposes them to `images` through `analysis.public`.
+- **Prompts**: `app/images/catalog.py` holds the versioned seed data (`CATALOG_VERSION`): 11
+  per-feature "after" edits, 5 hairstyles, 5 outfits and the 3 aging cards (+3, +5, +10 years).
+  Every request is an image edit of the user's own front photo (from the run's photo snapshot)
+  with `AI_IMAGE_FIDELITY`. [Decided by delivery team]: the wording is ours, not the client's.
+- **Vendor**: only the `ImageEditor` port is used; `AI_IMAGE_PROVIDER`, `OPENAI_IMAGE_MODEL` and
+  `OPENAI_BASE_URL` pick the adapter and model (NFR-013). Tests use `FakeImageEditor`; a
+  `fail-image` file in `AI_FAKE_CONTROL_DIR` makes the worker's next image calls fail.
+- **Generation**: `AI_IMAGE_CONCURRENCY` images at once; each is tried 1 + `AI_IMAGE_AUTO_RETRIES`
+  (3) times. A rate-limit answer waits for the vendor's hint (else `AI_RETRY_BACKOFF_SECONDS`) and
+  counts as an attempt; a request the vendor refuses is not retried. A slot that still fails is
+  `not_available_yet` and the report still publishes. The step is idempotent: only `pending`
+  slots are generated again after a restart or the free re-run.
+- **API** (owner-only, `Cache-Control: no-store`, 404 for another user): `GET /images` (slots in
+  report order with `status` `generating`, `ready` or `not_available`, an `imageUrl` served by
+  the owner-checked `GET /media/{fileId}`, the AI label and `retriesLeft`) and
+  `POST /images/{slotId}/retry` (one attempt, at most `AI_IMAGE_MANUAL_RETRY_LIMIT` (3) per slot;
+  then 409 `IMAGE_RETRY_NOT_AVAILABLE` with no vendor call; a failed retry still uses one).

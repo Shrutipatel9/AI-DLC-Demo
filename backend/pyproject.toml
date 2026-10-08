@@ -154,13 +154,14 @@ forbidden_modules = [
     "app.measurement",
     "app.report_writing",
     "app.analysis",
+    "app.images",
     "app.worker",
 ]
 
 [[tool.importlinter.contracts]]
 name = "Outside identity, only identity.public is imported"
 type = "forbidden"
-source_modules = ["app.main", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.identity.services",
     "app.identity.codes",
@@ -203,7 +204,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside onboarding, only onboarding.public is imported (ADR-007)"
 type = "forbidden"
-source_modules = ["app.main", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement"]
+source_modules = ["app.main", "app.images", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement"]
 forbidden_modules = [
     "app.onboarding.services",
     "app.onboarding.repositories",
@@ -265,7 +266,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside media and face, only their public modules are imported (C8, FaceGeometry)"
 type = "forbidden"
-source_modules = ["app.main", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement"]
+source_modules = ["app.main", "app.images", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement"]
 forbidden_modules = [
     "app.media.services",
     "app.media.repositories",
@@ -283,7 +284,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside photos, only photos.public is imported (C4)"
 type = "forbidden"
-source_modules = ["app.main", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.photos.services",
     "app.photos.repositories",
@@ -323,7 +324,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside payments, only payments.public is imported (C5)"
 type = "forbidden"
-source_modules = ["app.main", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.worker"]
+source_modules = ["app.main", "app.images", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.payments.services",
     "app.payments.repositories",
@@ -387,13 +388,47 @@ layers = [
 ]
 
 [[tool.importlinter.contracts]]
+name = "Images layers: public -> routes -> services -> generator -> catalog"
+type = "layers"
+layers = [
+    "app.images.public",
+    "app.images.routes",
+    "app.images.dependencies",
+    "app.images.schemas",
+    "app.images.service",
+    "app.images.generator",
+    "app.images.catalog",
+]
+
+[[tool.importlinter.contracts]]
+name = "Image route handlers never import the generator or the catalog directly"
+type = "forbidden"
+source_modules = ["app.images.routes", "app.images.dependencies"]
+forbidden_modules = ["app.images.generator", "app.images.catalog"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside images, only images.public is imported"
+type = "forbidden"
+source_modules = ["app.main", "app.worker", "app.analysis", "app.media", "app.ai"]
+forbidden_modules = [
+    "app.images.service",
+    "app.images.generator",
+    "app.images.catalog",
+    "app.images.routes",
+    "app.images.dependencies",
+    "app.images.schemas",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
 name = "Analysis layers: public -> routes -> services -> steps/pipeline -> repositories -> models"
 type = "layers"
 layers = [
     "app.analysis.public",
     "app.analysis.routes",
     "app.analysis.dependencies",
-    "app.analysis.services | app.analysis.steps",
+    "app.analysis.services | app.analysis.steps | app.analysis.slots",
     "app.analysis.pipeline",
     "app.analysis.repositories",
     "app.analysis.models | app.analysis.domain",
@@ -409,7 +444,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside their module, only the public modules of jobs, AI, measurement, report writing and analysis are imported"
 type = "forbidden"
-source_modules = ["app.main", "app.worker", "app.analysis", "app.payments", "app.photos", "app.onboarding", "app.media", "app.identity", "app.health"]
+source_modules = ["app.main", "app.images", "app.worker", "app.analysis", "app.payments", "app.photos", "app.onboarding", "app.media", "app.identity", "app.health"]
 forbidden_modules = [
     "app.jobs.service",
     "app.jobs.models",
@@ -434,6 +469,7 @@ forbidden_modules = [
     "app.report_writing.fake_responder",
     "app.analysis.services",
     "app.analysis.steps",
+    "app.analysis.slots",
     "app.analysis.pipeline",
     "app.analysis.repositories",
     "app.analysis.models",

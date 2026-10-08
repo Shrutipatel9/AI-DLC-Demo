@@ -25,6 +25,7 @@ from types import FrameType
 from app.ai.public import build_text_model
 from app.analysis.public import JOB_KIND, build_pipeline
 from app.face.public import build_face_geometry
+from app.images.public import build_image_generation, register_image_step
 from app.jobs.public import Worker, build_job_queue
 from app.measurement.public import build_measurement
 from app.media.public import build_media_store
@@ -49,16 +50,21 @@ def build_worker(settings: Settings) -> Worker:
     engine = create_db_engine(settings)
     session_factory = create_session_factory(engine)
     geometry = build_face_geometry(settings)
+    media = build_media_store(settings, clock=clock)
     pipeline = build_pipeline(
         settings,
         clock=clock,
         session_factory=session_factory,
-        media=build_media_store(settings, clock=clock),
+        media=media,
         measurement=build_measurement(settings, geometry=geometry),
         onboarding=build_onboarding(settings, clock=clock),
         report_writing=build_report_writing(
             settings, text_model=build_text_model(settings, responder=fake_report)
         ),
+    )
+    register_image_step(
+        pipeline,
+        build_image_generation(settings, clock=clock, session_factory=session_factory, media=media),
     )
     geometry.load()  # once per process; a missing or wrong model fails start-up
     return Worker(

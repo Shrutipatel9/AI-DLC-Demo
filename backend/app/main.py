@@ -32,6 +32,8 @@ from app.analysis.public import router as analysis_router
 from app.face.public import FaceGeometry, build_face_geometry
 from app.health.routes import router as health_router
 from app.identity.public import build_identity, current_user, protected_router, public_router
+from app.images.public import build_image_generation
+from app.images.public import router as images_router
 from app.jobs.public import build_job_queue
 from app.media.public import build_media_store
 from app.media.public import router as media_router
@@ -151,6 +153,9 @@ def create_app(
 
     queue = build_job_queue(settings, clock=clock)
     analysis = build_analysis(settings, clock=clock, queue=queue, payments=payments, photos=photos)
+    images = build_image_generation(
+        settings, clock=clock, session_factory=session_factory, media=media
+    )
     # A run keeps the photo files it started with: a retake must not delete them (R-02).
     media.add_reference_check(media_in_use)
 
@@ -194,6 +199,7 @@ def create_app(
     app.state.payments = payments
     app.state.job_queue = queue
     app.state.analysis = analysis
+    app.state.images = images
 
     install_exception_handlers(app)
     install_middleware(app, settings, metrics)
@@ -210,6 +216,7 @@ def create_app(
     app.include_router(media_router, dependencies=[Depends(current_user)])
     app.include_router(payments_router, dependencies=[Depends(current_user)])
     app.include_router(analysis_router, dependencies=[Depends(current_user)])
+    app.include_router(images_router, dependencies=[Depends(current_user)])
     if settings.payment_provider == "fake":
         # Development/test only (settings refuse the fake elsewhere): the browser navigates
         # to the fake's hosted page as it would to Stripe's, so it takes no access token.

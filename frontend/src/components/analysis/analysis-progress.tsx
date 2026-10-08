@@ -140,13 +140,23 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
         </ol>
 
         {run.status === "completed" ? (
-          <Link
-            href={REPORT_HREF}
-            className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-            data-testid="analysis-view-report"
-          >
-            View my report
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={REPORT_HREF}
+              className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
+              data-testid="analysis-view-report"
+            >
+              View my report
+            </Link>
+            {/* Until U8 adds header navigation, the AI Visuals are reached from here and Home. */}
+            <Link
+              href="/visuals"
+              className="inline-flex min-h-11 items-center rounded-[var(--radius)] border border-card-border bg-white px-4 text-base font-semibold text-heading hover:bg-[#eef2f5]"
+              data-testid="analysis-visuals-link"
+            >
+              See my AI Visuals
+            </Link>
+          </div>
         ) : null}
 
         {run.status === "failed" ? (

@@ -23,6 +23,7 @@ const ROUTES = [
   "/payment/success",
   "/payment/cancel",
   "/analysis",
+  "/visuals",
 ];
 const NEXT_DIR = path.resolve(".next");
 

@@ -15,11 +15,22 @@ import uuid
 from sqlalchemy.orm import Session
 
 from app.analysis import repositories
-from app.analysis.domain import JOB_KIND, STEP_KEYS, RunView
+from app.analysis.domain import JOB_KIND, STEP_GENERATING_IMAGES, STEP_KEYS, RunView
 from app.analysis.pipeline import AnalysisPipeline, RunContext, StepHandler, StepResult
 from app.analysis.routes import router
 from app.analysis.services import AnalysisService
-from app.analysis.steps import SLOT_COUNT, AnalysisSteps
+from app.analysis.slots import (
+    RunRef,
+    SlotView,
+    claim_manual_retry,
+    ensure_slots,
+    find_slot_view,
+    latest_run_ref,
+    list_slot_views,
+    record_auto_result,
+    record_manual_result,
+)
+from app.analysis.steps import SLOT_COUNT, SLOT_KINDS, AnalysisSteps
 from app.jobs.public import JobQueue
 from app.measurement.public import MeasurementService
 from app.media.public import MediaStore
@@ -34,16 +45,27 @@ from app.report_writing.public import ReportWritingService
 __all__ = [
     "JOB_KIND",
     "SLOT_COUNT",
+    "SLOT_KINDS",
+    "STEP_GENERATING_IMAGES",
     "STEP_KEYS",
     "AnalysisPipeline",
     "AnalysisService",
     "RunContext",
+    "RunRef",
     "RunView",
+    "SlotView",
     "StepHandler",
     "StepResult",
     "build_analysis",
     "build_pipeline",
+    "claim_manual_retry",
+    "ensure_slots",
+    "find_slot_view",
+    "latest_run_ref",
+    "list_slot_views",
     "media_in_use",
+    "record_auto_result",
+    "record_manual_result",
     "router",
 ]
 

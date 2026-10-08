@@ -92,7 +92,7 @@ uv run lint-imports
 
 step "Backend: tests with coverage (>= 80%), no network"
 uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" \
+  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images -m "not perf" \
   --cov=app --cov-report=term-missing --cov-fail-under=80 -q
 
 step "Backend: latency targets (p95; one automatic re-run per target, D10)"
@@ -137,7 +137,7 @@ bash "$ROOT/scripts/wait-for.sh" "http://127.0.0.1:8000/health/ready" 60
 
 step "Start the background worker (U6: fake AI, a short text pause so the steps are visible)"
 mkdir -p "$LOG_DIR/ai-control"
-rm -f "$LOG_DIR/ai-control/fail-text"
+rm -f "$LOG_DIR/ai-control/fail-text" "$LOG_DIR/ai-control/fail-image"
 export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
 WORKER_LABEL="verify-$$"
 WORKER_PID="$(cd "$ROOT/backend" && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \

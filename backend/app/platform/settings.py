@@ -390,8 +390,16 @@ class Settings(BaseSettings):
     ai_image_timeout_seconds: float = Field(default=120.0, gt=0, alias="AI_IMAGE_TIMEOUT_SECONDS")
     #: Attempts at the report-writing step (invalid output or a vendor error each use one).
     ai_text_max_attempts: int = Field(default=3, ge=1, le=10, alias="AI_TEXT_MAX_ATTEMPTS")
-    #: Image attempts per image (rate limits count too, AC7.6.4); used by U7.
-    ai_image_max_attempts: int = Field(default=3, ge=1, le=10, alias="AI_IMAGE_MAX_ATTEMPTS")
+    #: Automatic retries after an image's first attempt: 1 + 3 = 4 calls at most (AC9.5.1,
+    #: AC9.5.2); rate-limit answers count as attempts too (AC7.6.4).
+    ai_image_auto_retries: int = Field(default=3, ge=0, le=10, alias="AI_IMAGE_AUTO_RETRIES")
+    #: [Decided by delivery team] (Q10, AC9.5.4) Manual retries a user may use per image slot.
+    ai_image_manual_retry_limit: int = Field(
+        default=3, ge=0, le=10, alias="AI_IMAGE_MANUAL_RETRY_LIMIT"
+    )
+    #: The image-edit fidelity setting sent with every request (AC9.1.2, ASM-011): the output
+    #: keeps the person's face. A vendor-specific value, so it is configuration (NFR-013).
+    ai_image_fidelity: str = Field(default="high", min_length=1, alias="AI_IMAGE_FIDELITY")
     ai_retry_backoff_seconds: float = Field(default=2.0, ge=0, alias="AI_RETRY_BACKOFF_SECONDS")
     #: How many images are generated at once (AC7.6.4); used by U7.
     ai_image_concurrency: int = Field(default=4, ge=1, le=16, alias="AI_IMAGE_CONCURRENCY")

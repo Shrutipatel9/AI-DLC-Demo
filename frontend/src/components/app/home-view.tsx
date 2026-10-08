@@ -82,6 +82,13 @@ export function HomeView() {
             {onboardingLinkText(onboarding)}
           </Link>
         )}
+        <Link
+          href="/visuals"
+          className="mt-3 inline-flex min-h-11 items-center justify-center rounded-[var(--radius)] border border-card-border bg-white px-4 text-base font-semibold text-heading hover:bg-[#eef2f5]"
+          data-testid="home-visuals-link"
+        >
+          AI Visuals
+        </Link>
       </Card>
     </AppShell>
   );

@@ -132,6 +132,21 @@ def add_slots(session: Session, slots: Iterable[AnalysisImageSlot]) -> None:
     session.add_all(slots)
 
 
+def find_slot(
+    session: Session, run_id: uuid.UUID, slot_key: str, *, lock: bool = False
+) -> AnalysisImageSlot | None:
+    """One image slot (``FOR UPDATE`` when ``lock``)."""
+    statement = select(AnalysisImageSlot).where(
+        AnalysisImageSlot.run_id == run_id, AnalysisImageSlot.slot_key == slot_key
+    )
+    if lock:
+        statement = statement.with_for_update()
+    return session.scalars(statement).one_or_none()
+
+
 def media_in_use(session: Session, file_id: uuid.UUID) -> bool:
-    """Whether any run was started with this file."""
-    return bool(session.scalar(select(exists().where(AnalysisRunPhoto.media_file_id == file_id))))
+    """Whether any run was started with this file, or shows it as a generated image."""
+    return bool(
+        session.scalar(select(exists().where(AnalysisRunPhoto.media_file_id == file_id)))
+        or session.scalar(select(exists().where(AnalysisImageSlot.media_file_id == file_id)))
+    )

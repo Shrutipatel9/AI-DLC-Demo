@@ -82,7 +82,7 @@ jobs:
         run: |
           source ../scripts/ci-env.sh
           uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-            tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" \
+            tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images -m "not perf" \
             --cov=app --cov-report=term-missing --cov-fail-under=80
       - name: Latency targets and anti-enumeration timing (p95; one re-run per target)
         run: |

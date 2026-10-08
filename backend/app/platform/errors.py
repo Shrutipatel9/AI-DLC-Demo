@@ -55,6 +55,8 @@ class ErrorCode(StrEnum):
     ALREADY_PAID = "ALREADY_PAID"
     ANALYSIS_ALREADY_COMPLETE = "ANALYSIS_ALREADY_COMPLETE"
     RERUN_NOT_AVAILABLE = "RERUN_NOT_AVAILABLE"
+    #: [Decided by delivery team] U7: the image cannot be retried (not failed, or 3 retries used).
+    IMAGE_RETRY_NOT_AVAILABLE = "IMAGE_RETRY_NOT_AVAILABLE"
     NOT_FOUND = "NOT_FOUND"
     RATE_LIMITED = "RATE_LIMITED"  # [Decided by delivery team] plan decision D3
     UPSTREAM_UNAVAILABLE = "UPSTREAM_UNAVAILABLE"
@@ -328,6 +330,14 @@ class RerunNotAvailable(AppError):  # noqa: N818  (named after the C11 code)
     status_code = 409
     code = ErrorCode.RERUN_NOT_AVAILABLE
     default_message = "A re-run isn't available for this analysis."
+
+
+class ImageRetryNotAvailable(AppError):  # noqa: N818  (named after the code)
+    """409: the image is not marked "not available yet", or its manual retries are used up."""
+
+    status_code = 409
+    code = ErrorCode.IMAGE_RETRY_NOT_AVAILABLE
+    default_message = "This image can't be retried right now."
 
 
 class WebhookRejected(AppError):  # noqa: N818  (named like the other C11 errors)

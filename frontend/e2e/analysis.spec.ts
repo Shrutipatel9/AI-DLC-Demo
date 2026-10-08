@@ -196,6 +196,18 @@ test("start the analysis, watch the worker advance every step, then view the rep
   for (const step of STEPS) {
     await expect(page.getByTestId(`analysis-step-${step}-state`)).toHaveText("Done");
   }
+
+  // U7: the 13 AI Visuals images (5 hairstyles, 5 outfits, 3 aging cards) are shown, each labelled
+  // as an AI illustration, next to the user's own photo (AC9.2.1, AC9.3.1, AC9.4.1, AC9.4.2).
+  await page.getByTestId("analysis-visuals-link").click();
+  await expect(page).toHaveURL(/\/visuals$/);
+  await expect(page.getByTestId("visuals")).toBeVisible();
+  await expect(page.locator('[data-testid^="visual-ai-label-"]')).toHaveCount(13);
+  await expect(page.locator('[data-testid^="visual-image-"][data-state="loaded"]')).toHaveCount(14);
+  await expectAccessible(page, "AI Visuals");
+  await page.goBack();
+
+  await expect(page.getByTestId("analysis-view-report")).toBeVisible();
   await page.getByTestId("analysis-view-report").click();
   await expect(page).toHaveURL(/\/home$/);
 });
@@ -231,4 +243,43 @@ test("a failed analysis is explained and the one free re-run completes it", asyn
   // Coming back later shows the same finished run (AC7.2.3).
   await page.reload();
   await expect(page.getByTestId("analysis-view-report")).toBeVisible();
+});
+
+test("images that failed show Not available yet, and one retry brings the image back", async ({
+  page,
+}) => {
+  expect(CONTROL_DIR, "AI_FAKE_CONTROL_DIR must point at the worker's control directory").not.toBe(
+    "",
+  );
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- the control directory comes from the test environment, not user input
+  mkdirSync(CONTROL_DIR, { recursive: true });
+  const marker = path.join(CONTROL_DIR, "fail-image");
+  // Every image call of this run fails (24 images x 4 attempts); the API's own retry does not.
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- the control directory comes from the test environment, not user input
+  writeFileSync(marker, "96", "utf-8");
+
+  await startAnalysis(page, "images");
+  // The report is published even though no image could be made (AC9.5.2).
+  await expect(page.getByTestId("analysis-view-report")).toBeVisible({ timeout: 60_000 });
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- the control directory comes from the test environment, not user input
+  writeFileSync(marker, "0", "utf-8");
+
+  await page.getByTestId("analysis-visuals-link").click();
+  await expect(page).toHaveURL(/\/visuals$/);
+  await expect(page.getByTestId("visual-unavailable-hairstyle_1")).toContainText(
+    "Not available yet",
+  );
+  await expect(page.getByTestId("visual-retry-help-hairstyle_1")).toHaveText("3 retries left.");
+  await expectAccessible(page, "AI Visuals with images not available yet");
+
+  await page.getByTestId("visual-retry-hairstyle_1").click();
+  await expect(page.getByTestId("visual-image-hairstyle_1")).toHaveAttribute(
+    "data-state",
+    "loaded",
+  );
+  await expect(page.getByTestId("visual-ai-label-hairstyle_1")).toHaveText(
+    "AI-generated illustration",
+  );
+  // The other images are untouched: still marked, with all their retries.
+  await expect(page.getByTestId("visual-unavailable-hairstyle_2")).toBeVisible();
 });

@@ -90,7 +90,9 @@ def build_text_model(
 def build_image_editor(settings: Settings, *, sleep: Sleeper = time.sleep) -> ImageEditor:
     """The image adapter for ``AI_IMAGE_PROVIDER``."""
     if settings.ai_image_provider == "fake":
-        return FakeImageEditor(profile=_profile(settings), sleep=sleep)
+        return FakeImageEditor(
+            profile=_profile(settings), sleep=sleep, control_dir=settings.ai_fake_control_dir
+        )
     assert settings.openai_api_key is not None  # noqa: S101
     assert settings.openai_image_model is not None  # noqa: S101
     return OpenAiImageEditor(

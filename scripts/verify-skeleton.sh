@@ -121,7 +121,7 @@ bash "$ROOT/scripts/wait-for.sh" "http://127.0.0.1:8000/health/ready" 60
 
 step "Start the background worker (U6: fake AI, a short text pause so the steps are visible)"
 mkdir -p "$LOG_DIR/ai-control"
-rm -f "$LOG_DIR/ai-control/fail-text"
+rm -f "$LOG_DIR/ai-control/fail-text" "$LOG_DIR/ai-control/fail-image"
 export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
 WORKER_LABEL="verify-$$"
 WORKER_PID="$(cd "$ROOT/backend" && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \

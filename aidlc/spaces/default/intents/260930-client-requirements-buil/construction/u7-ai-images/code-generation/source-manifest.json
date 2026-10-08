@@ -1,0 +1,145 @@
+{
+  "stage": "code-generation",
+  "unit": "u7-ai-images",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "backend/.env.example"
+    },
+    {
+      "path": "backend/README.md"
+    },
+    {
+      "path": "backend/alembic/versions/0007_u7_images.py"
+    },
+    {
+      "path": "backend/app/ai/fakes.py"
+    },
+    {
+      "path": "backend/app/ai/public.py"
+    },
+    {
+      "path": "backend/app/analysis/models.py"
+    },
+    {
+      "path": "backend/app/analysis/public.py"
+    },
+    {
+      "path": "backend/app/analysis/repositories.py"
+    },
+    {
+      "path": "backend/app/analysis/slots.py"
+    },
+    {
+      "path": "backend/app/images/__init__.py"
+    },
+    {
+      "path": "backend/app/images/catalog.py"
+    },
+    {
+      "path": "backend/app/images/dependencies.py"
+    },
+    {
+      "path": "backend/app/images/generator.py"
+    },
+    {
+      "path": "backend/app/images/public.py"
+    },
+    {
+      "path": "backend/app/images/routes.py"
+    },
+    {
+      "path": "backend/app/images/schemas.py"
+    },
+    {
+      "path": "backend/app/images/service.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/media/models.py"
+    },
+    {
+      "path": "backend/app/platform/errors.py"
+    },
+    {
+      "path": "backend/app/platform/settings.py"
+    },
+    {
+      "path": "backend/app/worker.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/tests/images/__init__.py"
+    },
+    {
+      "path": "backend/tests/images/conftest.py"
+    },
+    {
+      "path": "backend/tests/images/test_catalog.py"
+    },
+    {
+      "path": "backend/tests/images/test_generation_unit.py"
+    },
+    {
+      "path": "backend/tests/images/test_images_flow.py"
+    },
+    {
+      "path": "frontend/README.md"
+    },
+    {
+      "path": "frontend/e2e/analysis.spec.ts"
+    },
+    {
+      "path": "frontend/scripts/size-check.mjs"
+    },
+    {
+      "path": "frontend/src/app/visuals/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/visuals/page.tsx"
+    },
+    {
+      "path": "frontend/src/components/analysis/analysis-progress.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/home-view.tsx"
+    },
+    {
+      "path": "frontend/src/components/visuals/messages.ts"
+    },
+    {
+      "path": "frontend/src/components/visuals/visuals-screen.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/visuals/visuals-screen.tsx"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/images/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/images/index.ts"
+    },
+    {
+      "path": "frontend/src/lib/images/visuals.ts"
+    },
+    {
+      "path": "frontend/src/test-utils/images-server.ts"
+    },
+    {
+      "path": "scripts/verify-skeleton.sh"
+    },
+    {
+      "path": "scripts/verify.sh"
+    }
+  ]
+}
