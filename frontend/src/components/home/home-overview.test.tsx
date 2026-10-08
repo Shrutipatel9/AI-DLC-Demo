@@ -130,7 +130,7 @@ describe("Home Overview", () => {
 
   it("keeps the existing home when there is no report yet (404) (AC11.1.1 otherwise)", async () => {
     show(newReportState({ home: { status: 404, code: "REPORT_NOT_READY" } }));
-    expect(await screen.findByTestId("home-onboarding-link")).toBeInTheDocument();
+    expect(await screen.findByTestId("home-next-step-button")).toBeInTheDocument();
     expect(screen.getByTestId("home-greeting")).toHaveTextContent("Hi, Maya Test");
     expect(screen.queryByTestId("home-overview")).toBeNull();
   });

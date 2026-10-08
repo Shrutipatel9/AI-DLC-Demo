@@ -12,6 +12,7 @@ import { describedBy, FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { isApiError } from "@/lib/api/errors";
 import { useAuth, useAuthActions, type CodePurpose } from "@/lib/auth";
+import { useGoToNextStep } from "@/lib/journey";
 
 import { messageFor } from "./messages";
 import { ResendCodeButton } from "./resend-code-button";
@@ -30,6 +31,7 @@ function startPage(purpose: CodePurpose, email: string | null): string {
 // "start again" link.
 export function VerifyForm() {
   const router = useRouter();
+  const goToNextStep = useGoToNextStep();
   const { pending, pendingEmail } = useAuth();
   const { verifyCode, verifyResetCode, cancelPending } = useAuthActions();
   const [locked, setLocked] = useState(false);
@@ -68,7 +70,7 @@ export function VerifyForm() {
       }
       await verifyCode(values.code.trim());
       toast.success(purpose === "signup" ? "Your account is ready." : "You're signed in.");
-      router.push("/home");
+      await goToNextStep(); // US11.8: sign-in lands on the next unfinished step
     } catch (error) {
       if (!isApiError(error)) throw error;
       if (error.code === "CODE_LOCKED") setLocked(true);

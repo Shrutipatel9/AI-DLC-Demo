@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AppShell } from "@/components/app/app-shell";
 import { ProtectedRoute } from "@/components/app/protected-route";
 import { PhotoFlow } from "@/components/photos/photo-flow";
+import { STAGE } from "@/lib/journey";
 
 export const metadata: Metadata = { title: "Photos · AI Facial Analysis" };
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = { title: "Photos · AI Facial Analysis" };
 // route, so Next.js code-splits it.
 export default function PhotosPage() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute stage={STAGE.photos}>
       <AppShell>
         <PhotoFlow />
       </AppShell>

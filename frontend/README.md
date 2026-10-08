@@ -202,3 +202,20 @@ confirmLabel })` for every destructive action. Focus starts on Cancel, Tab is tr
   cancels, focus returns to the opener, and the confirm label must name the action.
 - `src/components/ui/form-field.tsx`: `FormField` / `FieldError` for inline errors linked by
   `aria-describedby` with `aria-invalid` on the input.
+
+## Journey, landing and Settings (U10)
+
+- `src/lib/journey`: `getNextStep`, the route guard (`useJourneyGuard`) and
+  `useGoToNextStep`. A page passes its `stage` to `ProtectedRoute`; opening a later step's URL
+  before an earlier one is finished sends the user to their next step (AC11.8.2). The guard asks
+  the server once per page load, and when the answer cannot be read the page renders and shows
+  its own error. Sign-in and "Get started" use `useGoToNextStep`.
+- `/` is the landing page (`components/landing`): "Get started", a header "Sign in" link and an
+  ordered "How it works" whose scroll animation is skipped under reduced motion.
+- `/settings` (Account Info), `/settings/password` and `/settings/billing` share
+  `components/settings/settings-shell.tsx`. PayPal is shown disabled and announced as "Not
+  available"; it is never a working integration.
+- `e2e/journey.spec.ts` runs the two main journeys with axe on a 360 px phone and a desktop
+  viewport in Chromium, WebKit and Firefox (`scripts/verify.sh` and CI; install the browsers with
+  `pnpm exec playwright install chromium webkit firefox`). `scripts/verify-skeleton.sh` stays on
+  Chromium desktop.

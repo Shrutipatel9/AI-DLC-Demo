@@ -48,9 +48,10 @@ describe("pages", () => {
     expect(screen.getByTestId("not-found-next-step-link")).toHaveAttribute("href", "/login");
   });
 
-  it("sends the root to log in", () => {
-    RootPage();
-    expect(redirect).toHaveBeenCalledWith("/login");
+  it("shows the landing page at the root (US2.1)", () => {
+    render(<RootPage />);
+    expect(screen.getByTestId("landing-get-started")).toBeInTheDocument();
+    expect(redirect).not.toHaveBeenCalled();
   });
 
   it("passes the runtime API origin to the client and context", () => {

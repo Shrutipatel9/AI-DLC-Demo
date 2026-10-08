@@ -77,7 +77,8 @@ async function signUp(page: Page, label: string): Promise<void> {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Maya Photos");
+  // US11.8: a new user lands on the questionnaire; the user menu shows who is signed in.
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Photos");
 }
 
 /**
@@ -131,13 +132,11 @@ async function submitQuestionnaire(request: APIRequestContext): Promise<void> {
   expect(submitted.ok(), "submit the questionnaire").toBe(true);
 }
 
-/** Sign up, submit the questionnaire, and open the photo step from the home page link. */
+/** Sign up, submit the questionnaire, and open the photo step through the dashboard. */
 async function openPhotos(page: Page, label: string) {
   await signUp(page, label);
   await submitQuestionnaire(page.request);
-  await page.reload();
-  await expect(page.getByTestId("home-status")).toContainText("Next, add your photos.");
-  await page.getByTestId("home-photos-link").click();
+  await page.goto("/home"); // US11.8: the dashboard sends the user to the photo step
   await expect(page).toHaveURL(/\/photos$/);
   await expect(page.getByTestId("photo-requirements")).toBeVisible();
 }

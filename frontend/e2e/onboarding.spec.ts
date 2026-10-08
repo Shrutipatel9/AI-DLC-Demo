@@ -58,12 +58,11 @@ async function signUp(page: Page, label: string): Promise<void> {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Maya Onboarding");
+  // US11.8: a new user lands on the questionnaire; the user menu shows who is signed in.
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Onboarding");
 }
 
 async function consent(page: Page) {
-  await expect(page.getByTestId("home-onboarding-link")).toHaveText("Start your questionnaire");
-  await page.getByTestId("home-onboarding-link").click();
   await expect(page).toHaveURL(/\/onboarding$/);
   await expect(page.getByTestId("consent-continue-button")).toBeDisabled();
   await page.getByTestId("consent-checkbox").check();
@@ -109,7 +108,7 @@ test("consent, answer every question with Q19 shown, confirm the disclaimer, sub
   page,
 }) => {
   await signUp(page, "full");
-  await expectAccessible(page, "home with the questionnaire link");
+  await expectAccessible(page, "consent screen");
   await consent(page);
   await expectAccessible(page, "first question");
 
@@ -126,8 +125,8 @@ test("consent, answer every question with Q19 shown, confirm the disclaimer, sub
   await expectAccessible(page, "submitted");
 
   await page.getByTestId("onboarding-home-button").click();
-  await expect(page.getByTestId("home-status")).toContainText("questionnaire is submitted");
-  await expect(page.getByTestId("home-onboarding-link")).toHaveCount(0);
+  // US11.8: the dashboard sends a user with a submitted questionnaire to the photo step.
+  await expect(page).toHaveURL(/\/photos$/);
 });
 
 test("Q4 = Feminine skips Q19, answers resume after a reload, and the supportive message shows", async ({

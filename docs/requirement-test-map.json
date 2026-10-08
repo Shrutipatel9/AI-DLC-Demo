@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "note": "Every FR/AUTH/BR/FE ID in client_requirements.md maps to at least one test file, or to N/A or Deferred with a reason (US1.13 AC1.13.1). Checked by scripts/check-requirement-map.py.",
+  "requirements": {
+    "AUTH-001": {
+      "tests": [
+        "backend/tests/identity/test_login_verify_api.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-002": {
+      "tests": [
+        "backend/tests/identity/test_tokens.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-003": {
+      "tests": [
+        "backend/tests/identity/test_login_verify_api.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-004": {
+      "tests": [
+        "backend/tests/identity/test_tokens.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-005": {
+      "tests": [
+        "backend/tests/identity/test_me_and_routes.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-006": {
+      "tests": [
+        "backend/tests/identity/test_session_routes.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-007": {
+      "tests": [
+        "backend/tests/identity/test_me_and_routes.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-008": {
+      "tests": [
+        "backend/tests/identity/test_ownership_throttle_and_logs.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-009": {
+      "tests": [
+        "backend/tests/identity/test_me_and_routes.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-010": {
+      "tests": [
+        "backend/tests/identity/test_sessions.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-011": {
+      "tests": [
+        "backend/tests/identity/test_codes.py",
+        "backend/tests/identity/test_resend_lockout.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-012": {
+      "tests": [
+        "backend/tests/identity/test_tokens.py",
+        "backend/tests/identity/test_sessions.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-013": {
+      "tests": [
+        "backend/tests/identity/test_csrf_cors.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-014": {
+      "tests": [
+        "backend/tests/identity/test_me_and_routes.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-015": {
+      "tests": [
+        "backend/tests/identity/test_password_reset.py"
+      ],
+      "status": "mapped"
+    },
+    "AUTH-016": {
+      "tests": [
+        "backend/tests/identity/test_change_password.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-001": {
+      "tests": [
+        "backend/tests/analysis/test_analysis_flow.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-002": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-003": {
+      "tests": [
+        "backend/tests/onboarding/test_submit.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-004": {
+      "tests": [
+        "backend/tests/analysis/test_analysis_flow.py",
+        "backend/tests/payments/test_payments_api.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-005": {
+      "tests": [
+        "backend/tests/photos/test_identity_decision.py",
+        "backend/tests/payments/test_payment_service.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-006": {
+      "status": "N/A",
+      "reason": "A commercial term (who pays third-party usage costs). The technical rule that no paid service is called in tests is enforced by pytest-socket (backend/pyproject.toml) and the fakes."
+    },
+    "BR-007": {
+      "status": "N/A",
+      "reason": "A commercial term (no committed timeline or estimate); nothing to test in software."
+    },
+    "BR-008": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-009": {
+      "tests": [
+        "frontend/src/components/feedback/toast.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "BR-010": {
+      "tests": [
+        "frontend/src/components/feedback/confirm-dialog.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "BR-011": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "BR-012": {
+      "tests": [
+        "frontend/src/components/settings/settings-tabs.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FE-001": {
+      "tests": [
+        "frontend/src/lib/auth/store.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-002": {
+      "tests": [
+        "frontend/src/lib/auth/store.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-003": {
+      "tests": [
+        "frontend/src/lib/auth/store.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-004": {
+      "tests": [
+        "frontend/src/lib/api/client.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-005": {
+      "tests": [
+        "frontend/src/lib/api/client.u2.test.ts",
+        "frontend/src/lib/auth/refresh-coordinator.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-006": {
+      "tests": [
+        "frontend/src/lib/api/client.u2.test.ts",
+        "frontend/src/lib/auth/refresh-coordinator.test.ts"
+      ],
+      "status": "mapped"
+    },
+    "FE-007": {
+      "tests": [
+        "frontend/src/components/auth/login-form.test.tsx",
+        "frontend/src/components/app/protected-route.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-001": {
+      "tests": [
+        "frontend/src/components/landing/landing-page.test.tsx",
+        "frontend/e2e/journey.spec.ts"
+      ],
+      "status": "mapped"
+    },
+    "FR-002": {
+      "tests": [
+        "backend/tests/identity/test_register_api.py",
+        "frontend/src/components/auth/signup-form.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-003": {
+      "tests": [
+        "backend/tests/onboarding/test_questionnaire_api.py",
+        "frontend/src/components/onboarding/onboarding-flow.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-004": {
+      "tests": [
+        "backend/tests/onboarding/test_submit.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-005": {
+      "tests": [
+        "backend/tests/photos/test_photos_api.py",
+        "frontend/src/components/photos/photo-flow.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-006": {
+      "tests": [
+        "backend/tests/photos/test_checks.py",
+        "backend/tests/photos/test_identity_service.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-007": {
+      "tests": [
+        "backend/tests/analysis/test_measurement.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-008": {
+      "tests": [
+        "backend/tests/analysis/test_report_writing.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-009": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-010": {
+      "tests": [
+        "backend/tests/report/test_report_api.py",
+        "backend/tests/images/test_images_flow.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-011": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-012": {
+      "tests": [
+        "backend/tests/analysis/test_report_writing.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-013": {
+      "tests": [
+        "backend/tests/report/test_report_pdf.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-014": {
+      "tests": [
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-015": {
+      "tests": [
+        "backend/tests/analysis/test_analysis_flow.py",
+        "frontend/src/components/payments/payment-confirmation.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-016": {
+      "tests": [
+        "backend/tests/payments/test_payments_settings.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-017": {
+      "tests": [
+        "frontend/src/components/home/home-overview.test.tsx",
+        "backend/tests/report/test_report_api.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-018": {
+      "tests": [
+        "frontend/src/components/report/report-screen.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-019": {
+      "status": "Deferred",
+      "reason": "The AI Beauty Assistant (chat) is built in unit U9, which has not been built yet; U9 replaces this entry with its tests."
+    },
+    "FR-020": {
+      "tests": [
+        "frontend/src/components/visuals/visuals-screen.test.tsx",
+        "backend/tests/images/test_images_flow.py"
+      ],
+      "status": "mapped"
+    },
+    "FR-021": {
+      "tests": [
+        "backend/tests/settings/test_settings_api.py",
+        "frontend/src/components/settings/settings-tabs.test.tsx",
+        "frontend/src/components/settings/change-password-form.test.tsx"
+      ],
+      "status": "mapped"
+    },
+    "FR-022": {
+      "tests": [
+        "backend/tests/images/test_images_flow.py"
+      ],
+      "status": "mapped"
+    }
+  }
+}

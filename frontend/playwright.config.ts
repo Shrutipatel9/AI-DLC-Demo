@@ -24,11 +24,29 @@ export default defineConfig({
   projects: [
     {
       name: "phone",
-      use: { ...devices["Desktop Chrome"], viewport: { width: 390, height: 844 }, isMobile: false },
+      use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 800 }, isMobile: false },
     },
     {
       name: "desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
     },
+    // U10 (AC1.13.2): the two main journeys also run in WebKit and Firefox, on a 360 px phone and
+    // a desktop viewport. These four projects run only `journey.spec.ts`; the checkpoint run
+    // (scripts/verify-skeleton.sh) uses the Chromium `desktop` project alone.
+    ...(["webkit", "firefox"] as const).flatMap((engine) => {
+      const base = engine === "webkit" ? devices["Desktop Safari"] : devices["Desktop Firefox"];
+      return [
+        {
+          name: `phone-${engine}`,
+          testMatch: /journey\.spec\.ts/,
+          use: { ...base, viewport: { width: 360, height: 800 } },
+        },
+        {
+          name: `desktop-${engine}`,
+          testMatch: /journey\.spec\.ts/,
+          use: { ...base, viewport: { width: 1280, height: 800 } },
+        },
+      ];
+    }),
   ],
 });

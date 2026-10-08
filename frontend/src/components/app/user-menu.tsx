@@ -68,7 +68,7 @@ export function UserMenu({ userName }: { userName: string }) {
           <li role="none">
             <Link
               role="menuitem"
-              href="/settings/password"
+              href="/settings"
               className={ITEM}
               onClick={() => setOpen(false)}
               data-testid="user-menu-settings-link"

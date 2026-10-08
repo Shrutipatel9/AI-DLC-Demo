@@ -437,3 +437,19 @@ request. Stack traces go to the logs only.
 - **Home rules** [Decided by delivery team]: priority features are the three lowest scorable feature
   scores (distance from the first-pass `REFERENCE` ratios, see `measurement/scoring.py`); a feature
   with nothing to compare is never scored 0; the Smoothness radar axis is "not measured".
+
+## Journey and Settings (U10)
+
+- `app/journey/`: `GET /journey/next-step` (US11.8, US5.7). The rule in `rule.py` is a pure
+  function of the state the owning modules report through their `public.py` ports (onboarding,
+  photos, payments, analysis); `service.py` reads that state fresh on every call, so nothing is
+  cached. Order: consent, questionnaire, photos (incomplete or inconsistent, with the flagged
+  angles), payment, confirming payment, start analysis, progress, home. A failed run stays on
+  progress (the re-run lives there); a pending payment is "confirming payment"
+  `[Decided by delivery team]`.
+- `app/settings/`: `GET /settings/account` (name, email, verified, member since) and
+  `GET /settings/billing` (the caller's payments, newest first). Owner-only by construction: no
+  id is taken from the request. There is no endpoint that edits the name.
+- `tests/journey`, `tests/settings` and `tests/traceability` hold their tests;
+  `scripts/check-requirement-map.py` fails when a client `FR-*`, `AUTH-*`, `BR-*` or `FE-*` ID
+  is missing from `docs/requirement-test-map.json` (CI and `scripts/verify.sh` run it).

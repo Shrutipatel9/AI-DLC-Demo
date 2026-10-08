@@ -384,6 +384,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/journey/next-step": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The user's next unfinished step (US11.8)
+         * @description Exactly one step per the AC11.8.1 table, recomputed on every call.
+         */
+        get: operations["get_next_step_journey_next_step_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/media/{fileId}": {
         parameters: {
             query?: never;
@@ -688,6 +708,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/settings/account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Account Info: name, email, verification status, member-since (US11.4)
+         * @description The caller's own account; the name has no edit endpoint (AC11.4.2).
+         */
+        get: operations["get_account_settings_account_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/settings/billing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Billing: the caller's payments with date, amount, currency, status (US11.6)
+         * @description The caller's own payments, newest first.
+         */
+        get: operations["get_billing_settings_billing_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -704,6 +764,23 @@ export interface components {
              * Format: date-time
              */
             expiresAt: string;
+        };
+        /**
+         * AccountOut
+         * @description ``GET /settings/account``: name, email, verification status and member-since (FR13.1).
+         */
+        AccountOut: {
+            /** Email */
+            email: string;
+            /** Fullname */
+            fullName: string;
+            /** Isverified */
+            isVerified: boolean;
+            /**
+             * Membersince
+             * Format: date-time
+             */
+            memberSince: string;
         };
         /**
          * AnalysisRunOut
@@ -774,6 +851,14 @@ export interface components {
             /** Prototypicality */
             prototypicality: number | null;
             symmetry: components["schemas"]["SymmetryOut"] | null;
+        };
+        /**
+         * BillingOut
+         * @description ``GET /settings/billing``: the payment history, newest first (FR13.3).
+         */
+        BillingOut: {
+            /** Payments */
+            payments: components["schemas"]["PaymentRecordOut"][];
         };
         /** Body_put_photo_photos__angle__put */
         Body_put_photo_photos__angle__put: {
@@ -1114,6 +1199,19 @@ export interface components {
             value: number;
         };
         /**
+         * NextStepOut
+         * @description The next step. ``flaggedAngles`` is additive to C1 [Decided by delivery team].
+         */
+        NextStepOut: {
+            /** Flaggedangles */
+            flaggedAngles: string[];
+            /**
+             * Step
+             * @enum {string}
+             */
+            step: "consent" | "questionnaire" | "photos" | "payment" | "confirming_payment" | "start_analysis" | "progress" | "home";
+        };
+        /**
          * OfferOut
          * @description ``GET /payments/offer``: the configured price and what payment unlocks (FR7.1, FR7.3).
          */
@@ -1136,6 +1234,26 @@ export interface components {
             label: string;
             /** Value */
             value: string;
+        };
+        /**
+         * PaymentRecordOut
+         * @description One payment (contract C1 ``PaymentRecord``).
+         */
+        PaymentRecordOut: {
+            /** Amount */
+            amount: number;
+            /** Currency */
+            currency: string;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "succeeded" | "failed";
         };
         /**
          * PaymentStatusOut
@@ -2567,6 +2685,35 @@ export interface operations {
             };
         };
     };
+    get_next_step_journey_next_step_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NextStepOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     get_media_media__fileId__get: {
         parameters: {
             query?: never;
@@ -3299,6 +3446,64 @@ export interface operations {
             };
             /** @description Error (contract C11) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_account_settings_account_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_billing_settings_billing_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BillingOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

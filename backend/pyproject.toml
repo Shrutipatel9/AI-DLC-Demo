@@ -159,12 +159,14 @@ forbidden_modules = [
     "app.images",
     "app.report",
     "app.worker",
+    "app.journey",
+    "app.settings",
 ]
 
 [[tool.importlinter.contracts]]
 name = "Outside identity, only identity.public is imported"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.report", "app.worker"]
+source_modules = ["app.main", "app.images", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.report", "app.worker", "app.journey", "app.settings"]
 forbidden_modules = [
     "app.identity.services",
     "app.identity.codes",
@@ -207,7 +209,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside onboarding, only onboarding.public is imported (ADR-007)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement", "app.report"]
+source_modules = ["app.main", "app.images", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement", "app.report", "app.journey", "app.settings"]
 forbidden_modules = [
     "app.onboarding.services",
     "app.onboarding.repositories",
@@ -269,7 +271,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside media and face, only their public modules are imported (C8, FaceGeometry)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement", "app.report"]
+source_modules = ["app.main", "app.images", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement", "app.report", "app.journey", "app.settings"]
 forbidden_modules = [
     "app.media.services",
     "app.media.repositories",
@@ -287,7 +289,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside photos, only photos.public is imported (C4)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.report", "app.worker"]
+source_modules = ["app.main", "app.images", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.report", "app.worker", "app.journey", "app.settings"]
 forbidden_modules = [
     "app.photos.services",
     "app.photos.repositories",
@@ -327,7 +329,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside payments, only payments.public is imported (C5)"
 type = "forbidden"
-source_modules = ["app.main", "app.images", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.report", "app.worker"]
+source_modules = ["app.main", "app.images", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.report", "app.worker", "app.journey", "app.settings"]
 forbidden_modules = [
     "app.payments.services",
     "app.payments.repositories",
@@ -520,5 +522,38 @@ forbidden_modules = [
     "app.report.models",
     "app.report.routes",
     "app.report.dependencies",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Journey layers: public -> routes -> service -> rule (reads other modules only via public)"
+type = "layers"
+layers = [
+    "app.journey.public",
+    "app.journey.routes",
+    "app.journey.service",
+    "app.journey.rule",
+]
+
+[[tool.importlinter.contracts]]
+name = "Journey and settings import other modules only through their public interface"
+type = "forbidden"
+source_modules = ["app.journey", "app.settings"]
+forbidden_modules = [
+    "app.onboarding.services",
+    "app.onboarding.repositories",
+    "app.onboarding.models",
+    "app.photos.services",
+    "app.photos.repositories",
+    "app.photos.models",
+    "app.payments.services",
+    "app.payments.repositories",
+    "app.payments.models",
+    "app.analysis.services",
+    "app.analysis.repositories",
+    "app.analysis.models",
+    "app.identity.services",
+    "app.identity.repositories",
+    "app.identity.models",
 ]
 allow_indirect_imports = true

@@ -85,7 +85,8 @@ async function signUp(page: Page, label: string): Promise<void> {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Sam Payments");
+  // US11.8: a new user lands on the questionnaire; the user menu shows who is signed in.
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Sam Payments");
 }
 
 /** API headers with a fresh access token from the browser context's refresh cookie. */

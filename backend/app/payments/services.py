@@ -101,6 +101,16 @@ class PaymentStatusView:
 
 
 @dataclass(frozen=True)
+class PaymentRecordView:
+    """One row of the billing history (contract C1 ``PaymentRecord``; US11.6)."""
+
+    date: datetime
+    amount: int
+    currency: str
+    status: str
+
+
+@dataclass(frozen=True)
 class Entitlement:
     """Contract C5 ``entitlement``: has the user paid, and with which payment."""
 
@@ -160,6 +170,18 @@ class PaymentService:
         if latest is not None and latest.status == PaymentStatus.PENDING:
             return PaymentStatusView(state="pending", paid_at=None)
         return PaymentStatusView(state="none", paid_at=None)
+
+    def history(self, session: Session, user_id: uuid.UUID) -> list[PaymentRecordView]:
+        """The user's payments, newest first, for Settings -> Billing (US11.6)."""
+        return [
+            PaymentRecordView(
+                date=row.paid_at or row.created_at,
+                amount=row.amount,
+                currency=row.currency,
+                status=row.status,
+            )
+            for row in repositories.list_for_user(session, user_id)
+        ]
 
     def payment_state(self, session: Session, user_id: uuid.UUID) -> PaymentState:
         """``none`` / ``pending`` / ``paid`` for the Journey (C5 ``payment_state``)."""

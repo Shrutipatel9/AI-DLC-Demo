@@ -80,10 +80,10 @@ test("sign up, verify, see who I am, reload keeps me, log out, log in again @che
   await page.getByTestId("verify-submit-button").click();
 
   // --- Signed in: "who am I" -----------------------------------------------------------------
-  await expect(page).toHaveURL(/\/home$/);
-  await expect(page.getByTestId("home-greeting")).toHaveText(`Hi, ${fullName}`);
+  // US11.8: a new user lands on their next step, the questionnaire.
+  await expect(page).toHaveURL(/\/onboarding$/);
   await expect(page.getByTestId("user-menu-name")).toHaveText(fullName);
-  await expectAccessible(page, "home");
+  await expectAccessible(page, "consent");
   const storage = await page.evaluate(() => ({
     local: window.localStorage.length,
     session: window.sessionStorage.length,
@@ -95,7 +95,7 @@ test("sign up, verify, see who I am, reload keeps me, log out, log in again @che
 
   // --- Reload keeps the session (U2 WF-U2-2 replaces U1's "reload signs out") ----------------
   await page.reload();
-  await expect(page.getByTestId("home-greeting")).toHaveText(`Hi, ${fullName}`);
+  await expect(page.getByTestId("user-menu-name")).toHaveText(fullName);
 
   // --- Log out (confirmed in the shared dialog, U2 WF-U2-6) ------------------------------------
   await page.getByTestId("user-menu-button").click();
@@ -114,6 +114,6 @@ test("sign up, verify, see who I am, reload keeps me, log out, log in again @che
   const loginCode = await latestCode(page, email, "Your sign-in code", loginSentAt);
   await page.getByTestId("verify-code-input").fill(loginCode);
   await page.getByTestId("verify-submit-button").click();
-  await expect(page).toHaveURL(/\/home$/);
-  await expect(page.getByTestId("home-greeting")).toHaveText(`Hi, ${fullName}`);
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(page.getByTestId("user-menu-name")).toHaveText(fullName);
 });

@@ -11,7 +11,7 @@ face model is missing (U4, ``FACE_MODEL_PRELOAD``).
 Route classes (NFR2.8): one public router holds exactly ``PUBLIC_ROUTES`` (asserted at
 start-up); every other router is mounted with ``current_user``; ``/docs`` and
 ``/openapi.json`` exist only in development; ``/metrics`` is an opt-in sub-app with its
-own CIDR guard; the analysis routes (``/analysis/runs``) are protected like the rest, and the
+own CIDR guard; the analysis, journey and settings routes are protected like the rest, and the
 analysis itself runs in the separate worker process (``python -m app.worker``); the fake
 payment provider's test page (``FAKE_PAYMENT_ROUTES``) exists only with ``PAYMENT_PROVIDER=fake``,
 which settings allow in development and test only.
@@ -35,6 +35,8 @@ from app.identity.public import build_identity, current_user, protected_router, 
 from app.images.public import build_image_generation
 from app.images.public import router as images_router
 from app.jobs.public import build_job_queue
+from app.journey.public import build_journey
+from app.journey.public import router as journey_router
 from app.media.public import build_media_store
 from app.media.public import router as media_router
 from app.onboarding.public import build_onboarding
@@ -69,6 +71,7 @@ from app.platform.routing import assert_fake_payment_routes, assert_public_route
 from app.platform.settings import Settings, get_settings
 from app.report.public import build_report
 from app.report.public import router as report_router
+from app.settings.public import router as settings_router
 
 logger = logging.getLogger("app")
 
@@ -159,6 +162,7 @@ def create_app(
         settings, clock=clock, session_factory=session_factory, media=media
     )
     report = build_report(payments=payments, media=media, clock=clock)
+    journey = build_journey(onboarding=onboarding, photos=photos, payments=payments)
     # A run keeps the photo files it started with: a retake must not delete them (R-02).
     media.add_reference_check(media_in_use)
 
@@ -204,6 +208,7 @@ def create_app(
     app.state.analysis = analysis
     app.state.images = images
     app.state.report = report
+    app.state.journey = journey
 
     install_exception_handlers(app)
     install_middleware(app, settings, metrics)
@@ -222,6 +227,8 @@ def create_app(
     app.include_router(analysis_router, dependencies=[Depends(current_user)])
     app.include_router(images_router, dependencies=[Depends(current_user)])
     app.include_router(report_router, dependencies=[Depends(current_user)])
+    app.include_router(journey_router, dependencies=[Depends(current_user)])
+    app.include_router(settings_router, dependencies=[Depends(current_user)])
     if settings.payment_provider == "fake":
         # Development/test only (settings refuse the fake elsewhere): the browser navigates
         # to the fake's hosted page as it would to Stripe's, so it takes no access token.

@@ -66,7 +66,7 @@ async function expectAccessible(page: Page, screen: string) {
   expect(results.violations, `axe violations on ${screen}`).toEqual([]);
 }
 
-async function signUp(page: Page, label: string): Promise<void> {
+async function signUp(page: Page, label: string): Promise<string> {
   const email = `e2e-analysis-${label}-${Date.now()}-${test.info().project.name}@example.test`;
   await page.goto("/signup");
   await page.getByTestId("signup-fullname-input").fill("Sam Analysis");
@@ -79,7 +79,9 @@ async function signUp(page: Page, label: string): Promise<void> {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Sam Analysis");
+  // US11.8: a new user lands on the questionnaire; the user menu shows who is signed in.
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Sam Analysis");
+  return email;
 }
 
 /** API headers with a fresh access token from the browser context's refresh cookie. */
@@ -163,8 +165,9 @@ async function readyAndPaid(request: APIRequestContext): Promise<void> {
 }
 
 /** Sign up, get ready and paid, wait for the confirmation and click "Start Analysis". */
-async function startAnalysis(page: Page, label: string) {
-  await signUp(page, label);
+async function startAnalysis(page: Page, label: string, afterSignUp?: () => Promise<void>) {
+  const email = await signUp(page, label);
+  await afterSignUp?.();
   await readyAndPaid(page.request);
   await page.goto("/payment/success");
   await expect(page.getByTestId("payment-confirmation-title")).toHaveText("Payment confirmed", {
@@ -172,12 +175,17 @@ async function startAnalysis(page: Page, label: string) {
   });
   await page.getByTestId("payment-start-analysis-button").click();
   await expect(page).toHaveURL(/\/analysis$/);
+  return email;
 }
 
 test("start the analysis, watch the worker advance every step, then view the report @checkpoint", async ({
   page,
 }) => {
-  await startAnalysis(page, "happy");
+  const email = await startAnalysis(page, "happy", async () => {
+    // U10, AC11.8.2: opening a later step's URL before the questionnaire sends the user back.
+    await page.goto("/report");
+    await expect(page).toHaveURL(/\/onboarding$/);
+  });
 
   // The run is going in the background worker: steps in words, a leave-and-come-back note (AC7.2.1, AC7.2.2).
   await expect(page.getByTestId("analysis-progress")).toHaveAttribute("data-status", "running");
@@ -218,6 +226,10 @@ test("start the analysis, watch the worker advance every step, then view the rep
   await expect(page.getByTestId("home-protocol")).toContainText("PHASE 01");
   await expect(page.getByTestId("radar-values")).toContainText("Symmetry");
   await expect(page.locator('[data-testid^="home-priority-"]')).toHaveCount(3);
+  // On a phone the four links sit behind the Menu button (AC11.2.2); open it first.
+  if (await page.getByTestId("nav-menu-button").isVisible()) {
+    await page.getByTestId("nav-menu-button").click();
+  }
   for (const link of ["home", "report", "visuals", "chat"]) {
     await expect(page.getByTestId(`nav-${link}`)).toBeVisible();
   }
@@ -240,6 +252,28 @@ test("start the analysis, watch the worker advance every step, then view the rep
     page.getByTestId("report-download-pdf").click(),
   ]);
   expect(download.suggestedFilename()).toBe("facial-analysis-report.pdf");
+
+  // U10: log out, enter through the landing page's "Sign in" link, and sign-in lands on the next
+  // step, which for a finished report is Home (US2.1 AC2.1.2, US11.8).
+  await page.getByTestId("user-menu-button").click();
+  await page.getByTestId("user-menu-logout").click();
+  await page.getByTestId("confirm-dialog-confirm").click();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.goto("/");
+  await expect(page.getByTestId("landing-get-started")).toBeVisible();
+  await page.getByTestId("landing-signin-link").click();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.getByTestId("login-email-input").fill(email);
+  await page.getByTestId("login-password-input").fill(PASSWORD);
+  const loginSentAt = Date.now();
+  await page.getByTestId("login-submit-button").click();
+  await expect(page).toHaveURL(/\/verify$/);
+  await page
+    .getByTestId("verify-code-input")
+    .fill(await latestCode(page, email, "Your sign-in code", loginSentAt));
+  await page.getByTestId("verify-submit-button").click();
+  await expect(page).toHaveURL(/\/home$/);
+  await expect(page.getByTestId("home-overview")).toBeVisible();
 });
 
 test("a failed analysis is explained and the one free re-run completes it", async ({ page }) => {

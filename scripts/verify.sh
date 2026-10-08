@@ -92,7 +92,7 @@ uv run lint-imports
 
 step "Backend: tests with coverage (>= 80%), no network"
 uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report -m "not perf" \
+  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report \n  tests/journey tests/settings tests/traceability -m "not perf" \
   --cov=app --cov-report=term-missing --cov-fail-under=80 -q
 
 step "Backend: latency targets (p95; one automatic re-run per target, D10)"
@@ -100,6 +100,10 @@ uv run pytest tests/identity/test_perf_auth.py tests/health/test_perf_health.py 
   tests/identity/test_perf_sessions.py tests/identity/test_perf_enumeration.py -m perf -q
 
 # --------------------------------------------------------------------------- frontend
+step "Requirement-to-test map (every FR, AUTH, BR and FE ID is mapped; US1.13)"
+cd "$ROOT/backend"
+uv run python "$ROOT/scripts/check-requirement-map.py" "$ROOT"
+
 step "Frontend: install, lint, format, types"
 cd "$ROOT/frontend"
 pnpm install --frozen-lockfile

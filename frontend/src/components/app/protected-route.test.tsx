@@ -90,6 +90,47 @@ describe("ProtectedRoute", () => {
   });
 });
 
+describe("ProtectedRoute with a journey stage (US11.8)", () => {
+  beforeEach(() => {
+    resetAuthStore();
+    resetSession();
+    resetNextMocks();
+    configureApiOrigin("http://api.test");
+    act(() => setSession("tok", "2099-01-01T00:00:00Z", USER));
+  });
+
+  function stagedPage(stage: 1 | 2 | 3 | 4 | 5 | 6) {
+    return render(
+      <ProtectedRoute stage={stage}>
+        <p data-testid="secret-page">Signed-in content</p>
+      </ProtectedRoute>,
+    );
+  }
+
+  it("sends the user to their next step instead of showing a later step (AC11.8.2)", async () => {
+    mockFetch(
+      route("GET", "/journey/next-step", () =>
+        jsonResponse(200, { step: "photos", flaggedAngles: ["right_3q"] }),
+      ),
+    );
+    stagedPage(6);
+    expect(screen.getByTestId("journey-loader")).toBeInTheDocument();
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/photos"));
+    expect(screen.queryByTestId("secret-page")).toBeNull();
+  });
+
+  it("shows the page when it is the user's next step", async () => {
+    mockFetch(
+      route("GET", "/journey/next-step", () =>
+        jsonResponse(200, { step: "payment", flaggedAngles: [] }),
+      ),
+    );
+    stagedPage(3);
+    expect(await screen.findByTestId("secret-page")).toBeInTheDocument();
+    expect(router.replace).not.toHaveBeenCalled();
+  });
+});
+
 describe("AuthBootstrap", () => {
   beforeEach(() => {
     resetAuthStore();

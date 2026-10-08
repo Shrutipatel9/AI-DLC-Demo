@@ -1,0 +1,104 @@
+{
+  "stage": "code-generation",
+  "unit": "u10-journey-settings",
+  "upstream_ids": [
+    "AC11.8.1",
+    "AC11.8.2",
+    "AC5.7.1",
+    "AC5.7.2",
+    "AC2.1.1",
+    "AC2.1.2",
+    "AC2.1.3",
+    "AC2.2.1",
+    "AC2.2.2",
+    "AC11.4.1",
+    "AC11.4.2",
+    "AC11.6.1",
+    "AC11.6.2",
+    "AC1.13.1",
+    "AC1.13.2",
+    "AC1.13.3"
+  ],
+  "coverage": [
+    {
+      "id": "AC11.8.1",
+      "status": "OK",
+      "target": "backend/tests/journey/test_next_step.py"
+    },
+    {
+      "id": "AC11.8.2",
+      "status": "OK",
+      "target": "frontend/src/components/app/protected-route.test.tsx"
+    },
+    {
+      "id": "AC5.7.1",
+      "status": "OK",
+      "target": "backend/tests/journey/test_next_step.py"
+    },
+    {
+      "id": "AC5.7.2",
+      "status": "OK",
+      "target": "frontend/src/lib/journey/journey.test.tsx"
+    },
+    {
+      "id": "AC2.1.1",
+      "status": "OK",
+      "target": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "id": "AC2.1.2",
+      "status": "OK",
+      "target": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "id": "AC2.1.3",
+      "status": "OK",
+      "target": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "id": "AC2.2.1",
+      "status": "OK",
+      "target": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "id": "AC2.2.2",
+      "status": "OK",
+      "target": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "id": "AC11.4.1",
+      "status": "OK",
+      "target": "backend/tests/settings/test_settings_api.py"
+    },
+    {
+      "id": "AC11.4.2",
+      "status": "OK",
+      "target": "frontend/src/components/settings/settings-tabs.test.tsx"
+    },
+    {
+      "id": "AC11.6.1",
+      "status": "OK",
+      "target": "backend/tests/settings/test_settings_api.py"
+    },
+    {
+      "id": "AC11.6.2",
+      "status": "OK",
+      "target": "frontend/src/components/settings/settings-tabs.test.tsx"
+    },
+    {
+      "id": "AC1.13.1",
+      "status": "OK",
+      "target": "backend/tests/traceability/test_requirement_map.py"
+    },
+    {
+      "id": "AC1.13.2",
+      "status": "OK",
+      "target": "frontend/e2e/journey.spec.ts"
+    },
+    {
+      "id": "AC1.13.3",
+      "status": "OK",
+      "target": "frontend/e2e/journey.spec.ts"
+    }
+  ]
+}

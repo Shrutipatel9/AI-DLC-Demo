@@ -48,7 +48,7 @@ async function expectAccessible(page: Page, screen: string, include?: string) {
   expect(results.violations, `axe violations on ${screen}`).toEqual([]);
 }
 
-/** Sign up through the UI and land on /home. Returns the email. */
+/** Sign up through the UI and land on the questionnaire (US11.8). Returns the email. */
 async function signUp(page: Page, label: string): Promise<string> {
   const email = `e2e-${label}-${Date.now()}-${test.info().project.name}@example.test`;
   await page.goto("/signup");
@@ -62,7 +62,11 @@ async function signUp(page: Page, label: string): Promise<string> {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Maya Session");
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Session");
+  // The session tests below use the settings page: it is signed-in but not a journey step, so
+  // their timing budgets measure only the session restore.
+  await page.goto("/settings");
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Session");
   return email;
 }
 
@@ -77,7 +81,7 @@ async function logIn(page: Page, email: string, password: string) {
     .getByTestId("verify-code-input")
     .fill(await latestCode(page, email, "Your sign-in code", sentAt));
   await page.getByTestId("verify-submit-button").click();
-  await expect(page.getByTestId("home-greeting")).toBeVisible();
+  await expect(page.getByTestId("user-menu-name")).toBeVisible();
 }
 
 async function expectNoWebStorage(page: Page) {
@@ -98,7 +102,7 @@ test("reload stays signed in, within 1.5 s", async ({ page }) => {
   await signUp(page, "reload");
   const started = Date.now();
   await page.reload();
-  await expect(page.getByTestId("home-greeting")).toHaveText("Hi, Maya Session");
+  await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Session");
   const elapsed = Date.now() - started;
   test.info().annotations.push({ type: "restore-ms", description: String(elapsed) });
   expect(elapsed, "session restore on reload (NFR9.6)").toBeLessThanOrEqual(1_500);
@@ -110,8 +114,8 @@ test("two tabs refresh together without being logged out, both valid within 1 s 
   context,
 }) => {
   await signUp(page, "tabs");
-  const second = await openTab(context, "/home");
-  await expect(second.getByTestId("home-greeting")).toBeVisible();
+  const second = await openTab(context, "/settings");
+  await expect(second.getByTestId("user-menu-name")).toBeVisible();
   // Reload both at once: both restore at the same time; the lock lets one tab call
   // /auth/refresh and the other adopt its result, so strict reuse detection never fires.
   let refreshStartedAt = 0;
@@ -120,22 +124,22 @@ test("two tabs refresh together without being logged out, both valid within 1 s 
   });
   await Promise.all([page.reload(), second.reload()]);
   await Promise.all([
-    expect(page.getByTestId("home-greeting")).toBeVisible(),
-    expect(second.getByTestId("home-greeting")).toBeVisible(),
+    expect(page.getByTestId("user-menu-name")).toBeVisible(),
+    expect(second.getByTestId("user-menu-name")).toBeVisible(),
   ]);
   const elapsed = Date.now() - refreshStartedAt;
   test.info().annotations.push({ type: "two-tab-ms", description: String(elapsed) });
   expect(elapsed, "both tabs hold a valid token (NFR9.7)").toBeLessThanOrEqual(1_000);
   // Neither tab was signed out: a further reload still restores in both.
   await second.reload();
-  await expect(second.getByTestId("home-greeting")).toBeVisible();
+  await expect(second.getByTestId("user-menu-name")).toBeVisible();
   await expectNoWebStorage(second);
 });
 
 test("logout in one tab signs out the other", async ({ page, context }) => {
   await signUp(page, "logout");
-  const second = await openTab(context, "/home");
-  await expect(second.getByTestId("home-greeting")).toBeVisible();
+  const second = await openTab(context, "/settings");
+  await expect(second.getByTestId("user-menu-name")).toBeVisible();
   await page.getByTestId("user-menu-button").click();
   await page.getByTestId("user-menu-logout").click();
   await expect(page.getByTestId("confirm-dialog")).toBeVisible();
@@ -146,7 +150,7 @@ test("logout in one tab signs out the other", async ({ page, context }) => {
   await expectAccessible(page, "log in with a toast");
   await expect(second).toHaveURL(/\/login$/);
   // The revoked cookie cannot restore the session.
-  await second.goto("/home");
+  await second.goto("/settings");
   await expect(second).toHaveURL(/\/login$/);
 });
 

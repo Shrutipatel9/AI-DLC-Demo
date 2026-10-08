@@ -25,6 +25,7 @@ from app.payments.routes import router, webhook_router
 from app.payments.services import (
     Entitlement,
     IdentityCheck,
+    PaymentRecordView,
     PaymentService,
     PaymentState,
     Price,
@@ -37,6 +38,7 @@ from app.platform.settings import Settings
 __all__ = [
     "Entitlement",
     "PaymentGateway",
+    "PaymentRecordView",
     "PaymentService",
     "PaymentState",
     "build_payment_gateway",
@@ -44,6 +46,7 @@ __all__ = [
     "entitlement",
     "fake_checkout_router",
     "paid_photo_snapshot",
+    "payment_history",
     "payment_state",
     "require_paid",
     "router",
@@ -109,6 +112,13 @@ def entitlement(service: PaymentService, session: Session, user_id: uuid.UUID) -
 def payment_state(service: PaymentService, session: Session, user_id: uuid.UUID) -> PaymentState:
     """``none`` / ``pending`` / ``paid`` (C5 ``payment_state``)."""
     return service.payment_state(session, user_id)
+
+
+def payment_history(
+    service: PaymentService, session: Session, user_id: uuid.UUID
+) -> list[PaymentRecordView]:
+    """The user's payments, newest first (Settings -> Billing, US11.6)."""
+    return service.history(session, user_id)
 
 
 def require_paid(service: PaymentService, session: Session, user_id: uuid.UUID) -> Entitlement:

@@ -84,6 +84,8 @@ jobs:
           uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
             tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis tests/images tests/report -m "not perf" \
             --cov=app --cov-report=term-missing --cov-fail-under=80
+      - name: Requirement-to-test map (every FR, AUTH, BR and FE ID is mapped; US1.13)
+        run: uv run python ../scripts/check-requirement-map.py ..
       - name: Latency targets and anti-enumeration timing (p95; one re-run per target)
         run: |
           source ../scripts/ci-env.sh
@@ -203,7 +205,7 @@ jobs:
             nohup uv run python -m app.worker --label ci > ../.verify/worker.log 2>&1 &)
           (cd frontend && API_ORIGIN="$API_ORIGIN" nohup pnpm start --port 3000 > ../.verify/web.log 2>&1 &)
           bash scripts/wait-for.sh http://localhost:3000/login 60
-      - name: Playwright skeleton, session, onboarding, photo, payment and analysis journeys (phone + desktop, axe)
+      - name: Playwright journeys (phone 360 px + desktop, axe); the main journeys also in WebKit and Firefox
         working-directory: frontend
         env:
           CI: "true"

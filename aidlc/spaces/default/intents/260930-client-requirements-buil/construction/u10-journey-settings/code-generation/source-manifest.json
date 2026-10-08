@@ -1,0 +1,244 @@
+{
+  "stage": "code-generation",
+  "unit": "u10-journey-settings",
+  "version": 1,
+  "writes": [
+    {
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "path": "backend/README.md"
+    },
+    {
+      "path": "backend/app/journey/__init__.py"
+    },
+    {
+      "path": "backend/app/journey/public.py"
+    },
+    {
+      "path": "backend/app/journey/routes.py"
+    },
+    {
+      "path": "backend/app/journey/rule.py"
+    },
+    {
+      "path": "backend/app/journey/schemas.py"
+    },
+    {
+      "path": "backend/app/journey/service.py"
+    },
+    {
+      "path": "backend/app/main.py"
+    },
+    {
+      "path": "backend/app/payments/public.py"
+    },
+    {
+      "path": "backend/app/payments/repositories.py"
+    },
+    {
+      "path": "backend/app/payments/services.py"
+    },
+    {
+      "path": "backend/app/photos/services.py"
+    },
+    {
+      "path": "backend/app/settings/__init__.py"
+    },
+    {
+      "path": "backend/app/settings/public.py"
+    },
+    {
+      "path": "backend/app/settings/routes.py"
+    },
+    {
+      "path": "backend/app/settings/schemas.py"
+    },
+    {
+      "path": "backend/pyproject.toml"
+    },
+    {
+      "path": "backend/tests/journey/__init__.py"
+    },
+    {
+      "path": "backend/tests/journey/conftest.py"
+    },
+    {
+      "path": "backend/tests/journey/test_next_step.py"
+    },
+    {
+      "path": "backend/tests/journey/test_rule.py"
+    },
+    {
+      "path": "backend/tests/settings/__init__.py"
+    },
+    {
+      "path": "backend/tests/settings/conftest.py"
+    },
+    {
+      "path": "backend/tests/settings/test_settings_api.py"
+    },
+    {
+      "path": "backend/tests/traceability/__init__.py"
+    },
+    {
+      "path": "backend/tests/traceability/test_requirement_map.py"
+    },
+    {
+      "path": "docs/requirement-test-map.json"
+    },
+    {
+      "path": "frontend/README.md"
+    },
+    {
+      "path": "frontend/e2e/analysis.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/helpers.ts"
+    },
+    {
+      "path": "frontend/e2e/journey.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/onboarding.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/payments.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/photos.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/session.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/settings.spec.ts"
+    },
+    {
+      "path": "frontend/e2e/skeleton.spec.ts"
+    },
+    {
+      "path": "frontend/playwright.config.ts"
+    },
+    {
+      "path": "frontend/scripts/size-check.mjs"
+    },
+    {
+      "path": "frontend/src/app/analysis/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/home/page.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/home/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/onboarding/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/pages.test.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/payment/success/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/photos/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/report/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/settings/billing/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/settings/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/settings/password/page.tsx"
+    },
+    {
+      "path": "frontend/src/app/visuals/page.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/app-header.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/home-view.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/protected-route.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/protected-route.tsx"
+    },
+    {
+      "path": "frontend/src/components/app/user-menu.tsx"
+    },
+    {
+      "path": "frontend/src/components/auth/verify-form.tsx"
+    },
+    {
+      "path": "frontend/src/components/home/home-overview.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/landing/landing-page.test.tsx"
+    },
+    {
+      "path": "frontend/src/components/landing/landing-page.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/account-info.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/billing-panel.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/format.ts"
+    },
+    {
+      "path": "frontend/src/components/settings/settings-shell.tsx"
+    },
+    {
+      "path": "frontend/src/components/settings/settings-tabs.test.tsx"
+    },
+    {
+      "path": "frontend/src/lib/api/types.gen.ts"
+    },
+    {
+      "path": "frontend/src/lib/journey/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/journey/hooks.ts"
+    },
+    {
+      "path": "frontend/src/lib/journey/index.ts"
+    },
+    {
+      "path": "frontend/src/lib/journey/journey.test.tsx"
+    },
+    {
+      "path": "frontend/src/lib/journey/routes.ts"
+    },
+    {
+      "path": "frontend/src/lib/settings/api.ts"
+    },
+    {
+      "path": "frontend/src/lib/settings/hooks.ts"
+    },
+    {
+      "path": "frontend/src/lib/settings/index.ts"
+    },
+    {
+      "path": "scripts/check-requirement-map.py"
+    },
+    {
+      "path": "scripts/verify.sh"
+    }
+  ]
+}

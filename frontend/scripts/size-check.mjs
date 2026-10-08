@@ -9,6 +9,7 @@ import vm from "node:vm";
 
 const LIMIT_BYTES = 200 * 1024;
 const ROUTES = [
+  "/",
   "/signup",
   "/login",
   "/verify",
@@ -16,6 +17,8 @@ const ROUTES = [
   "/forgot-password",
   "/forgot-password/verify",
   "/reset-password",
+  "/settings",
+  "/settings/billing",
   "/settings/password",
   "/onboarding",
   "/photos",
@@ -42,11 +45,13 @@ const buildManifest = JSON.parse(readFileSync(path.join(NEXT_DIR, "build-manifes
 const rootFiles = (buildManifest.rootMainFiles ?? []).map((file) => `/_next/${file}`);
 
 function routeChunks(route) {
+  // The root page lives directly under server/app and is keyed "/page".
+  const routeDir = route === "/" ? "" : route;
   const manifestPath = path.join(
     NEXT_DIR,
     "server",
     "app",
-    route,
+    routeDir,
     "page_client-reference-manifest.js",
   );
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- paths are built from the fixed .next build directory, not user input
@@ -55,7 +60,7 @@ function routeChunks(route) {
   sandbox.globalThis = sandbox;
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- paths are built from the fixed .next build directory, not user input
   vm.runInNewContext(readFileSync(manifestPath, "utf8"), sandbox);
-  const manifest = sandbox.__RSC_MANIFEST?.[`${route}/page`];
+  const manifest = sandbox.__RSC_MANIFEST?.[`${routeDir}/page`];
   if (!manifest) fail(`unexpected client manifest shape for ${route}`);
   const chunks = new Set();
   for (const entry of Object.values(manifest.clientModules ?? {})) {

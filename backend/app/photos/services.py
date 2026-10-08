@@ -94,6 +94,8 @@ class PhotoSetState:
 
     complete: bool
     consistent: bool
+    #: Angles the same-person check flagged; empty unless the set is inconsistent.
+    flagged_angles: tuple[str, ...] = ()
 
 
 class PhotoIntakeService:
@@ -234,7 +236,9 @@ class PhotoIntakeService:
         """Complete and consistent flags for the Journey (C4 ``set_state``)."""
         result = self.evaluate_identity(session, user_id)
         return PhotoSetState(
-            complete=result.status != "incomplete", consistent=result.status == "consistent"
+            complete=result.status != "incomplete",
+            consistent=result.status == "consistent",
+            flagged_angles=result.mismatched_angles if result.status == "mismatch" else (),
         )
 
     # --- Upload ------------------------------------------------------------------------------

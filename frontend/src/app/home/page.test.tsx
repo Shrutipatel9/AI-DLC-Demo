@@ -100,56 +100,32 @@ describe("HomePage", () => {
     expect(screen.getByTestId("home-greeting")).toHaveTextContent("Hi, Maya Test");
   });
 
-  it("links to the questionnaire until it is submitted (U3)", async () => {
+  it("sends a user who has no overview yet to the journey's next step (US11.8)", async () => {
     act(() => setSession("tok", "2026-10-01T10:15:00Z", USER));
-    let given = false;
-    let submitted = false;
+    const steps = ["home", "photos"]; // the guard asks first, the button asks again
     mockFetch(
       route("GET", "/auth/me", () => jsonResponse(200, USER)),
-      route("GET", "/onboarding/consent", () =>
-        jsonResponse(200, {
-          consentTextVersion: "consent-v1",
-          consentText: "t",
-          agreementText: "a",
-          given,
-        }),
-      ),
-      route("GET", "/onboarding/response", () =>
-        jsonResponse(200, {
-          answers: { q1: { value: "Designer" } },
-          visibleQuestionIds: ["q1"],
-          submitted,
-        }),
+      route("GET", "/home", () => errorResponse(404, "REPORT_NOT_READY")),
+      route("GET", "/journey/next-step", () =>
+        jsonResponse(200, { step: steps.shift() ?? "photos", flaggedAngles: [] }),
       ),
     );
-    const { unmount } = render(<HomePage />);
-    const link = await screen.findByText("Start your questionnaire");
-    expect(link).toHaveAttribute("href", "/onboarding");
-    expect(link).toHaveAttribute("data-testid", "home-onboarding-link");
-    unmount();
-
-    given = true;
-    const second = render(<HomePage />);
-    expect(await screen.findByText("Continue your questionnaire")).toBeInTheDocument();
-    second.unmount();
-
-    submitted = true;
     render(<HomePage />);
-    expect(await screen.findByTestId("home-status")).toHaveTextContent(
-      "Your questionnaire is submitted. Next, add your photos.",
-    );
-    expect(screen.queryByTestId("home-onboarding-link")).toBeNull();
-    // U4: the photo step is linked once the questionnaire is submitted (temporary until U10).
-    expect(screen.getByTestId("home-photos-link")).toHaveAttribute("href", "/photos");
+    const user = userEvent.setup();
+    await user.click(await screen.findByTestId("home-next-step-button"));
+    expect(router.push).toHaveBeenCalledWith("/photos");
   });
 
-  it("still offers the questionnaire when its status cannot be read", async () => {
+  it("falls back to /home when the next step cannot be read", async () => {
     act(() => setSession("tok", "2026-10-01T10:15:00Z", USER));
     mockFetch(
       route("GET", "/auth/me", () => jsonResponse(200, USER)),
-      route("GET", "/onboarding/consent", () => errorResponse(500, "INTERNAL_ERROR")),
+      route("GET", "/home", () => errorResponse(404, "REPORT_NOT_READY")),
+      route("GET", "/journey/next-step", () => errorResponse(500, "INTERNAL_ERROR")),
     );
     render(<HomePage />);
-    expect(await screen.findByText("Go to your questionnaire")).toBeInTheDocument();
+    const user = userEvent.setup();
+    await user.click(await screen.findByTestId("home-next-step-button"));
+    expect(router.push).toHaveBeenCalledWith("/home");
   });
 });

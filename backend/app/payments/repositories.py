@@ -39,6 +39,17 @@ def find_latest(session: Session, user_id: uuid.UUID) -> Payment | None:
     ).first()
 
 
+def list_for_user(session: Session, user_id: uuid.UUID) -> list[Payment]:
+    """All the user's payment attempts, newest first."""
+    return list(
+        session.scalars(
+            select(Payment)
+            .where(Payment.user_id == user_id)
+            .order_by(Payment.created_at.desc(), Payment.id.desc())
+        )
+    )
+
+
 def lock_by_session_id(session: Session, provider_session_id: str) -> Payment | None:
     """The payment for a provider Checkout session, locked ``FOR UPDATE``."""
     return session.scalars(

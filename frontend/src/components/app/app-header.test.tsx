@@ -32,10 +32,7 @@ describe("The app header", () => {
   it("puts Settings in the user menu (AC11.2.1)", async () => {
     render(<AppHeader userName="Maya Test" />);
     await userEvent.click(screen.getByTestId("user-menu-button"));
-    expect(screen.getByTestId("user-menu-settings-link")).toHaveAttribute(
-      "href",
-      "/settings/password",
-    );
+    expect(screen.getByTestId("user-menu-settings-link")).toHaveAttribute("href", "/settings");
     expect(screen.getByTestId("user-menu-settings-link")).toHaveTextContent("Settings");
   });
 

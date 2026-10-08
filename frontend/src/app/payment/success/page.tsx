@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AppShell } from "@/components/app/app-shell";
 import { ProtectedRoute } from "@/components/app/protected-route";
 import { PaymentConfirmation } from "@/components/payments/payment-confirmation";
+import { STAGE } from "@/lib/journey";
 
 export const metadata: Metadata = { title: "Confirming payment · AI Facial Analysis" };
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = { title: "Confirming payment · AI Facial Anal
 // the verified webhook (US6.5). The redirect itself is never trusted (FR7.4).
 export default function PaymentSuccessPage() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute stage={STAGE.confirming}>
       <AppShell>
         <PaymentConfirmation />
       </AppShell>
