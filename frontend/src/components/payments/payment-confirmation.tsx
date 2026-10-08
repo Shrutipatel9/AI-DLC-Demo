@@ -5,14 +5,19 @@
 // webhook arrives. Until then "Start Analysis" is unavailable (AC6.5.1). When the confirmation
 // arrives the screen updates without a reload and announces it to screen readers (AC6.5.2).
 // After the configured wait it says the payment is still being confirmed, that the user won't
-// be charged twice and can safely leave (AC6.5.3). The analysis never starts by itself.
+// be charged twice and can safely leave (AC6.5.3). The analysis never starts by itself: only
+// the "Start Analysis" click calls the server (US7.1, FR-015). A 409 about the photos shows its
+// message and sends the user to the photo screen (AC7.1.2).
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
+import { analysisErrorMessage, needsPhotos } from "@/components/analysis/messages";
 import { toast } from "@/components/feedback/toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { isApiError } from "@/lib/api/errors";
+import { startAnalysis } from "@/lib/analysis";
 import { usePaymentConfirmation } from "@/lib/payments";
 
 import {
@@ -28,7 +33,7 @@ export function PaymentConfirmation({
   onStartAnalysis,
 }: {
   pollIntervalMs?: number;
-  /** What "Start Analysis" does; U6 replaces the default with the analysis start. */
+  /** What "Start Analysis" does; the default starts the analysis and opens the progress screen. */
   onStartAnalysis?: () => void;
 }) {
   const router = useRouter();
@@ -44,12 +49,26 @@ export function PaymentConfirmation({
     previous.current = phase;
   }, [phase]);
 
+  const [starting, setStarting] = useState(false);
+
   const paid = phase === "paid";
-  const startAnalysis =
-    onStartAnalysis ??
-    // TODO(U6): replace with the "Start Analysis" call and the progress screen (US7.1). Until
-    // that unit exists, the confirmed user goes back to the home page.
-    (() => router.push("/home"));
+
+  async function beginAnalysis() {
+    setStarting(true);
+    try {
+      await startAnalysis();
+      router.push("/analysis");
+    } catch (error) {
+      setStarting(false);
+      if (isApiError(error) && error.code === "ANALYSIS_ALREADY_COMPLETE") {
+        router.push("/analysis"); // already done: the progress screen shows the finished report
+        return;
+      }
+      toast.error(isApiError(error) ? analysisErrorMessage(error) : "Something went wrong.");
+      if (isApiError(error) && needsPhotos(error)) router.push("/photos");
+    }
+  }
+  const onStart = onStartAnalysis ?? (() => void beginAnalysis());
 
   let title = "Checking your payment…";
   let message = "";
@@ -110,8 +129,8 @@ export function PaymentConfirmation({
             <p className="text-base text-heading">{START_ANALYSIS_NOTE}</p>
             <div className="flex flex-wrap items-center gap-3">
               <Button
-                onClick={startAnalysis}
-                disabled={!paid}
+                onClick={onStart}
+                disabled={!paid || starting}
                 aria-describedby={paid ? undefined : reasonId}
                 data-testid="payment-start-analysis-button"
               >

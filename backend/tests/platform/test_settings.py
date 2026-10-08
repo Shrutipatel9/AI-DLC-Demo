@@ -57,7 +57,11 @@ def test_insecure_cookie_is_refused_in_production() -> None:
         )
 
 
-def test_smtp_secret_required_only_when_real_adapter_uses_it() -> None:
+def test_smtp_secret_required_only_when_real_adapter_uses_it(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # scripts/ci-env.sh blanks SMTP_PASSWORD for the whole test run; this test needs it unset.
+    monkeypatch.delenv("SMTP_PASSWORD", raising=False)
     # Fake adapter: no SMTP secret needed (AC1.5.3).
     assert make_settings(EMAIL_BACKEND="fake", SMTP_USERNAME="user").email_backend == "fake"
     # Real adapter with a username but no password: refused, naming the setting (AC1.5.2).

@@ -44,6 +44,11 @@ from app.platform.errors import (
 
 logger = logging.getLogger("onboarding")
 
+#: [Decided by delivery team] The distress question ([QS] Q20) and the appearance-frequency
+#: question ([QS] Q21) read by :meth:`OnboardingService.needs_reassurance` (US7.4, FR-008 e).
+DISTRESS_QUESTION_ID = "q20"
+FREQUENCY_QUESTION_ID = "q21"
+
 
 @dataclass(frozen=True)
 class ConsentView:
@@ -313,6 +318,35 @@ class OnboardingService:
                 )
             )
         return result
+
+    def needs_reassurance(
+        self, session: Session, user_id: uuid.UUID, *, distress_at: str, frequency_at: str
+    ) -> bool:
+        """Whether Q20 or Q21 is answered at or above the given option (AC7.4.3).
+
+        Only a yes/no leaves this module: neither question is medical, and no answer text does.
+        "At or above" follows the order of each question's options.
+
+        Raises:
+            ValueError: When a trigger is not an option of its question (a configuration error).
+        """
+        response = repositories.find_response(session, user_id)
+        if response is None or response.status != ResponseStatus.SUBMITTED:
+            return False
+        checks = ((DISTRESS_QUESTION_ID, distress_at), (FREQUENCY_QUESTION_ID, frequency_at))
+        return any(self._at_or_above(response, qid, trigger) for qid, trigger in checks)
+
+    def _at_or_above(self, response: QuestionnaireResponse, question_id: str, trigger: str) -> bool:
+        question = next((q for q in self.definition.questions if q.id == question_id), None)
+        if question is None:
+            return False
+        options = [option.value for option in question.options]
+        if trigger not in options:
+            raise ValueError(f"{trigger!r} is not an answer option of {question_id}")
+        entry = response.answers.get(question_id)
+        if entry is None or entry["value"] not in options:
+            return False
+        return options.index(entry["value"]) >= options.index(trigger)
 
     def state(self, session: Session, user_id: uuid.UUID) -> OnboardingState:
         """Consent and submission flags for the Journey (C6 ``onboarding_state``)."""

@@ -27,6 +27,8 @@ RateLimitBackend = Literal["postgres", "memory"]
 SameSite = Literal["lax", "strict", "none"]
 MediaBackend = Literal["local"]
 PaymentProvider = Literal["stripe", "fake"]
+AiProvider = Literal["openai", "fake"]
+FakeAiProfile = Literal["instant", "realistic"]
 
 #: Angle ids (``front``, ``left_3q`` ...): also used as URL path segments and storage names.
 _ANGLE_ID = re.compile(r"[a-z][a-z0-9_]{0,31}")
@@ -109,6 +111,41 @@ def parse_yaw_ranges(raw: str) -> dict[str, tuple[float, float]]:
             raise ValueError("PHOTO_POSE_YAW_RANGES values must be [min, max] within -90..90")
         ranges[angle] = (float(bounds[0]), float(bounds[1]))
     return ranges
+
+
+#: [Decided by delivery team] Symmetry label bands: ``label -> minimum score`` (a score on a
+#: band's lower boundary gets that band's label; AC7.5.2). Placeholder values to calibrate.
+DEFAULT_SYMMETRY_BANDS = '{"Excellent": 90, "Good": 75, "Moderate": 55, "Fair": 35, "Low": 0}'
+
+
+def parse_symmetry_bands(raw: str) -> tuple[tuple[str, float], ...]:
+    """Parse ``SYMMETRY_LABEL_BANDS`` into ``(label, minimum score)``, highest band first.
+
+    Raises:
+        ValueError: If the JSON is malformed, a label is empty, a minimum is outside 0..100
+            or repeated, or no band starts at 0 (every score must get a label).
+    """
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError("SYMMETRY_LABEL_BANDS must be a JSON object") from exc
+    if not isinstance(data, dict) or not data:
+        raise ValueError("SYMMETRY_LABEL_BANDS must be a non-empty JSON object")
+    bands: list[tuple[str, float]] = []
+    for label, minimum in data.items():
+        if (
+            not isinstance(label, str)
+            or not label.strip()
+            or not isinstance(minimum, int | float)
+            or isinstance(minimum, bool)
+            or not 0 <= minimum <= 100
+        ):
+            raise ValueError("SYMMETRY_LABEL_BANDS maps a label to a minimum score of 0-100")
+        bands.append((label.strip(), float(minimum)))
+    minimums = [minimum for _, minimum in bands]
+    if len(set(minimums)) != len(minimums) or 0.0 not in minimums:
+        raise ValueError("SYMMETRY_LABEL_BANDS minimums must be distinct and include 0")
+    return tuple(sorted(bands, key=lambda band: band[1], reverse=True))
 
 
 def decode_key(raw: str, setting_name: str) -> bytes:
@@ -338,6 +375,63 @@ class Settings(BaseSettings):
         default=2.0, ge=0, le=60, alias="FAKE_PAYMENT_WEBHOOK_DELAY_SECONDS"
     )
 
+    # --- AI vendors (U6; US1.12, FR-008, NFR-008, NFR-013, ASM-011) ---------------------------
+    #: ``openai`` or ``fake`` (development/test only). The image vendor is chosen separately so
+    #: it can be swapped without touching code (AC1.12.1).
+    ai_text_provider: AiProvider = Field(default="fake", alias="AI_TEXT_PROVIDER")
+    ai_image_provider: AiProvider = Field(default="fake", alias="AI_IMAGE_PROVIDER")
+    openai_base_url: str = Field(default="https://api.openai.com/v1", alias="OPENAI_BASE_URL")
+    openai_api_key: SecretStr | None = Field(default=None, alias="OPENAI_API_KEY")
+    #: Model names are configuration, never code (NFR-008); required with the ``openai`` adapter.
+    openai_text_model: str | None = Field(default=None, alias="OPENAI_TEXT_MODEL")
+    openai_image_model: str | None = Field(default=None, alias="OPENAI_IMAGE_MODEL")
+    #: Contract section 6: every adapter call has a timeout.
+    ai_text_timeout_seconds: float = Field(default=90.0, gt=0, alias="AI_TEXT_TIMEOUT_SECONDS")
+    ai_image_timeout_seconds: float = Field(default=120.0, gt=0, alias="AI_IMAGE_TIMEOUT_SECONDS")
+    #: Attempts at the report-writing step (invalid output or a vendor error each use one).
+    ai_text_max_attempts: int = Field(default=3, ge=1, le=10, alias="AI_TEXT_MAX_ATTEMPTS")
+    #: Image attempts per image (rate limits count too, AC7.6.4); used by U7.
+    ai_image_max_attempts: int = Field(default=3, ge=1, le=10, alias="AI_IMAGE_MAX_ATTEMPTS")
+    ai_retry_backoff_seconds: float = Field(default=2.0, ge=0, alias="AI_RETRY_BACKOFF_SECONDS")
+    #: How many images are generated at once (AC7.6.4); used by U7.
+    ai_image_concurrency: int = Field(default=4, ge=1, le=16, alias="AI_IMAGE_CONCURRENCY")
+    #: Fakes only: ``instant`` or the committed ``realistic`` latency profile (AC7.2.5).
+    ai_fake_profile: FakeAiProfile = Field(default="instant", alias="AI_FAKE_PROFILE")
+    #: Fakes only: an extra pause per text call (lets browser journeys see a step in progress).
+    ai_fake_text_delay_seconds: float = Field(
+        default=0.0, ge=0, le=60, alias="AI_FAKE_TEXT_DELAY_SECONDS"
+    )
+    #: Fakes only: a directory whose ``fail-text`` file (a count) makes the next text calls fail.
+    ai_fake_control_dir: Path | None = Field(default=None, alias="AI_FAKE_CONTROL_DIR")
+
+    # --- Analysis (U6; FR-007, FR-008, FR8.2, NFR4, US7.x) -----------------------------------
+    #: Shown on the progress screen; within NFR4's 10 minutes (AC7.2.2).
+    analysis_expected_wait_minutes: int = Field(
+        default=8, ge=1, le=10, alias="ANALYSIS_EXPECTED_WAIT_MINUTES"
+    )
+    #: [Decided by delivery team] The reassuring-tone instruction is added when Q20 (distress)
+    #: or Q21 (how often they think about their appearance) is at or above these answers
+    #: (AC7.4.3). Values are answer option values of the questionnaire.
+    tone_distress_trigger: str = Field(default="moderate", alias="TONE_DISTRESS_TRIGGER")
+    tone_frequency_trigger: str = Field(default="frequently", alias="TONE_FREQUENCY_TRIGGER")
+    #: JSON ``{"label": minimum score}`` (AC7.5.2); see ``parse_symmetry_bands``.
+    symmetry_label_bands: str = Field(default=DEFAULT_SYMMETRY_BANDS, alias="SYMMETRY_LABEL_BANDS")
+    #: Stored measurements are rounded to this many decimals; narratives must cite them at
+    #: exactly this precision (AC7.9.1).
+    report_value_decimals: int = Field(default=2, ge=0, le=4, alias="REPORT_VALUE_DECIMALS")
+
+    # --- Background worker (U6; US1.7) ------------------------------------------------------
+    worker_poll_interval_seconds: float = Field(
+        default=1.0, gt=0, alias="WORKER_POLL_INTERVAL_SECONDS"
+    )
+    worker_heartbeat_seconds: float = Field(default=10.0, gt=0, alias="WORKER_HEARTBEAT_SECONDS")
+    #: A running job whose heartbeat is older than this belongs to a dead worker (AC1.7.2).
+    worker_stale_after_seconds: float = Field(
+        default=60.0, gt=0, alias="WORKER_STALE_AFTER_SECONDS"
+    )
+    #: A job is started (or resumed after a worker died) at most this many times.
+    job_max_attempts: int = Field(default=3, ge=1, le=10, alias="JOB_MAX_ATTEMPTS")
+
     # --- Metrics (NFR5.10) ------------------------------------------------------------------
     metrics_enabled: bool = Field(default=False, alias="METRICS_ENABLED")
     metrics_allow_cidrs: Annotated[list[str], NoDecode] = Field(
@@ -402,6 +496,10 @@ class Settings(BaseSettings):
         "face_landmark_overrides_file",
         "photo_catalog_file",
         "photo_pose_yaw_ranges",
+        "ai_fake_control_dir",
+        "openai_api_key",
+        "openai_text_model",
+        "openai_image_model",
         mode="before",
     )
     @classmethod
@@ -466,6 +564,20 @@ class Settings(BaseSettings):
             raise ValueError("ONBOARDING_SUPPORT_URL must be an https:// URL")
         return value.strip()
 
+    @field_validator("openai_base_url")
+    @classmethod
+    def _validate_openai_base_url(cls, value: str) -> str:
+        url = value.strip().rstrip("/")
+        if not _is_http_url(url):
+            raise ValueError("OPENAI_BASE_URL must be an absolute http(s) URL")
+        return url
+
+    @field_validator("symmetry_label_bands")
+    @classmethod
+    def _validate_symmetry_bands(cls, value: str) -> str:
+        parse_symmetry_bands(value)
+        return value
+
     @field_validator("code_hmac_key")
     @classmethod
     def _validate_code_key(cls, value: SecretStr) -> SecretStr:
@@ -511,7 +623,32 @@ class Settings(BaseSettings):
         if self.photo_min_face_fraction >= self.photo_max_face_fraction:
             raise ValueError("PHOTO_MIN_FACE_FRACTION must be below PHOTO_MAX_FACE_FRACTION")
         self._validate_payment_rules()
+        self._validate_ai_rules()
+        if self.worker_stale_after_seconds <= self.worker_heartbeat_seconds:
+            raise ValueError("WORKER_STALE_AFTER_SECONDS must exceed WORKER_HEARTBEAT_SECONDS")
         return self
+
+    def _validate_ai_rules(self) -> None:
+        providers = {
+            "AI_TEXT_PROVIDER": (
+                self.ai_text_provider,
+                self.openai_text_model,
+                "OPENAI_TEXT_MODEL",
+            ),
+            "AI_IMAGE_PROVIDER": (
+                self.ai_image_provider,
+                self.openai_image_model,
+                "OPENAI_IMAGE_MODEL",
+            ),
+        }
+        for name, (provider, model, model_name) in providers.items():
+            if provider == "fake" and self.app_env not in INSECURE_ENVIRONMENTS:
+                raise ValueError(f"{name}=fake is only allowed when APP_ENV is development or test")
+            if provider == "openai":
+                if self.openai_api_key is None or not self.openai_api_key.get_secret_value():
+                    raise ValueError(f"OPENAI_API_KEY is required when {name}=openai")
+                if not model:
+                    raise ValueError(f"{model_name} is required when {name}=openai")
 
     def _validate_payment_rules(self) -> None:
         if self.payment_provider == "fake" and self.app_env not in INSECURE_ENVIRONMENTS:
@@ -534,6 +671,11 @@ class Settings(BaseSettings):
             self.payment_success_url or f"{self.frontend_origin}/payment/success",
             self.payment_cancel_url or f"{self.frontend_origin}/payment/cancel",
         )
+
+    @property
+    def symmetry_bands(self) -> tuple[tuple[str, float], ...]:
+        """``SYMMETRY_LABEL_BANDS`` parsed, highest band first."""
+        return parse_symmetry_bands(self.symmetry_label_bands)
 
     def yaw_range_overrides(self) -> dict[str, tuple[float, float]]:
         """``PHOTO_POSE_YAW_RANGES`` parsed (empty when not set)."""

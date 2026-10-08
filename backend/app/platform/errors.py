@@ -53,6 +53,8 @@ class ErrorCode(StrEnum):
     PHOTO_IDENTITY_MISMATCH = "PHOTO_IDENTITY_MISMATCH"
     PAYMENT_REQUIRED = "PAYMENT_REQUIRED"
     ALREADY_PAID = "ALREADY_PAID"
+    ANALYSIS_ALREADY_COMPLETE = "ANALYSIS_ALREADY_COMPLETE"
+    RERUN_NOT_AVAILABLE = "RERUN_NOT_AVAILABLE"
     NOT_FOUND = "NOT_FOUND"
     RATE_LIMITED = "RATE_LIMITED"  # [Decided by delivery team] plan decision D3
     UPSTREAM_UNAVAILABLE = "UPSTREAM_UNAVAILABLE"
@@ -310,6 +312,22 @@ class AlreadyPaid(AppError):  # noqa: N818  (named after the C11 code)
     status_code = 409
     code = ErrorCode.ALREADY_PAID
     default_message = "You've already paid for your report."
+
+
+class AnalysisAlreadyComplete(AppError):  # noqa: N818  (named after the C11 code)
+    """409: start after a completed run (one analysis per paid report, NFR10, AC7.1.4)."""
+
+    status_code = 409
+    code = ErrorCode.ANALYSIS_ALREADY_COMPLETE
+    default_message = "Your analysis is already complete."
+
+
+class RerunNotAvailable(AppError):  # noqa: N818  (named after the C11 code)
+    """409: the free re-run is used up, or the run has not failed (US7.11)."""
+
+    status_code = 409
+    code = ErrorCode.RERUN_NOT_AVAILABLE
+    default_message = "A re-run isn't available for this analysis."
 
 
 class WebhookRejected(AppError):  # noqa: N818  (named like the other C11 errors)

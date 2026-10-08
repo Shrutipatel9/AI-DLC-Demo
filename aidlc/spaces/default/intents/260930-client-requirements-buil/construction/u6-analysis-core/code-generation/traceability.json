@@ -1,0 +1,242 @@
+{
+  "stage": "code-generation",
+  "unit": "u6-analysis-core",
+  "upstream_ids": [
+    "AC1.7.1",
+    "AC1.7.2",
+    "AC1.7.3",
+    "AC1.12.1",
+    "AC1.12.2",
+    "AC1.12.3",
+    "AC7.1.1",
+    "AC7.1.2",
+    "AC7.1.3",
+    "AC7.1.4",
+    "AC7.2.1",
+    "AC7.2.2",
+    "AC7.2.3",
+    "AC7.2.4",
+    "AC7.2.5",
+    "AC7.3.1",
+    "AC7.3.2",
+    "AC7.4.1",
+    "AC7.4.2",
+    "AC7.4.3",
+    "AC7.5.1",
+    "AC7.5.2",
+    "AC7.5.3",
+    "AC7.6.1",
+    "AC7.6.2",
+    "AC7.6.3",
+    "AC7.6.4",
+    "AC7.6.5",
+    "AC7.7.1",
+    "AC7.7.2",
+    "AC7.8.1",
+    "AC7.9.1",
+    "AC7.9.2",
+    "AC7.9.3",
+    "AC7.10.1",
+    "AC7.10.2",
+    "AC7.11.1",
+    "AC7.11.2",
+    "AC7.11.3"
+  ],
+  "coverage": [
+    {
+      "id": "AC1.7.1",
+      "status": "OK",
+      "target": "backend/tests/jobs/test_queue.py"
+    },
+    {
+      "id": "AC1.7.2",
+      "status": "OK",
+      "target": "backend/tests/jobs/test_worker.py"
+    },
+    {
+      "id": "AC1.7.3",
+      "status": "OK",
+      "target": "backend/tests/jobs/test_worker.py"
+    },
+    {
+      "id": "AC1.12.1",
+      "status": "OK",
+      "target": "backend/tests/ai/test_fakes_and_selection.py"
+    },
+    {
+      "id": "AC1.12.2",
+      "status": "OK",
+      "target": "backend/tests/ai/test_openai_adapters.py"
+    },
+    {
+      "id": "AC1.12.3",
+      "status": "OK",
+      "target": "backend/tests/ai/test_fakes_and_selection.py"
+    },
+    {
+      "id": "AC7.1.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.1.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.1.3",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_start_concurrency.py"
+    },
+    {
+      "id": "AC7.1.4",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.2.1",
+      "status": "OK",
+      "target": "frontend/src/components/analysis/analysis-progress.test.tsx"
+    },
+    {
+      "id": "AC7.2.2",
+      "status": "OK",
+      "target": "frontend/src/components/analysis/analysis-progress.test.tsx"
+    },
+    {
+      "id": "AC7.2.3",
+      "status": "OK",
+      "target": "frontend/e2e/analysis.spec.ts"
+    },
+    {
+      "id": "AC7.2.4",
+      "status": "OK",
+      "target": "frontend/src/components/analysis/analysis-progress.test.tsx"
+    },
+    {
+      "id": "AC7.2.5",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_wiring_and_budget.py"
+    },
+    {
+      "id": "AC7.3.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.3.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.4.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_report_writing.py"
+    },
+    {
+      "id": "AC7.4.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_report_writing.py"
+    },
+    {
+      "id": "AC7.4.3",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_report_writing.py"
+    },
+    {
+      "id": "AC7.5.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.5.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.5.3",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.6.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.6.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.6.3",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.6.4",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_wiring_and_budget.py"
+    },
+    {
+      "id": "AC7.6.5",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.7.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.7.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.8.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.9.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_report_writing.py"
+    },
+    {
+      "id": "AC7.9.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_report_writing.py"
+    },
+    {
+      "id": "AC7.9.3",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.10.1",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.10.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_measurement.py"
+    },
+    {
+      "id": "AC7.11.1",
+      "status": "OK",
+      "target": "frontend/src/components/analysis/analysis-progress.test.tsx"
+    },
+    {
+      "id": "AC7.11.2",
+      "status": "OK",
+      "target": "backend/tests/analysis/test_analysis_flow.py"
+    },
+    {
+      "id": "AC7.11.3",
+      "status": "OK",
+      "target": "frontend/src/components/analysis/analysis-progress.test.tsx"
+    }
+  ]
+}

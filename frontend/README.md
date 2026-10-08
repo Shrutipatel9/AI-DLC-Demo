@@ -15,18 +15,19 @@ pnpm dev                        # http://localhost:3000 (the API must run on :80
 
 ## Commands
 
-| Task                                                              | Command                                                                         |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Lint (ESLint, security plugin, layering rules)                    | `pnpm lint`                                                                     |
-| Format / check                                                    | `pnpm format` / `pnpm format:check`                                             |
-| Types                                                             | `pnpm typecheck`                                                                |
-| Unit and component tests with coverage (lines >= 80%)             | `pnpm exec vitest run --coverage`                                               |
-| Production build / run                                            | `pnpm build` / `pnpm start`                                                     |
-| Bundle budget (auth, onboarding, photo, payment routes <= 200 KB) | `pnpm size-check` (after `pnpm build`)                                          |
-| End-to-end journeys (needs Compose, the API, and `pnpm start`)    | `pnpm exec playwright test` (skeleton, session, onboarding, photos, payments)   |
-| Photo tests only (U4)                                             | `pnpm exec vitest run src/components/photos src/lib/photos src/app/photos`      |
-| Payment tests only (U5)                                           | `pnpm exec vitest run src/components/payments src/lib/payments src/app/payment` |
-| Regenerate API types from the backend                             | `bash ../scripts/export-openapi.sh`                                             |
+| Task                                                              | Command                                                                                 |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Lint (ESLint, security plugin, layering rules)                    | `pnpm lint`                                                                             |
+| Format / check                                                    | `pnpm format` / `pnpm format:check`                                                     |
+| Types                                                             | `pnpm typecheck`                                                                        |
+| Unit and component tests with coverage (lines >= 80%)             | `pnpm exec vitest run --coverage`                                                       |
+| Production build / run                                            | `pnpm build` / `pnpm start`                                                             |
+| Bundle budget (auth, onboarding, photo, payment routes <= 200 KB) | `pnpm size-check` (after `pnpm build`)                                                  |
+| End-to-end journeys (needs Compose, the API, and `pnpm start`)    | `pnpm exec playwright test` (skeleton, session, onboarding, photos, payments, analysis) |
+| Photo tests only (U4)                                             | `pnpm exec vitest run src/components/photos src/lib/photos src/app/photos`              |
+| Payment tests only (U5)                                           | `pnpm exec vitest run src/components/payments src/lib/payments src/app/payment`         |
+| Analysis tests only (U6)                                          | `pnpm exec vitest run src/components/analysis src/lib/analysis src/app/analysis`        |
+| Regenerate API types from the backend                             | `bash ../scripts/export-openapi.sh`                                                     |
 
 Vitest replaces `fetch` with a stub that fails any request a test did not handle, so unit
 tests can never reach the network.
@@ -75,6 +76,8 @@ Other folders:
 - `src/lib/payments`: the payment endpoints, price formatting, the checkout redirect and the
   confirmation polling hook (U5).
 - `src/components/payments`: the payment and confirming screens (U5).
+- `src/lib/analysis`: the analysis endpoints and the polling hook (`useAnalysisProgress`, U6).
+- `src/components/analysis`: the progress screen (`/analysis`, U6).
 
 ## Session (U2)
 
@@ -149,6 +152,23 @@ navigates the whole window to the returned hosted Checkout URL (`goToCheckout`, 
   test page on the API, "Pay", "confirming", then "confirmed" when the fake's signed webhook
   arrives; and "Cancel" back to the payment screen. The expected price comes from
   `REPORT_PRICE_AMOUNT` / `REPORT_PRICE_CURRENCY` (2900 USD by default).
+
+## Analysis progress (U6)
+
+"Start Analysis" on the payment confirmation (`src/components/payments/payment-confirmation.tsx`)
+is the only thing that starts the analysis: it calls `POST /analysis/runs` and opens `/analysis`
+(a 409 about the photos shows its message and goes to `/photos`). `/analysis`
+(`src/components/analysis/analysis-progress.tsx`) polls `GET /analysis/runs/current` every
+2 s while the run is going: each step shows done / in progress / waiting in words, a polite
+live region announces changes without moving focus, the expected wait comes from the server, and
+leaving and coming back reads the same run. When ready it offers "View my report" (to `/home`
+until the report screens exist). After a failure it explains in plain language and offers one free
+"Try again for free"; after a second failure it points to support.
+
+- **Browser journey** (`e2e/analysis.spec.ts`): needs the background worker with the AI fake
+  (`scripts/verify.sh` and `scripts/verify-skeleton.sh` start it): a paid user starts the analysis,
+  the steps advance, "View my report" appears (the `@checkpoint` scenario); and a failed run
+  (the worker is told through `AI_FAKE_CONTROL_DIR`) is explained and completed by the free re-run.
 
 ## Feedback components (U2, used by every later unit)
 

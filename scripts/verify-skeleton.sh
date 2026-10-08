@@ -4,7 +4,7 @@
 #   bash scripts/verify-skeleton.sh
 #
 # Proves the integrated slice works for real: a fresh database with the migration round-trip
-# (0001 to 0005), the API (with the pinned face model and the Stripe fake) and the production
+# (0001 to 0006), the API (with the pinned face model and the Stripe fake) and the production
 # web build running together, and the Playwright checkpoint subset at the desktop viewport: the skeleton journey
 # plus ONE @checkpoint journey per unit (U4 plan Step 9; every other scenario runs in
 # `scripts/verify.sh` and CI):
@@ -18,6 +18,8 @@
 #   - payments.spec.ts tagged @checkpoint (U5): photo review -> payment screen with the
 #     configured price -> Stripe fake hosted checkout -> Pay -> "confirming" -> the signed
 #     webhook arrives -> "confirmed" with Start Analysis enabled.
+#   - analysis.spec.ts tagged @checkpoint (U6): paid user -> "Start Analysis" -> the worker
+#     process runs the steps (fake AI) -> the progress screen advances -> "View my report".
 # It must finish in 110 s or less: the script prints the elapsed time and fails above that.
 # The full matrix (both viewports, every scenario, axe everywhere) and every other gate stay
 # in `bash scripts/verify.sh` and in CI.
@@ -36,6 +38,8 @@ export MSYS_NO_PATHCONV=1
 
 API_PID=""
 WEB_PID=""
+WORKER_PID=""
+WORKER_LABEL=""
 
 step() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
 
@@ -52,9 +56,19 @@ stop_process() {
   kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
 }
 
+stop_worker() {
+  # The worker has no port, so it is found by the unique --label this script gave it.
+  [ -z "$WORKER_LABEL" ] && return 0
+  if command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { \$_.CommandLine -like '*app.worker*--label $WORKER_LABEL*' } | ForEach-Object { Stop-Process -Id \$_.ProcessId -Force }" >/dev/null 2>&1 || true
+  fi
+  kill -TERM -- "-$WORKER_PID" 2>/dev/null || kill -TERM "$WORKER_PID" 2>/dev/null || true
+}
+
 cleanup() {
   stop_process "$WEB_PID" 3000
   stop_process "$API_PID" 8000
+  stop_worker
 }
 trap cleanup EXIT
 
@@ -104,13 +118,23 @@ cd "$ROOT/frontend"
 pnpm install --frozen-lockfile --silent
 pnpm build
 bash "$ROOT/scripts/wait-for.sh" "http://127.0.0.1:8000/health/ready" 60
+
+step "Start the background worker (U6: fake AI, a short text pause so the steps are visible)"
+mkdir -p "$LOG_DIR/ai-control"
+rm -f "$LOG_DIR/ai-control/fail-text"
+export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
+WORKER_LABEL="verify-$$"
+WORKER_PID="$(cd "$ROOT/backend" && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \
+  MEDIA_ROOT="$LOG_DIR/media" FACE_LANDMARK_OVERRIDES_FILE=tests/fixtures/faces/overrides.json \
+  AI_FAKE_TEXT_DELAY_SECONDS=1 WORKER_POLL_INTERVAL_SECONDS=0.5 \
+  start_background "$LOG_DIR/worker.log" uv run python -m app.worker --label "$WORKER_LABEL")"
 WEB_PID="$(API_ORIGIN="$API_ORIGIN" start_background "$LOG_DIR/web.log" pnpm start --port 3000)"
 bash "$ROOT/scripts/wait-for.sh" "http://localhost:3000/login" 60
 
 step "Playwright checkpoint subset (desktop, axe): skeleton + one @checkpoint per unit"
 pnpm exec playwright install chromium
 pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-  e2e/photos.spec.ts e2e/payments.spec.ts --project=desktop --grep "@checkpoint"
+  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts --project=desktop --grep "@checkpoint"
 
 ELAPSED=$((SECONDS - STARTED_AT))
 echo "Checkpoint command took ${ELAPSED} s (budget ${BUDGET_SECONDS} s)."

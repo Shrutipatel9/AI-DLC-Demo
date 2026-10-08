@@ -371,8 +371,10 @@ dependencies = [
     { name = "anyio" },
     { name = "argon2-cffi" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "jinja2" },
     { name = "mediapipe" },
+    { name = "numpy" },
     { name = "pillow" },
     { name = "pillow-heif" },
     { name = "prometheus-client" },
@@ -389,7 +391,6 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "aiosmtpd" },
-    { name = "httpx" },
     { name = "import-linter" },
     { name = "mypy" },
     { name = "pip-audit" },
@@ -405,8 +406,10 @@ requires-dist = [
     { name = "anyio", specifier = ">=4.6" },
     { name = "argon2-cffi", specifier = ">=23.1" },
     { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.28" },
     { name = "jinja2", specifier = ">=3.1" },
     { name = "mediapipe", specifier = ">=0.10.14" },
+    { name = "numpy", specifier = ">=1.26" },
     { name = "pillow", specifier = ">=11.0" },
     { name = "pillow-heif", specifier = ">=0.18" },
     { name = "prometheus-client", specifier = ">=0.21" },
@@ -423,7 +426,6 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "aiosmtpd", specifier = ">=1.4" },
-    { name = "httpx", specifier = ">=0.28" },
     { name = "import-linter", specifier = ">=2.1" },
     { name = "mypy", specifier = ">=1.13" },
     { name = "pip-audit", specifier = ">=2.7" },

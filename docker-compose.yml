@@ -1,5 +1,6 @@
 # Local supporting services for development, tests and CI (BR8.3, AC1.2.1, AC1.2.3).
-# The apps themselves run as normal processes (infrastructure answer Q1).
+# The apps themselves run as normal processes (infrastructure answer Q1): the API, the web app
+# and the background worker (`uv run python -m app.worker`, U6; scripts/dev.sh starts all three).
 #
 #   docker compose up -d --wait postgres mailpit
 #

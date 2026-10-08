@@ -76,9 +76,7 @@
 
 
 
-- **Active Unit**: u6-analysis-core
 
-- **Unit State**: in-progress
 
 ## Phase Progress
 <!-- Status values: Pending, Active, Verified, Skipped -->
@@ -141,7 +139,7 @@ Per unit: [TBD]
 - **Current Stage**: code-generation
 - **Next Stage**: build-and-test
 - **Status**: Running
-- **Last Updated**: 2026-10-05T08:17:30Z
+- **Last Updated**: 2026-10-08T04:33:29Z
 
 - **Construction Autonomy Mode**: autonomous
 

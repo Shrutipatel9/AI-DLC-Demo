@@ -82,7 +82,7 @@ jobs:
         run: |
           source ../scripts/ci-env.sh
           uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-            tests/face tests/photos tests/payments -m "not perf" \
+            tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" \
             --cov=app --cov-report=term-missing --cov-fail-under=80
       - name: Latency targets and anti-enumeration timing (p95; one re-run per target)
         run: |
@@ -192,18 +192,28 @@ jobs:
             nohup uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000 \
             --timeout-graceful-shutdown 10 > ../.verify/api.log 2>&1 &)
           bash scripts/wait-for.sh http://127.0.0.1:8000/health/ready 60
+          # The background worker (U6): fake AI with a short pause, and a control directory the
+          # browser journey uses to make one run fail.
+          mkdir -p .verify/ai-control
+          (cd backend && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \
+            MEDIA_ROOT="$GITHUB_WORKSPACE/.verify/media" \
+            FACE_LANDMARK_OVERRIDES_FILE=tests/fixtures/faces/overrides.json \
+            AI_FAKE_CONTROL_DIR="$GITHUB_WORKSPACE/.verify/ai-control" \
+            AI_FAKE_TEXT_DELAY_SECONDS=1 WORKER_POLL_INTERVAL_SECONDS=0.5 \
+            nohup uv run python -m app.worker --label ci > ../.verify/worker.log 2>&1 &)
           (cd frontend && API_ORIGIN="$API_ORIGIN" nohup pnpm start --port 3000 > ../.verify/web.log 2>&1 &)
           bash scripts/wait-for.sh http://localhost:3000/login 60
-      - name: Playwright skeleton, session, onboarding, photo and payment journeys (phone + desktop, axe)
+      - name: Playwright skeleton, session, onboarding, photo, payment and analysis journeys (phone + desktop, axe)
         working-directory: frontend
         env:
           CI: "true"
           MAILPIT_URL: http://127.0.0.1:8025
           WEB_BASE_URL: http://localhost:3000
+          AI_FAKE_CONTROL_DIR: ${{ github.workspace }}/.verify/ai-control
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-            e2e/photos.spec.ts e2e/payments.spec.ts
+            e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts
       - name: Upload Playwright report and API log
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

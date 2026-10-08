@@ -157,6 +157,12 @@ def test_landmark_overrides_are_refused_outside_development_and_test(tmp_path: P
         "PAYMENT_PROVIDER": "stripe",
         "STRIPE_SECRET_KEY": "sk_test_unused",
         "STRIPE_WEBHOOK_SECRET": "whsec_placeholder",
+        # U6: the AI fakes are refused in production too.
+        "AI_TEXT_PROVIDER": "openai",
+        "AI_IMAGE_PROVIDER": "openai",
+        "OPENAI_API_KEY": "sk-test-unused",
+        "OPENAI_TEXT_MODEL": "text-model",
+        "OPENAI_IMAGE_MODEL": "image-model",
     }
     make_settings(**production)  # valid without the overrides file
     with pytest.raises(ValidationError, match="FACE_LANDMARK_OVERRIDES_FILE"):

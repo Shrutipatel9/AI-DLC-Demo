@@ -43,6 +43,10 @@ def base_env(**overrides: Any) -> dict[str, str]:
         "REPORT_PRICE_AMOUNT": 1999,
         "REPORT_PRICE_CURRENCY": "USD",
         "PAYMENT_PROVIDER": "fake",
+        # U6: AI vendors are always fakes in tests, with no pause between attempts (NFR-008).
+        "AI_TEXT_PROVIDER": "fake",
+        "AI_IMAGE_PROVIDER": "fake",
+        "AI_RETRY_BACKOFF_SECONDS": 0,
         # Never the developer's var/media: tests that read files set their own tmp_path.
         "MEDIA_ROOT": os.environ.get(
             "TEST_MEDIA_ROOT", str(Path(tempfile.gettempdir()) / "facial-analysis-test-media")

@@ -6,15 +6,17 @@ unreferenced file stays on disk. ``retire`` removes the row and returns the stor
 the caller deletes the bytes with :meth:`MediaStore.purge` after its commit succeeds, so a
 failed commit never leaves a row without a file.
 
-Until U6 adds analysis-run snapshots, nothing else references a photo, so a retired photo
-is deleted at once (AC1.10.3; C8 "deleted when unreferenced").
+A retired photo is deleted at once unless another module still references it: modules
+register a reference check with :meth:`MediaStore.add_reference_check` (the analysis module
+does, because a run keeps the photo files it started with, R-02). A referenced file is kept, row
+and bytes, so the run can still read it (AC1.10.3; C8 "deleted when unreferenced").
 """
 
 from __future__ import annotations
 
 import logging
 import uuid
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 
 from sqlalchemy.orm import Session
@@ -26,6 +28,9 @@ from app.platform.clock import Clock
 from app.platform.errors import NotFound
 
 logger = logging.getLogger("media")
+
+#: ``(session, file id) -> bool``: does another module still need this file?
+ReferenceCheck = Callable[[Session, uuid.UUID], bool]
 
 _EXTENSIONS = {"image/jpeg": "jpg", "image/png": "png"}
 
@@ -59,6 +64,11 @@ class MediaStore:
     def __init__(self, *, storage: FileStorage, clock: Clock) -> None:
         self.storage = storage
         self.clock = clock
+        self._reference_checks: list[ReferenceCheck] = []
+
+    def add_reference_check(self, check: ReferenceCheck) -> None:
+        """Keep retired files that ``check`` says are still referenced."""
+        self._reference_checks.append(check)
 
     def put(
         self,
@@ -120,17 +130,25 @@ class MediaStore:
         return StoredFile(file_id=record.id, content_type=record.content_type, data=data)
 
     def retire(self, session: Session, file_id: uuid.UUID) -> str | None:
-        """Remove a replaced file's row; returns its key for :meth:`purge` after commit."""
+        """Remove a replaced file's row; returns its key for :meth:`purge` after commit.
+
+        Returns ``None`` (and keeps the file) when it is missing or still referenced.
+        """
         record = repositories.find(session, file_id)
         if record is None:
+            return None
+        if any(check(session, file_id) for check in self._reference_checks):
             return None
         key = record.storage_key
         repositories.remove(session, file_id)
         return key
 
     def purge(self, keys: Iterable[str]) -> None:
-        """Delete stored bytes. A failure is logged (the file is orphaned), never raised,
-        because the database change it follows has already committed."""
+        """Delete stored bytes.
+
+        A failure is logged (the file is orphaned), never raised, because the database change it
+        follows has already committed.
+        """
         for key in keys:
             try:
                 self.storage.delete(key)

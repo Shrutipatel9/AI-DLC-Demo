@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "note": "[Decided by delivery team] Committed 'realistic latency' profile for the AI fakes (AC7.2.5): one structured report-writing call (11 narratives) and one image edit. Tests run it on a virtual clock. Real timings are measured separately (AC7.2.6, eval).",
+  "textSeconds": 60,
+  "imageSeconds": 40
+}

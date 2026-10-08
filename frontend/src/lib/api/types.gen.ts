@@ -4,6 +4,66 @@
  */
 
 export interface paths {
+    "/analysis/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * "Start Analysis": idempotent; a second call returns the same run
+         * @description 402 first, then 409 for a photo set that is not consistent now, then the run (US7.1).
+         */
+        post: operations["post_start_analysis_runs_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analysis/runs/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The current run's steps and state (polled every 2-3 s)
+         * @description Steps (done, current, waiting), expected wait, failure and re-run availability (US7.2).
+         */
+        get: operations["get_current_analysis_runs_current_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analysis/runs/current/rerun": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * The one free re-run after a failed run
+         * @description 409 ``RERUN_NOT_AVAILABLE`` when the run has not failed or the re-run was used (US7.11).
+         */
+        post: operations["post_rerun_analysis_runs_current_rerun_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/change-password": {
         parameters: {
             query?: never;
@@ -546,6 +606,32 @@ export interface components {
             expiresAt: string;
         };
         /**
+         * AnalysisRunOut
+         * @description ``AnalysisRun``: the progress screen's whole picture.
+         */
+        AnalysisRunOut: {
+            /** Contactsupport */
+            contactSupport: boolean;
+            /** Expectedwaitminutes */
+            expectedWaitMinutes: number;
+            /** Failuremessage */
+            failureMessage?: string | null;
+            /** Rerunavailable */
+            rerunAvailable: boolean;
+            /**
+             * Runid
+             * Format: uuid
+             */
+            runId: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "running" | "completed" | "failed";
+            /** Steps */
+            steps: components["schemas"]["StepOut"][];
+        };
+        /**
          * AngleOut
          * @description A required angle and how to take it.
          */
@@ -655,7 +741,7 @@ export interface components {
          * @description C11 error codes used so far (the full list grows with later units).
          * @enum {string}
          */
-        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
+        ErrorCode: "VALIDATION_FAILED" | "NOT_AUTHENTICATED" | "SESSION_INVALID" | "CSRF_CHECK_FAILED" | "INVALID_CREDENTIALS" | "EMAIL_ALREADY_REGISTERED" | "CODE_INVALID" | "CODE_EXPIRED" | "CODE_LOCKED" | "CODE_RESEND_COOLDOWN" | "RESET_TOKEN_INVALID" | "CONSENT_REQUIRED" | "DISCLAIMER_REQUIRED" | "QUESTIONNAIRE_NOT_SUBMITTED" | "QUESTIONNAIRE_ALREADY_SUBMITTED" | "PHOTO_REJECTED" | "PHOTO_TOO_LARGE" | "PHOTO_UNSUPPORTED_TYPE" | "PHOTO_SET_INCOMPLETE" | "PHOTO_IDENTITY_MISMATCH" | "PAYMENT_REQUIRED" | "ALREADY_PAID" | "ANALYSIS_ALREADY_COMPLETE" | "RERUN_NOT_AVAILABLE" | "NOT_FOUND" | "RATE_LIMITED" | "UPSTREAM_UNAVAILABLE" | "UPSTREAM_TIMEOUT" | "INTERNAL_ERROR";
         /**
          * ErrorDetail
          * @description One detail item. ``attemptsLeft`` is sent with ``CODE_INVALID`` (D3).
@@ -1008,6 +1094,22 @@ export interface components {
             questionId: string;
         };
         /**
+         * StepOut
+         * @description One named step and its state in text.
+         */
+        StepOut: {
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "measuring" | "writing" | "generating_images" | "assembling";
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "done" | "current" | "waiting" | "failed";
+        };
+        /**
          * SubmitRequest
          * @description ``POST /onboarding/response/submit`` body. Missing means not confirmed (BR-003).
          */
@@ -1093,6 +1195,138 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    post_start_analysis_runs_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRunOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_current_analysis_runs_current_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRunOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    post_rerun_analysis_runs_current_rerun_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRunOut"];
+                };
+            };
+            /** @description Error (contract C11) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Error (contract C11) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     change_password_auth_change_password_post: {
         parameters: {
             query?: never;

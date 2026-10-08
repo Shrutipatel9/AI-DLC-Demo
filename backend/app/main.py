@@ -11,8 +11,10 @@ face model is missing (U4, ``FACE_MODEL_PRELOAD``).
 Route classes (NFR2.8): one public router holds exactly ``PUBLIC_ROUTES`` (asserted at
 start-up); every other router is mounted with ``current_user``; ``/docs`` and
 ``/openapi.json`` exist only in development; ``/metrics`` is an opt-in sub-app with its
-own CIDR guard; the fake payment provider's test page (``FAKE_PAYMENT_ROUTES``) exists only
-with ``PAYMENT_PROVIDER=fake``, which settings allow in development and test only.
+own CIDR guard; the analysis routes (``/analysis/runs``) are protected like the rest, and the
+analysis itself runs in the separate worker process (``python -m app.worker``); the fake
+payment provider's test page (``FAKE_PAYMENT_ROUTES``) exists only with ``PAYMENT_PROVIDER=fake``,
+which settings allow in development and test only.
 """
 
 from __future__ import annotations
@@ -25,9 +27,12 @@ from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy import Engine
 from starlette.routing import BaseRoute
 
+from app.analysis.public import build_analysis, media_in_use
+from app.analysis.public import router as analysis_router
 from app.face.public import FaceGeometry, build_face_geometry
 from app.health.routes import router as health_router
 from app.identity.public import build_identity, current_user, protected_router, public_router
+from app.jobs.public import build_job_queue
 from app.media.public import build_media_store
 from app.media.public import router as media_router
 from app.onboarding.public import build_onboarding
@@ -144,6 +149,11 @@ def create_app(
         identity_check=lambda session, user_id: check_identity(photos, session, user_id),
     )
 
+    queue = build_job_queue(settings, clock=clock)
+    analysis = build_analysis(settings, clock=clock, queue=queue, payments=payments, photos=photos)
+    # A run keeps the photo files it started with: a retake must not delete them (R-02).
+    media.add_reference_check(media_in_use)
+
     @asynccontextmanager
     async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
         if settings.check_migrations_at_startup:
@@ -182,6 +192,8 @@ def create_app(
     app.state.photos = photos
     app.state.payment_gateway = gateway
     app.state.payments = payments
+    app.state.job_queue = queue
+    app.state.analysis = analysis
 
     install_exception_handlers(app)
     install_middleware(app, settings, metrics)
@@ -197,6 +209,7 @@ def create_app(
     app.include_router(photos_router, dependencies=[Depends(current_user)])
     app.include_router(media_router, dependencies=[Depends(current_user)])
     app.include_router(payments_router, dependencies=[Depends(current_user)])
+    app.include_router(analysis_router, dependencies=[Depends(current_user)])
     if settings.payment_provider == "fake":
         # Development/test only (settings refuse the fake elsewhere): the browser navigates
         # to the fake's hosted page as it would to Stripe's, so it takes no access token.

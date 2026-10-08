@@ -22,6 +22,8 @@ dependencies = [
     "pillow-heif>=0.18",
     "python-multipart>=0.0.20",
     "stripe>=12",
+    "httpx>=0.28",
+    "numpy>=1.26",
 ]
 
 [dependency-groups]
@@ -29,7 +31,6 @@ dev = [
     "pytest>=8.3",
     "pytest-cov>=6.0",
     "pytest-socket>=0.7",
-    "httpx>=0.28",
     "aiosmtpd>=1.4",
     "mypy>=1.13",
     "ruff>=0.8",
@@ -148,12 +149,18 @@ forbidden_modules = [
     "app.face",
     "app.photos",
     "app.payments",
+    "app.jobs",
+    "app.ai",
+    "app.measurement",
+    "app.report_writing",
+    "app.analysis",
+    "app.worker",
 ]
 
 [[tool.importlinter.contracts]]
 name = "Outside identity, only identity.public is imported"
 type = "forbidden"
-source_modules = ["app.main", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments"]
+source_modules = ["app.main", "app.health", "app.onboarding", "app.media", "app.photos", "app.payments", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.identity.services",
     "app.identity.codes",
@@ -196,7 +203,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside onboarding, only onboarding.public is imported (ADR-007)"
 type = "forbidden"
-source_modules = ["app.main", "app.health", "app.identity", "app.photos", "app.payments"]
+source_modules = ["app.main", "app.health", "app.identity", "app.photos", "app.payments", "app.analysis", "app.worker", "app.report_writing", "app.measurement"]
 forbidden_modules = [
     "app.onboarding.services",
     "app.onboarding.repositories",
@@ -258,7 +265,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside media and face, only their public modules are imported (C8, FaceGeometry)"
 type = "forbidden"
-source_modules = ["app.main", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments"]
+source_modules = ["app.main", "app.photos", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker", "app.measurement"]
 forbidden_modules = [
     "app.media.services",
     "app.media.repositories",
@@ -276,7 +283,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside photos, only photos.public is imported (C4)"
 type = "forbidden"
-source_modules = ["app.main", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments"]
+source_modules = ["app.main", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.payments", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.photos.services",
     "app.photos.repositories",
@@ -316,7 +323,7 @@ allow_indirect_imports = true
 [[tool.importlinter.contracts]]
 name = "Outside payments, only payments.public is imported (C5)"
 type = "forbidden"
-source_modules = ["app.main", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health"]
+source_modules = ["app.main", "app.photos", "app.media", "app.face", "app.onboarding", "app.identity", "app.health", "app.analysis", "app.worker"]
 forbidden_modules = [
     "app.payments.services",
     "app.payments.repositories",
@@ -328,5 +335,111 @@ forbidden_modules = [
     "app.payments.routes",
     "app.payments.dependencies",
     "app.payments.schemas",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Jobs layers: public -> worker -> queue -> models (jobs knows no feature module)"
+type = "layers"
+layers = [
+    "app.jobs.public",
+    "app.jobs.worker",
+    "app.jobs.service",
+    "app.jobs.models",
+]
+
+[[tool.importlinter.contracts]]
+name = "Jobs, AI, measurement and report writing never import the analysis module"
+type = "forbidden"
+source_modules = ["app.jobs", "app.ai", "app.measurement", "app.report_writing"]
+forbidden_modules = ["app.analysis"]
+
+[[tool.importlinter.contracts]]
+name = "AI layers: public -> adapters and fakes -> http plumbing -> ports and errors"
+type = "layers"
+layers = [
+    "app.ai.public",
+    "app.ai.openai_text | app.ai.openai_image | app.ai.fakes",
+    "app.ai.openai_http",
+    "app.ai.ports | app.ai.errors",
+]
+
+[[tool.importlinter.contracts]]
+name = "Measurement layers: public -> service -> assessments/skin -> features -> geometry -> landmarks"
+type = "layers"
+layers = [
+    "app.measurement.public",
+    "app.measurement.service",
+    "app.measurement.assessments | app.measurement.skin",
+    "app.measurement.features",
+    "app.measurement.geometry",
+    "app.measurement.landmarks",
+]
+
+[[tool.importlinter.contracts]]
+name = "Report writing layers: public -> service -> request/validation -> schema/tiers"
+type = "layers"
+layers = [
+    "app.report_writing.public",
+    "app.report_writing.fake_responder | app.report_writing.service",
+    "app.report_writing.request | app.report_writing.validation",
+    "app.report_writing.schema | app.report_writing.tiers",
+]
+
+[[tool.importlinter.contracts]]
+name = "Analysis layers: public -> routes -> services -> steps/pipeline -> repositories -> models"
+type = "layers"
+layers = [
+    "app.analysis.public",
+    "app.analysis.routes",
+    "app.analysis.dependencies",
+    "app.analysis.services | app.analysis.steps",
+    "app.analysis.pipeline",
+    "app.analysis.repositories",
+    "app.analysis.models | app.analysis.domain",
+]
+
+[[tool.importlinter.contracts]]
+name = "Analysis route handlers never import repositories, models or the pipeline"
+type = "forbidden"
+source_modules = ["app.analysis.routes", "app.analysis.dependencies"]
+forbidden_modules = ["app.analysis.repositories", "app.analysis.models", "app.analysis.pipeline"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Outside their module, only the public modules of jobs, AI, measurement, report writing and analysis are imported"
+type = "forbidden"
+source_modules = ["app.main", "app.worker", "app.analysis", "app.payments", "app.photos", "app.onboarding", "app.media", "app.identity", "app.health"]
+forbidden_modules = [
+    "app.jobs.service",
+    "app.jobs.models",
+    "app.jobs.worker",
+    "app.ai.openai_text",
+    "app.ai.openai_image",
+    "app.ai.openai_http",
+    "app.ai.fakes",
+    "app.ai.ports",
+    "app.ai.errors",
+    "app.measurement.service",
+    "app.measurement.features",
+    "app.measurement.assessments",
+    "app.measurement.geometry",
+    "app.measurement.landmarks",
+    "app.measurement.skin",
+    "app.report_writing.service",
+    "app.report_writing.request",
+    "app.report_writing.validation",
+    "app.report_writing.schema",
+    "app.report_writing.tiers",
+    "app.report_writing.fake_responder",
+    "app.analysis.services",
+    "app.analysis.steps",
+    "app.analysis.pipeline",
+    "app.analysis.repositories",
+    "app.analysis.models",
+    "app.analysis.routes",
+    "app.analysis.dependencies",
+    "app.analysis.schemas",
+    "app.analysis.domain",
 ]
 allow_indirect_imports = true

@@ -98,6 +98,14 @@ if [ -z "${STRIPE_WEBHOOK_SECRET:-}" ]; then
   _ci_env_export STRIPE_WEBHOOK_SECRET "whsec_test_$(openssl rand -hex 24)" secret
 fi
 
+# AI vendors (U6): always the fakes in tests, never OpenAI (NFR-008), with no pause between
+# attempts. The browser journeys' worker adds a short per-call delay and a control directory in
+# its own start-up line (scripts/verify.sh, scripts/verify-skeleton.sh, CI), not here, so the
+# unit tests never wait.
+_ci_env_export AI_TEXT_PROVIDER "fake"
+_ci_env_export AI_IMAGE_PROVIDER "fake"
+_ci_env_export AI_RETRY_BACKOFF_SECONDS "0"
+
 # --- Frontend and end-to-end ------------------------------------------------------------
 _ci_env_export API_ORIGIN "${API_ORIGIN:-http://localhost:8000}"
 _ci_env_export WEB_BASE_URL "${WEB_BASE_URL:-http://localhost:3000}"

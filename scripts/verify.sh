@@ -20,6 +20,8 @@ GITLEAKS_IMAGE="ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c
 
 API_PID=""
 WEB_PID=""
+WORKER_PID=""
+WORKER_LABEL=""
 
 step() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
 
@@ -37,9 +39,19 @@ stop_process() {
   kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
 }
 
+stop_worker() {
+  # The worker has no port, so it is found by the unique --label this script gave it.
+  [ -z "$WORKER_LABEL" ] && return 0
+  if command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { \$_.CommandLine -like '*app.worker*--label $WORKER_LABEL*' } | ForEach-Object { Stop-Process -Id \$_.ProcessId -Force }" >/dev/null 2>&1 || true
+  fi
+  kill -TERM -- "-$WORKER_PID" 2>/dev/null || kill -TERM "$WORKER_PID" 2>/dev/null || true
+}
+
 cleanup() {
   stop_process "$WEB_PID" 3000
   stop_process "$API_PID" 8000
+  stop_worker
 }
 trap cleanup EXIT
 
@@ -80,7 +92,7 @@ uv run lint-imports
 
 step "Backend: tests with coverage (>= 80%), no network"
 uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media \
-  tests/face tests/photos tests/payments -m "not perf" \
+  tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" \
   --cov=app --cov-report=term-missing --cov-fail-under=80 -q
 
 step "Backend: latency targets (p95; one automatic re-run per target, D10)"
@@ -98,7 +110,7 @@ pnpm typecheck
 step "Frontend: tests with coverage (lines >= 80%)"
 pnpm exec vitest run --coverage
 
-step "Frontend: production build and bundle budget (<= 200 KB per auth, onboarding, photo, payment route)"
+step "Frontend: production build and bundle budget (<= 200 KB per auth, onboarding, photo, payment, analysis route)"
 pnpm build
 pnpm size-check
 
@@ -122,17 +134,29 @@ API_PID="$(DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp MEDIA_ROOT="$LOG_
   start_background "$LOG_DIR/api.log" uv run uvicorn app.main:create_app --factory \
   --host 127.0.0.1 --port 8000 --timeout-graceful-shutdown 10)"
 bash "$ROOT/scripts/wait-for.sh" "http://127.0.0.1:8000/health/ready" 60
+
+step "Start the background worker (U6: fake AI, a short text pause so the steps are visible)"
+mkdir -p "$LOG_DIR/ai-control"
+rm -f "$LOG_DIR/ai-control/fail-text"
+export AI_FAKE_CONTROL_DIR="$LOG_DIR/ai-control"
+WORKER_LABEL="verify-$$"
+WORKER_PID="$(cd "$ROOT/backend" && DATABASE_URL="$E2E_DATABASE_URL" EMAIL_BACKEND=smtp \
+  MEDIA_ROOT="$LOG_DIR/media" FACE_LANDMARK_OVERRIDES_FILE=tests/fixtures/faces/overrides.json \
+  AI_FAKE_TEXT_DELAY_SECONDS=1 WORKER_POLL_INTERVAL_SECONDS=0.5 \
+  start_background "$LOG_DIR/worker.log" uv run python -m app.worker --label "$WORKER_LABEL")"
 cd "$ROOT/frontend"
 WEB_PID="$(API_ORIGIN="$API_ORIGIN" start_background "$LOG_DIR/web.log" pnpm start --port 3000)"
 bash "$ROOT/scripts/wait-for.sh" "http://localhost:3000/login" 60
 
-step "E2E: Playwright skeleton, session, onboarding, photo and payment journeys (phone + desktop, axe)"
+step "E2E: Playwright skeleton, session, onboarding, photo, payment and analysis journeys (phone + desktop, axe)"
 pnpm exec playwright install chromium
 pnpm exec playwright test e2e/skeleton.spec.ts e2e/session.spec.ts e2e/onboarding.spec.ts \
-  e2e/photos.spec.ts e2e/payments.spec.ts
+  e2e/photos.spec.ts e2e/payments.spec.ts e2e/analysis.spec.ts
 cleanup
 API_PID=""
 WEB_PID=""
+WORKER_PID=""
+WORKER_LABEL=""
 
 # --------------------------------------------------------------------------- security
 step "Security: Gitleaks (working tree), dependency audits, auth deny-list, app independence"

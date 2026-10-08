@@ -14,7 +14,9 @@ from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import create_engine, pool
 
+import app.analysis.models
 import app.identity.models
+import app.jobs.models
 import app.media.models
 import app.onboarding.models
 import app.payments.models

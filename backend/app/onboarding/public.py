@@ -7,6 +7,8 @@
 - ``get_non_medical_answers``: submitted answers with question text, NEVER including a
   medical-flagged answer or its follow-up (ADR-007; plan decision D4). There is no public
   query that returns medical answers.
+- ``needs_reassurance``: yes/no for the reassuring-tone rule (Q20/Q21 at or above a level);
+  no answer text leaves the module.
 - ``get_onboarding_state``: consent and submission flags (for the Journey).
 - ``require_submitted_questionnaire``: guard for later steps (409
   ``QUESTIONNAIRE_NOT_SUBMITTED``).
@@ -37,6 +39,7 @@ __all__ = [
     "build_onboarding",
     "get_non_medical_answers",
     "get_onboarding_state",
+    "needs_reassurance",
     "require_submitted_questionnaire",
     "router",
 ]
@@ -63,6 +66,24 @@ def get_non_medical_answers(
 ) -> list[AnsweredQuestion]:
     """Non-medical, submitted answers with question text (C6 ``answers_for_ai``; ADR-007)."""
     return service.non_medical_answers(session, user_id)
+
+
+def needs_reassurance(
+    service: OnboardingService,
+    session: Session,
+    user_id: uuid.UUID,
+    *,
+    distress_at: str,
+    frequency_at: str,
+) -> bool:
+    """Whether the distress or appearance-frequency answer is at or above the configured level.
+
+    Raises:
+        ValueError: When a level is not an answer option (configuration error).
+    """
+    return service.needs_reassurance(
+        session, user_id, distress_at=distress_at, frequency_at=frequency_at
+    )
 
 
 def get_onboarding_state(

@@ -26,9 +26,11 @@ or is not the pinned version (`FACE_MODEL_PRELOAD`).
 | Types | `uv run mypy --strict app` |
 | Layering contracts | `uv run lint-imports` |
 | Face model and test portrait (once; hash-checked, git-ignored `var/models/`) | `uv run python -m tools.fetch_face_model` |
-| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments -m "not perf" --cov=app --cov-fail-under=80` |
+| Tests (needs `source ../scripts/ci-env.sh`, Compose and the face model) | `uv run pytest tests/platform tests/identity tests/health tests/onboarding tests/media tests/face tests/photos tests/payments tests/jobs tests/ai tests/analysis -m "not perf" --cov=app --cov-fail-under=80` |
 | Photo tests only (U4) | `uv run pytest tests/photos tests/media tests/face -q` |
 | Payment tests only (U5; the Stripe fake, never Stripe) | `uv run pytest tests/payments -q` |
+| Analysis tests only (U6; the AI fakes, never OpenAI) | `uv run pytest tests/jobs tests/ai tests/analysis -q` |
+| Background worker (runs the analysis; start it next to the API) | `uv run python -m app.worker` |
 | Re-render the synthetic face fixtures (only when the renderer or model pin changes) | `uv run python -m tools.make_face_fixtures --out tests/fixtures/faces --out ../frontend/e2e/fixtures/photos` |
 | Latency checks and anti-enumeration timing | `uv run pytest -m perf tests/identity/test_perf_auth.py tests/health/test_perf_health.py tests/identity/test_perf_sessions.py tests/identity/test_perf_enumeration.py` |
 | Identity clean-up (old sessions, reset tokens, shadow counters) | `uv run python -m app.identity.cleanup` |
@@ -229,6 +231,47 @@ Payments (U5): `public -> routes | fake_routes -> dependencies -> services -> re
 stripe_gateway | fake_gateway -> gateway | models`. Route handlers never import the
 repositories, the models or the Stripe adapter. Outside `payments`, code imports only
 `app.payments.public`.
+
+Analysis (U6): `jobs` (`public -> worker -> service -> models`), `ai` (`public -> openai_text |
+openai_image | fakes -> openai_http -> ports | errors`), `measurement`, `report_writing` and
+`analysis` (`public -> routes -> services | steps -> pipeline -> repositories -> models`). `jobs`,
+`ai`, `measurement` and `report_writing` never import `analysis`; outside each module only its
+`public` module is imported. `app/worker.py` is a second composition root (the background
+process).
+
+## Analysis (U6)
+
+- **Start** (`POST /analysis/runs`, 202): payment first (402 `PAYMENT_REQUIRED`), then the photo
+  set from the U5 `paid_photo_snapshot` port (409 `PHOTO_SET_INCOMPLETE` /
+  `PHOTO_IDENTITY_MISMATCH`). One run per payment (unique `payment_id`): a concurrent or repeated
+  start returns the same run; after it completes, 409 `ANALYSIS_ALREADY_COMPLETE` and no vendor
+  call. The photo files are recorded at start (`analysis_run_photos`) and a retake never deletes
+  them while a run references them. The route paths follow contract C1 (`/analysis/runs...`).
+- **Progress** (`GET /analysis/runs/current`): the four steps (`measuring`, `writing`,
+  `generating_images`, `assembling`) as `done` / `current` / `waiting` / `failed`, the expected
+  wait, a plain-language failure message and whether the free re-run is available.
+- **Re-run** (`POST /analysis/runs/current/rerun`, 202): once, after a failed run; completed
+  steps are kept and not repeated. A second failure answers with a "contact support" message.
+- **The worker** (`uv run python -m app.worker`, one process; run it next to the API; `scripts/dev.sh`
+  does): claims `jobs` rows with `FOR UPDATE SKIP LOCKED`, keeps a heartbeat while it works, and on
+  start-up resumes (or, after `JOB_MAX_ATTEMPTS`, fails) jobs a dead worker left `running`. Logs hold
+  event names and error classes only, never photo data or answer text.
+- **Steps**: measurements from the U4 landmarks (formulas in `app/measurement/`; all
+  deterministic; values rounded to `REPORT_VALUE_DECIMALS`), the privacy-safe AI request (only the
+  non-medical answers from the Onboarding port, plus the reassuring-tone instruction when Q20/Q21
+  are at or above `TONE_*_TRIGGER`), validated report text (3-5 sentences, a stored value quoted,
+  recommendations sorted into three tiers by keyword, ASM-007), then 24 image slots recorded as
+  "not available yet" (U7 generates them) and the stored result. Stored JSON is JSONB: readers
+  iterate `FEATURE_KEYS`, they do not rely on key order.
+- **AI vendors** (`AI_TEXT_PROVIDER`, `AI_IMAGE_PROVIDER`: `openai` or `fake`): the OpenAI adapters
+  talk to `OPENAI_BASE_URL` with `OPENAI_API_KEY` and the configured model names, with timeouts and
+  typed errors (rate limit, timeout, unavailable, rejected, bad output). The fakes (development and
+  test only) record their calls and can succeed, fail, return malformed output or be slow; the
+  committed "realistic latency" profile is `app/ai/data/realistic_latency_v1.json`.
+- **Opt-in evaluation suite (placeholder)**: the stories' `(eval)` checks (AC7.2.6 a timed run with
+  the real vendors, AC7.9.4 narrative quality with the real model) need a real `OPENAI_API_KEY` and
+  are not part of any default run. They are to be added under `tests/eval/` and run by hand.
+  Nothing in the default suite can reach a paid service.
 
 ## Payments (U5)
 
