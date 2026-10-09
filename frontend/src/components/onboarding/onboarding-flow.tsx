@@ -2,6 +2,7 @@
 
 // Onboarding: consent, then the questionnaire (US4.1-US4.4). Loads the consent state; once
 // consent is given it loads the definition and the saved answers (resume, AC4.2.6).
+import { Camera, CircleCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -93,11 +94,18 @@ export function OnboardingFlow() {
   }
   if (stage.kind === "submitted") {
     return (
-      <div className="space-y-4" data-testid="onboarding-submitted">
+      <Card
+        className="mx-auto max-w-[640px] space-y-4 text-center"
+        data-testid="onboarding-submitted"
+      >
+        <span className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success-soft text-success">
+          <CircleCheck className="size-7" aria-hidden="true" />
+        </span>
         <h1 className="text-2xl font-bold text-heading">Your questionnaire is submitted</h1>
-        <p className="text-base text-foreground">Thank you. Next, add your photos.</p>
-        <div className="flex flex-wrap gap-3">
+        <p className="text-base text-subheading">Thank you. Next, add your photos.</p>
+        <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Button onClick={() => router.push("/photos")} data-testid="onboarding-photos-button">
+            <Camera aria-hidden="true" />
             Add your photos
           </Button>
           <Button
@@ -108,12 +116,15 @@ export function OnboardingFlow() {
             Go to home
           </Button>
         </div>
-      </div>
+      </Card>
     );
   }
   return (
     <div className="mx-auto max-w-[640px]">
-      <p className="mb-3 text-sm font-medium text-muted" data-testid="onboarding-step">
+      <p
+        className="mb-3 inline-flex rounded-full border border-accent-soft-border bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-deep"
+        data-testid="onboarding-step"
+      >
         {STEP_LABEL[stage.kind]}
       </p>
       <Card>

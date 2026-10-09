@@ -1,3 +1,4 @@
+import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Label } from "./label";
@@ -17,7 +18,7 @@ export function FormField({
   children: ReactNode;
 }) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       <Label htmlFor={id}>{label}</Label>
       {children}
       {hint ? (
@@ -38,9 +39,13 @@ export function FormField({
 export function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={`${id}-error`} className="text-sm font-medium text-danger" data-testid={`${id}-error`}>
-      <span aria-hidden="true">⚠ </span>
-      {message}
+    <p
+      id={`${id}-error`}
+      className="flex items-start gap-1.5 text-sm font-medium text-danger"
+      data-testid={`${id}-error`}
+    >
+      <CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <span>{message}</span>
     </p>
   );
 }

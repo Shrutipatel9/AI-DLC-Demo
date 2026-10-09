@@ -17,11 +17,13 @@ function PaymentOptions() {
       </h3>
       <ul className="space-y-2">
         <li
-          className="flex items-center justify-between rounded-[var(--radius)] border border-card-border px-4 py-3"
+          className="flex items-center justify-between rounded-ui border border-card-border px-4 py-3"
           data-testid="payment-option-stripe"
         >
           <span className="text-base text-heading">Stripe</span>
-          <span className="text-sm font-medium text-heading">Available</span>
+          <span className="rounded-full bg-success-soft px-2.5 py-0.5 text-sm font-semibold text-success">
+            Available
+          </span>
         </li>
         <li>
           <button
@@ -29,7 +31,7 @@ function PaymentOptions() {
             aria-disabled="true"
             aria-describedby="paypal-unavailable"
             onClick={(event) => event.preventDefault()}
-            className="flex w-full cursor-not-allowed items-center justify-between rounded-[var(--radius)] border border-card-border bg-[#f3f4f6] px-4 py-3 text-left"
+            className="flex w-full cursor-not-allowed items-center justify-between rounded-ui border border-card-border bg-surface-muted px-4 py-3 text-left"
             data-testid="payment-option-paypal"
           >
             <span className="text-base text-heading">PayPal</span>
@@ -76,17 +78,17 @@ export function BillingPanel() {
         <table className="w-full text-left text-base" data-testid="billing-table">
           <caption className="sr-only">Your payments, newest first</caption>
           <thead>
-            <tr className="border-b border-card-border text-sm text-muted">
-              <th scope="col" className="py-2 pr-4 font-medium">
+            <tr className="bg-surface-muted text-sm text-subheading">
+              <th scope="col" className="px-3 py-2.5 font-semibold">
                 Date
               </th>
-              <th scope="col" className="py-2 pr-4 font-medium">
+              <th scope="col" className="px-3 py-2.5 font-semibold">
                 Amount
               </th>
-              <th scope="col" className="py-2 pr-4 font-medium">
+              <th scope="col" className="px-3 py-2.5 font-semibold">
                 Currency
               </th>
-              <th scope="col" className="py-2 font-medium">
+              <th scope="col" className="px-3 py-2.5 font-semibold">
                 Status
               </th>
             </tr>
@@ -98,10 +100,10 @@ export function BillingPanel() {
                 className="border-b border-card-border last:border-0"
                 data-testid="billing-row"
               >
-                <td className="py-2 pr-4">{formatDate(payment.date)}</td>
-                <td className="py-2 pr-4">{formatPrice(payment.amount, payment.currency)}</td>
-                <td className="py-2 pr-4">{payment.currency}</td>
-                <td className="py-2">{statusText(payment.status)}</td>
+                <td className="px-3 py-3">{formatDate(payment.date)}</td>
+                <td className="px-3 py-3">{formatPrice(payment.amount, payment.currency)}</td>
+                <td className="px-3 py-3">{payment.currency}</td>
+                <td className="px-3 py-3">{statusText(payment.status)}</td>
               </tr>
             ))}
           </tbody>

@@ -13,7 +13,14 @@ import { Button } from "@/components/ui/button";
 import { useAuthActions } from "@/lib/auth";
 
 const ITEM =
-  "block w-full rounded-[var(--radius)] px-3 py-2 text-left text-base hover:bg-[#eef2f5]";
+  "flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[15px] font-medium text-heading hover:bg-surface-muted [&_svg]:size-4 [&_svg]:text-subheading";
+
+/** Up to two initials for the avatar circle. */
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const letters = parts.length > 1 ? [parts[0], parts[parts.length - 1]] : parts;
+  return letters.map((part) => part[0]?.toUpperCase() ?? "").join("") || "?";
+}
 
 export function UserMenu({ userName }: { userName: string }) {
   const router = useRouter();
@@ -41,6 +48,7 @@ export function UserMenu({ userName }: { userName: string }) {
         ref={buttonRef}
         type="button"
         variant="secondary"
+        className="gap-2 pl-1.5 pr-3"
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls="user-menu"
@@ -50,14 +58,24 @@ export function UserMenu({ userName }: { userName: string }) {
         }}
         data-testid="user-menu-button"
       >
-        <span data-testid="user-menu-name">{userName}</span>
-        <span aria-hidden="true">▾</span>
+        <span
+          aria-hidden="true"
+          className="inline-flex size-7 items-center justify-center rounded-full bg-brand-gradient text-xs font-bold text-white"
+        >
+          {initials(userName)}
+        </span>
+        <span className="max-w-24 truncate sm:max-w-40" data-testid="user-menu-name">
+          {userName}
+        </span>
+        <span aria-hidden="true" className="text-subheading">
+          ▾
+        </span>
       </Button>
       {open ? (
         <ul
           id="user-menu"
           role="menu"
-          className="absolute right-0 z-10 mt-2 min-w-48 rounded-[var(--radius)] border border-card-border bg-white p-1 shadow-lg"
+          className="absolute right-0 z-40 mt-2 min-w-56 rounded-card border border-card-border bg-white p-1.5 shadow-popover"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               setOpen(false);

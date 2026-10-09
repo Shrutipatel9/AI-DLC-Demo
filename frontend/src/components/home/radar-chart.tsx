@@ -40,7 +40,7 @@ export function RadarChart({ axes }: { axes: RadarAxis[] }) {
             key={ring}
             points={polygon(axes.map((_, index) => point(index, count, (RADIUS * ring) / 100)))}
             fill="none"
-            stroke="#c9d3da"
+            stroke="#e2e8f0"
             strokeWidth="1"
           />
         ))}
@@ -53,7 +53,7 @@ export function RadarChart({ axes }: { axes: RadarAxis[] }) {
               y1={CENTER}
               x2={x}
               y2={y}
-              stroke="#c9d3da"
+              stroke="#e2e8f0"
               strokeWidth="1"
             />
           );
@@ -61,13 +61,21 @@ export function RadarChart({ axes }: { axes: RadarAxis[] }) {
         {plotted.length >= 3 ? (
           <polygon
             points={polygon(plotted)}
-            fill="rgba(42, 127, 115, 0.25)"
-            stroke="#1f6159"
+            fill="rgba(99, 102, 241, 0.18)"
+            stroke="#4f46e5"
             strokeWidth="2"
           />
         ) : null}
         {plotted.map(([x, y]) => (
-          <circle key={`${x}-${y}`} cx={x} cy={y} r="3.5" fill="#1f6159" />
+          <circle
+            key={`${x}-${y}`}
+            cx={x}
+            cy={y}
+            r="4"
+            fill="#4f46e5"
+            stroke="#fff"
+            strokeWidth="1.5"
+          />
         ))}
         {axes.map((axis, index) => {
           const [x, y] = point(index, count, LABEL_RADIUS);
@@ -79,7 +87,8 @@ export function RadarChart({ axes }: { axes: RadarAxis[] }) {
               textAnchor="middle"
               dominantBaseline="middle"
               fontSize="12"
-              fill="#1b2a35"
+              fill="#334155"
+              fontWeight="600"
             >
               {axis.axis}
             </text>

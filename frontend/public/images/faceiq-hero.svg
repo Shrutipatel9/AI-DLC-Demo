@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 600" role="img" aria-labelledby="t">
+<title id="t">FaceIQ maps facial landmarks to measure symmetry, proportions and face shape</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef2ff"/><stop offset=".55" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ecfeff"/></linearGradient>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#6366f1" opacity=".16"/></pattern>
+<linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0e7ff"/><stop offset="1" stop-color="#c7d2fe"/></linearGradient>
+<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a5b4fc"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+<linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#312e81"/><stop offset="1" stop-color="#4c1d95"/></linearGradient>
+<linearGradient id="scan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14b8a6" stop-opacity="0"/><stop offset="1" stop-color="#14b8a6" stop-opacity=".35"/></linearGradient>
+<linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#0d9488"/></linearGradient>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#312e81" flood-opacity=".16"/></filter>
+<clipPath id="frame"><rect width="560" height="600" rx="32"/></clipPath>
+</defs>
+<g clip-path="url(#frame)">
+<rect width="560" height="600" fill="url(#bg)"/><rect width="560" height="600" fill="url(#dots)"/>
+<circle cx="280" cy="300" r="230" fill="#fff" opacity=".55"/>
+<path d="M246 430L246 482C246 498 232 506 204 514L124 538C98 546 86 566 84 600L476 600C474 566 462 546 436 538L356 514C328 506 314 498 314 482L314 430Z" fill="url(#body)"/>
+<path d="M178 250C160 246 156 292 182 306M382 250C400 246 404 292 378 306" fill="url(#skin)" stroke="#6366f1" stroke-width="2"/>
+<path d="M280 118C214 118 176 168 176 238C176 300 190 352 214 392C236 428 258 452 280 456C302 452 324 428 346 392C370 352 384 300 384 238C384 168 346 118 280 118Z" fill="url(#skin)" stroke="#6366f1" stroke-width="2"/>
+<path d="M168 238C158 150 214 90 284 92C354 94 404 146 392 238C384 196 362 160 322 148C292 168 236 170 204 156C184 176 172 206 168 238Z" fill="url(#hair)"/>
+<g fill="none" stroke="#312e81" stroke-linecap="round" stroke-width="5"><path d="M214 222C230 210 254 210 266 218"/><path d="M294 218C306 210 330 210 346 222"/></g>
+<g stroke="#312e81" stroke-width="2"><path d="M218 248C230 236 254 236 264 248C254 258 230 258 218 248Z" fill="#fff"/><path d="M296 248C306 236 330 236 342 248C330 258 306 258 296 248Z" fill="#fff"/></g>
+<circle cx="241" cy="247.5" r="7" fill="#4f46e5"/><circle cx="319" cy="247.5" r="7" fill="#4f46e5"/><circle cx="241" cy="247.5" r="2.8" fill="#0f172a"/><circle cx="319" cy="247.5" r="2.8" fill="#0f172a"/>
+<path d="M280 262C278 290 270 312 266 320C272 328 288 328 294 320" fill="none" stroke="#4338ca" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M250 366C262 356 274 358 280 362C286 358 298 356 310 366C296 371 264 371 250 366Z" fill="#818cf8"/><path d="M250 366C262 388 298 388 310 366C296 371 264 371 250 366Z" fill="#6366f1"/>
+<rect x="150" y="300" width="260" height="34" fill="url(#scan)"/><path d="M150 334H410" stroke="#14b8a6" stroke-width="2"/>
+<path d="M280 128V470" stroke="#0d9488" stroke-width="1.6" stroke-dasharray="6 6" opacity=".8"/>
+<path d="M182 240L214 222M214 222L240 212M240 212L266 218M266 218L294 218M294 218L320 212M320 212L346 222M346 222L378 240M226 172L280 160M280 160L334 172M226 172L214 222M226 172L240 212M280 160L266 218M280 160L294 218M334 172L320 212M334 172L346 222M214 222L218 248M240 212L241 240M266 218L264 248M294 218L296 248M320 212L319 240M346 222L342 248M218 248L241 240M241 240L264 248M296 248L319 240M319 240L342 248M264 248L280 262M296 248L280 262M266 218L280 262M294 218L280 262M280 262L280 296M280 296L266 320M280 296L294 320M266 320L280 327M294 320L280 327M218 248L226 300M264 248L226 300M226 300L266 320M342 248L334 300M296 248L334 300M334 300L294 320M182 240L218 248M186 292L226 300M186 292L218 248M374 292L334 300M374 292L342 248M378 240L342 248M200 340L226 300M360 340L334 300M226 300L250 366M334 300L310 366M266 320L250 366M294 320L310 366M280 327L280 361M250 366L280 361M280 361L310 366M250 366L280 383M310 366L280 383M200 340L250 366M222 392L250 366M338 392L310 366M360 340L310 366M251 431L280 383M309 431L280 383M280 452L280 383M222 392L251 431M309 431L338 392M182 240L186 292M186 292L200 340M200 340L222 392M251 431L280 452M280 452L309 431M338 392L360 340M360 340L374 292M374 292L378 240" fill="none" stroke="#fff" stroke-width="1.1" opacity=".8"/>
+<g fill="#14b8a6" stroke="#fff" stroke-width="1.6"><circle cx="182" cy="240" r="3.6"/><circle cx="186" cy="292" r="3.6"/><circle cx="200" cy="340" r="3.6"/><circle cx="222" cy="392" r="3.6"/><circle cx="251" cy="431" r="3.6"/><circle cx="280" cy="452" r="3.6"/><circle cx="309" cy="431" r="3.6"/><circle cx="338" cy="392" r="3.6"/><circle cx="360" cy="340" r="3.6"/><circle cx="374" cy="292" r="3.6"/><circle cx="378" cy="240" r="3.6"/><circle cx="226" cy="172" r="3.6"/><circle cx="280" cy="160" r="3.6"/><circle cx="334" cy="172" r="3.6"/><circle cx="214" cy="222" r="3.6"/><circle cx="240" cy="212" r="3.6"/><circle cx="266" cy="218" r="3.6"/><circle cx="294" cy="218" r="3.6"/><circle cx="320" cy="212" r="3.6"/><circle cx="346" cy="222" r="3.6"/><circle cx="218" cy="248" r="3.6"/><circle cx="241" cy="240" r="3.6"/><circle cx="264" cy="248" r="3.6"/><circle cx="296" cy="248" r="3.6"/><circle cx="319" cy="240" r="3.6"/><circle cx="342" cy="248" r="3.6"/><circle cx="280" cy="262" r="3.6"/><circle cx="280" cy="296" r="3.6"/><circle cx="266" cy="320" r="3.6"/><circle cx="294" cy="320" r="3.6"/><circle cx="280" cy="327" r="3.6"/><circle cx="226" cy="300" r="3.6"/><circle cx="334" cy="300" r="3.6"/><circle cx="250" cy="366" r="3.6"/><circle cx="280" cy="361" r="3.6"/><circle cx="310" cy="366" r="3.6"/><circle cx="280" cy="383" r="3.6"/></g>
+<g fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"><path d="M150 132V104H178"/><path d="M382 104H410V132"/><path d="M150 448V476H178"/><path d="M382 476H410V448"/></g>
+<g stroke="#4f46e5" stroke-width="1.8"><path d="M218 196H342"/><path d="M218 189V203M342 189V203"/></g>
+<g filter="url(#sh)"><rect x="380" y="58" width="160" height="78" rx="16" fill="#fff"/></g>
+<circle cx="417" cy="97" r="19" fill="none" stroke="#e0e7ff" stroke-width="6"/><circle cx="417" cy="97" r="19" fill="none" stroke="url(#ring)" stroke-width="6" stroke-linecap="round" stroke-dasharray="110 120" transform="rotate(-90 417 97)"/>
+<text x="446" y="90" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#526077">Symmetry</text><text x="446" y="114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="22" font-weight="700" fill="#0f172a">92%</text>
+<g filter="url(#sh)"><rect x="22" y="404" width="176" height="72" rx="16" fill="#fff"/></g>
+<rect x="38" y="420" width="40" height="40" rx="12" fill="#eef2ff"/><ellipse cx="58" cy="440" rx="9" ry="12" fill="none" stroke="#4f46e5" stroke-width="2.4"/>
+<text x="90" y="436" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#526077">Face shape</text><text x="90" y="458" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#0f172a">Oval</text>
+<g filter="url(#sh)"><rect x="22" y="150" width="150" height="64" rx="16" fill="#fff"/></g>
+<rect x="36" y="164" width="36" height="36" rx="11" fill="#ecfeff"/><path d="M45 189l6-8 5 5 7-10" fill="none" stroke="#0d9488" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="82" y="179" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#0f172a">11</text><text x="82" y="199" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#526077">features</text>
+<g filter="url(#sh)"><rect x="392" y="470" width="146" height="40" rx="20" fill="#0f172a"/></g>
+<circle cx="414" cy="490" r="6" fill="#2dd4bf"/><text x="428" y="495" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="600" fill="#fff">Landmark map</text>
+</g>
+</svg>

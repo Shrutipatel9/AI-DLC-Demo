@@ -77,7 +77,7 @@ async function signUp(page: Page, label: string): Promise<string> {
   await expect(page).toHaveURL(/\/verify$/);
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-up code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   // US11.8: a new user lands on the questionnaire; the user menu shows who is signed in.
   await expect(page.getByTestId("user-menu-name")).toHaveText("Sam Analysis");
@@ -285,7 +285,7 @@ test("start the analysis, watch the worker advance every step, then view the rep
   await expect(page).toHaveURL(/\/verify$/);
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-in code", loginSentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-in code", loginSentAt));
   await page.getByTestId("verify-submit-button").click();
   await expect(page).toHaveURL(/\/home$/);
   await expect(page.getByTestId("home-overview")).toBeVisible();

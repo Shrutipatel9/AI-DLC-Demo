@@ -71,7 +71,7 @@ def test_send_delivers_text_and_html_with_code(smtp_stub: tuple[StubHandler, int
     assert len(handler.messages) == 1
     message = handler.messages[0]
     assert message["To"] == "maya@example.test"
-    assert message["Subject"] == "Your sign-up code"
+    assert message["Subject"] == "Your FaceIQ sign-up code"
     parts = {part.get_content_type(): part.get_payload(decode=True) for part in message.walk()}
     assert b"123456" in parts["text/plain"]
     assert b"123456" in parts["text/html"]

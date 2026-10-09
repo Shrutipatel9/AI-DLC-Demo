@@ -1,11 +1,12 @@
 "use client";
 
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { toast } from "@/components/feedback/toast";
 import { HomeOverview } from "@/components/home/home-overview";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAuth, useAuthActions } from "@/lib/auth";
 import { useGoToNextStep } from "@/lib/journey";
@@ -51,31 +52,36 @@ export function HomeView() {
 
   return (
     <AppShell>
-      <Card>
-        <h1 className="text-2xl font-bold text-heading" data-testid="home-greeting">
+      <Card className="mx-auto max-w-[720px] text-center">
+        <span
+          aria-hidden="true"
+          className="mx-auto mb-4 inline-flex size-14 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-raised"
+        >
+          <Sparkles className="size-7" />
+        </span>
+        <h1 className="text-2xl font-bold text-heading sm:text-3xl" data-testid="home-greeting">
           Hi, {user?.fullName}
         </h1>
-        <p className="mt-2 text-base text-muted" data-testid="home-status" aria-live="polite">
+        <p className="mt-2 text-base text-subheading" data-testid="home-status" aria-live="polite">
           {!loaded
             ? "Loading your account…"
             : home.phase === "loading"
               ? "Loading your overview…"
               : "Your overview isn't ready yet. Pick up where you left off."}
         </p>
-        <Button
-          className="mt-6"
-          onClick={() => void goToNextStep()}
-          data-testid="home-next-step-button"
-        >
-          Continue
-        </Button>
-        <Link
-          href="/visuals"
-          className="mt-3 inline-flex min-h-11 items-center justify-center rounded-[var(--radius)] border border-card-border bg-white px-4 text-base font-semibold text-heading hover:bg-[#eef2f5]"
-          data-testid="home-visuals-link"
-        >
-          AI Visuals
-        </Link>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Button onClick={() => void goToNextStep()} data-testid="home-next-step-button">
+            Continue
+            <ArrowRight aria-hidden="true" />
+          </Button>
+          <Link
+            href="/visuals"
+            className={buttonVariants({ variant: "secondary" })}
+            data-testid="home-visuals-link"
+          >
+            AI Visuals
+          </Link>
+        </div>
       </Card>
     </AppShell>
   );

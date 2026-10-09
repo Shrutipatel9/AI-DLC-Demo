@@ -41,7 +41,7 @@ export function PhotoThumbnail({
   }, [imageUrl]);
 
   const frame = cn(
-    "flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-[var(--radius)] border border-card-border bg-white",
+    "flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-ui border border-card-border bg-white",
     className,
   );
   if (failed) {

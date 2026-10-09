@@ -60,7 +60,7 @@ async function signUp(page: Page, label: string): Promise<string> {
   await expect(page).toHaveURL(/\/verify$/);
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-up code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Session");
   // The session tests below use the settings page: it is signed-in but not a journey step, so
@@ -79,7 +79,7 @@ async function logIn(page: Page, email: string, password: string) {
   await expect(page).toHaveURL(/\/verify$/);
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-in code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-in code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   await expect(page.getByTestId("user-menu-name")).toBeVisible();
 }
@@ -171,7 +171,7 @@ test("forgot password: code from Mailpit, reset, log in with the new password", 
   await expectAccessible(page, "reset code");
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your password reset code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ password reset code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   await expect(page).toHaveURL(/\/reset-password$/);
   await expectAccessible(page, "choose a new password");

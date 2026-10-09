@@ -55,7 +55,7 @@ test("landing, sign up, questionnaire, log out, sign in again lands on the next 
   await expectAccessible(page, "enter your code");
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-in code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-in code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   await expect(page).toHaveURL(/\/onboarding$/); // the next step is still the questionnaire
   await expect(page.getByTestId("user-menu-name")).toHaveText("Maya Journey");

@@ -43,7 +43,7 @@ export function ConfirmDialogHost() {
   const titleId = `confirm-title-${request.id}`;
   const bodyId = `confirm-body-${request.id}`;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm">
       <div
         ref={dialogRef}
         role="alertdialog"
@@ -51,13 +51,13 @@ export function ConfirmDialogHost() {
         aria-labelledby={titleId}
         aria-describedby={bodyId}
         onKeyDown={onKeyDown}
-        className="w-full max-w-[420px] rounded-[var(--radius)] border border-card-border bg-white p-6 shadow-xl"
+        className="w-full max-w-[440px] rounded-card border border-card-border bg-white p-6 shadow-[0_24px_60px_-12px_rgb(15_23_42/0.35)] sm:p-7"
         data-testid="confirm-dialog"
       >
         <h2 id={titleId} className="text-xl font-bold text-heading">
           {request.title}
         </h2>
-        <p id={bodyId} className="mt-2 text-base text-foreground">
+        <p id={bodyId} className="mt-2 text-base text-subheading">
           {request.body}
         </p>
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">

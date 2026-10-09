@@ -4,7 +4,7 @@ import { HomeView } from "@/components/app/home-view";
 import { ProtectedRoute } from "@/components/app/protected-route";
 import { STAGE } from "@/lib/journey";
 
-export const metadata: Metadata = { title: "Home · AI Facial Analysis" };
+export const metadata: Metadata = { title: "Home · FaceIQ" };
 
 export default function HomePage() {
   return (

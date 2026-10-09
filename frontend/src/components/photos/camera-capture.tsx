@@ -107,7 +107,7 @@ export function CameraCapture({
   if (phase.kind === "preview") {
     return (
       <div className="space-y-3" data-testid="camera-preview">
-        <div className="mx-auto aspect-[3/4] max-h-[55vh] overflow-hidden rounded-[var(--radius)] border border-card-border bg-black">
+        <div className="mx-auto aspect-[3/4] max-h-[55vh] overflow-hidden rounded-ui border border-card-border bg-black">
           {/* eslint-disable-next-line @next/next/no-img-element -- a local blob: preview of the captured frame */}
           <img
             src={phase.url}
@@ -139,7 +139,7 @@ export function CameraCapture({
 
   return (
     <div className="space-y-3" data-testid="camera-view">
-      <div className="relative mx-auto aspect-[3/4] max-h-[55vh] overflow-hidden rounded-[var(--radius)] border border-card-border bg-black">
+      <div className="relative mx-auto aspect-[3/4] max-h-[55vh] overflow-hidden rounded-ui border border-card-border bg-black">
         <div className="absolute inset-0 -scale-x-100">
           <video
             ref={videoRef}

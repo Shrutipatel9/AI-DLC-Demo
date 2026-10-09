@@ -75,7 +75,7 @@ test("sign up, verify, see who I am, reload keeps me, log out, log in again @che
   await expect(page).toHaveURL(/\/verify$/);
   await expect(page.getByTestId("verify-masked-email")).toContainText("e•••@example.test");
   await expectAccessible(page, "enter your code");
-  const signupCode = await latestCode(page, email, "Your sign-up code", signupSentAt);
+  const signupCode = await latestCode(page, email, "Your FaceIQ sign-up code", signupSentAt);
   await page.getByTestId("verify-code-input").fill(signupCode);
   await page.getByTestId("verify-submit-button").click();
 
@@ -111,7 +111,7 @@ test("sign up, verify, see who I am, reload keeps me, log out, log in again @che
   const loginSentAt = Date.now();
   await page.getByTestId("login-submit-button").click();
   await expect(page).toHaveURL(/\/verify$/);
-  const loginCode = await latestCode(page, email, "Your sign-in code", loginSentAt);
+  const loginCode = await latestCode(page, email, "Your FaceIQ sign-in code", loginSentAt);
   await page.getByTestId("verify-code-input").fill(loginCode);
   await page.getByTestId("verify-submit-button").click();
   await expect(page).toHaveURL(/\/onboarding$/);

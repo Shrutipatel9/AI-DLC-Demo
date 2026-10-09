@@ -6,14 +6,15 @@
 // not available yet offers a retry button (AC9.5.2); a failed retry shows an error toast and
 // the slot stays marked (AC9.5.3); after three retries the button is disabled (AC9.5.4). While
 // images are generating the screen polls and says so politely; nothing here blocks the report.
-import { ImageOff } from "lucide-react";
+import { ImageOff, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
 import { toast } from "@/components/feedback/toast";
 import { PhotoThumbnail } from "@/components/photos/photo-thumbnail";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { IconTile } from "@/components/ui/page-header";
 import { useVisuals, type ImageSlot, type SlotGroup } from "@/lib/images";
 
 import {
@@ -29,12 +30,12 @@ import {
 } from "./messages";
 
 const FRAME =
-  "flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-[var(--radius)] border border-card-border bg-white p-3 text-center";
+  "flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-ui border border-card-border bg-surface-muted/60 p-3 text-center";
 
 function AiBadge({ slotId }: { slotId: string }) {
   return (
     <span
-      className="mt-2 inline-block rounded-full bg-[#eef2f5] px-2 py-1 text-xs font-medium text-heading"
+      className="mt-2 inline-block rounded-full bg-surface-muted px-2 py-1 text-xs font-medium text-heading"
       data-testid={`visual-ai-label-${slotId}`}
     >
       {AI_LABEL}
@@ -99,7 +100,7 @@ function SlotCard({
   return (
     <li data-testid={`visual-${slot.slotId}`} data-state={busy ? "generating" : slot.status}>
       {body}
-      <p className="mt-2 text-sm font-medium text-heading">{slot.title}</p>
+      <p className="mt-2 text-sm font-semibold text-heading">{slot.title}</p>
       {slot.status === "ready" && !busy ? <AiBadge slotId={slot.slotId} /> : null}
     </li>
   );
@@ -143,11 +144,7 @@ export function VisualsScreen({ pollIntervalMs }: { pollIntervalMs?: number }) {
     body = (
       <section className="space-y-4" data-testid="visuals-none">
         <h1 className="text-2xl font-bold text-heading">Your images appear after your analysis</h1>
-        <Link
-          href="/analysis"
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-          data-testid="visuals-analysis-link"
-        >
+        <Link href="/analysis" className={buttonVariants()} data-testid="visuals-analysis-link">
           Go to your analysis
         </Link>
       </section>
@@ -165,7 +162,10 @@ export function VisualsScreen({ pollIntervalMs }: { pollIntervalMs?: number }) {
       ));
     const section = (group: SlotGroup, heading: string) => (
       <section aria-labelledby={`visuals-${group}-heading`} data-testid={`visuals-${group}`}>
-        <h2 id={`visuals-${group}-heading`} className="mb-3 text-xl font-semibold text-heading">
+        <h2
+          id={`visuals-${group}-heading`}
+          className="mb-4 border-l-4 border-accent-strong pl-3 text-xl font-bold text-heading"
+        >
           {heading}
         </h2>
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">{cards(group)}</ul>
@@ -173,16 +173,22 @@ export function VisualsScreen({ pollIntervalMs }: { pollIntervalMs?: number }) {
     );
     body = (
       <div className="space-y-8" data-testid="visuals" data-generating={images.generating}>
-        <div>
-          <h1 className="text-2xl font-bold text-heading">{VISUALS_TITLE}</h1>
-          <p className="mt-2 text-base text-muted" data-testid="visuals-intro">
-            {VISUALS_INTRO}
-          </p>
+        <div className="flex items-start gap-4">
+          <IconTile icon={Sparkles} tone="violet" className="hidden sm:inline-flex" />
+          <div>
+            <h1 className="text-2xl font-bold text-heading sm:text-[28px]">{VISUALS_TITLE}</h1>
+            <p className="mt-1.5 text-base text-subheading" data-testid="visuals-intro">
+              {VISUALS_INTRO}
+            </p>
+          </div>
         </div>
         {section("hairstyle", "Hairstyles")}
         {section("outfit", "Outfits")}
         <section aria-labelledby="visuals-aging-heading" data-testid="visuals-aging">
-          <h2 id="visuals-aging-heading" className="mb-3 text-xl font-semibold text-heading">
+          <h2
+            id="visuals-aging-heading"
+            className="mb-4 border-l-4 border-accent-strong pl-3 text-xl font-bold text-heading"
+          >
             Healthy-aging preview
           </h2>
           <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4">

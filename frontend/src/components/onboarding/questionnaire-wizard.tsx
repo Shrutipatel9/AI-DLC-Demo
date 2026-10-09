@@ -156,20 +156,25 @@ export function QuestionnaireWizard({
   return (
     <form noValidate onSubmit={(event) => void onNext(event)} data-testid="questionnaire-wizard">
       <div className="mb-6">
-        <p className="text-sm font-medium text-muted" data-testid="wizard-position">
-          Question {index + 1} of {total}
-        </p>
+        <div className="flex items-center justify-between text-sm font-semibold">
+          <p className="text-subheading" data-testid="wizard-position">
+            Question {index + 1} of {total}
+          </p>
+          <span aria-hidden="true" className="text-accent-strong">
+            {Math.round(((index + 1) / total) * 100)}%
+          </span>
+        </div>
         <div
           role="progressbar"
           aria-label={`Question ${index + 1} of ${total}`}
           aria-valuemin={1}
           aria-valuemax={total}
           aria-valuenow={index + 1}
-          className="mt-2 h-2 w-full overflow-hidden rounded-full bg-card-border"
+          className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-surface-muted"
           data-testid="wizard-progress"
         >
           <div
-            className="h-full bg-accent"
+            className="h-full rounded-full bg-brand-gradient transition-[width] duration-500"
             style={{ width: `${Math.round(((index + 1) / total) * 100)}%` }}
           />
         </div>
@@ -193,7 +198,7 @@ export function QuestionnaireWizard({
           reasonId={reasonId}
         />
       ) : null}
-      <div className="sticky bottom-0 mt-8 flex gap-3 bg-card py-3 sm:static sm:justify-between sm:py-0">
+      <div className="sticky bottom-0 mt-8 flex gap-3 border-t border-card-border bg-card py-3 sm:static sm:justify-between sm:pt-6 sm:pb-0">
         <Button
           type="button"
           variant="secondary"

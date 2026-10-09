@@ -4,19 +4,23 @@ import type { ButtonHTMLAttributes, Ref } from "react";
 
 import { cn } from "@/lib/utils";
 
-// shadcn/ui-style button. Primary uses --accent-strong for full normal-text contrast.
-const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius)] px-4 text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+// FaceIQ button. Primary text on --accent-strong keeps full normal-text contrast (6.3:1).
+export const buttonVariants = cva(
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-ui px-5 text-base font-semibold transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-[18px] [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        primary: "bg-accent-strong text-white hover:bg-[#1f6159]",
-        secondary: "border border-card-border bg-white text-heading hover:bg-[#eef2f5]",
-        link: "min-h-0 px-0 text-accent-strong underline underline-offset-4 hover:text-[#1f6159]",
+        primary:
+          "bg-accent-strong text-white shadow-button hover:bg-accent-deep hover:shadow-button-hover active:translate-y-px",
+        secondary:
+          "border border-card-border bg-white text-heading shadow-sm hover:border-accent-soft-border hover:bg-accent-soft",
+        ghost: "text-heading hover:bg-surface-muted",
+        link: "min-h-0 px-0 text-accent-strong underline underline-offset-4 hover:text-accent-deep",
       },
+      size: { md: "", lg: "min-h-12 px-6 text-[17px]" },
       width: { auto: "", full: "w-full" },
     },
-    defaultVariants: { variant: "primary", width: "auto" },
+    defaultVariants: { variant: "primary", size: "md", width: "auto" },
   },
 );
 
@@ -26,7 +30,16 @@ export interface ButtonProps
   ref?: Ref<HTMLButtonElement>;
 }
 
-export function Button({ className, variant, width, asChild = false, ...props }: ButtonProps) {
+export function Button({
+  className,
+  variant,
+  size,
+  width,
+  asChild = false,
+  ...props
+}: ButtonProps) {
   const Component = asChild ? Slot : "button";
-  return <Component className={cn(buttonVariants({ variant, width }), className)} {...props} />;
+  return (
+    <Component className={cn(buttonVariants({ variant, size, width }), className)} {...props} />
+  );
 }

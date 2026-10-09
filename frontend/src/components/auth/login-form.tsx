@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleAlert } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -57,11 +58,11 @@ export function LogInForm() {
       {formError ? (
         <p
           role="alert"
-          className="rounded-[var(--radius)] border border-danger p-3 text-base text-danger"
+          className="flex items-start gap-2 rounded-ui border border-danger/30 bg-danger-soft p-3 text-[15px] text-danger"
           data-testid="login-form-error"
         >
-          <span aria-hidden="true">⚠ </span>
-          {formError}
+          <CircleAlert className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+          <span>{formError}</span>
         </p>
       ) : null}
       <FormField id="email" label="Email" error={errors.email?.message}>

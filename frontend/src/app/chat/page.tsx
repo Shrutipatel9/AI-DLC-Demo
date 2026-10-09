@@ -5,7 +5,7 @@ import { ProtectedRoute } from "@/components/app/protected-route";
 import { ChatScreen } from "@/components/chat/chat-screen";
 import { STAGE } from "@/lib/journey";
 
-export const metadata: Metadata = { title: "Chat · AI Facial Analysis" };
+export const metadata: Metadata = { title: "Chat · FaceIQ" };
 
 // The Beauty Assistant (US10.1-US10.3). Its own route, so Next.js code-splits it.
 export default function ChatPage() {

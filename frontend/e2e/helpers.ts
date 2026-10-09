@@ -77,7 +77,7 @@ export async function signUpThroughTheUi(page: Page, label: string, fullName: st
   await expect(page).toHaveURL(/\/verify$/);
   await page
     .getByTestId("verify-code-input")
-    .fill(await latestCode(page, email, "Your sign-up code", sentAt));
+    .fill(await latestCode(page, email, "Your FaceIQ sign-up code", sentAt));
   await page.getByTestId("verify-submit-button").click();
   // Signed in once the app shell shows the user menu; the refresh cookie exists from then on.
   await expect(page.getByTestId("user-menu-name")).toHaveText(fullName);

@@ -107,7 +107,7 @@ class _Writer:
         self.pdf.set_margins(MARGIN, 18, MARGIN)
         self.pdf.set_auto_page_break(auto=True, margin=18)
         self.pdf.set_title(template.PDF_TITLE)
-        self.pdf.set_creator("AI Facial Analysis Platform")
+        self.pdf.set_creator("FaceIQ")
         self.pages: dict[str, int] = {}
 
     def section(self, name: str, subtitle: str = "") -> None:

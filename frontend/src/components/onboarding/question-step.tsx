@@ -10,7 +10,7 @@ import { describedBy, FieldError } from "@/components/ui/form-field";
 import { followUpVisible, type DraftAnswer, type Question } from "@/lib/onboarding";
 
 const FIELD_CLASS =
-  "block w-full rounded-[var(--radius)] border border-input-border bg-white px-3 py-2 text-base text-foreground placeholder:text-muted aria-[invalid=true]:border-danger";
+  "block w-full rounded-ui border border-input-border bg-white px-3 py-2 text-base text-foreground placeholder:text-muted aria-[invalid=true]:border-danger";
 const LONG_TEXT = 500;
 
 interface QuestionStepProps {
@@ -36,7 +36,7 @@ function Choice({
   testId: string;
 }) {
   return (
-    <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-[var(--radius)] border border-card-border px-3 text-base text-heading has-[:checked]:border-accent-strong">
+    <label className="flex min-h-12 cursor-pointer items-center gap-3 rounded-ui border border-card-border bg-white px-4 text-base font-medium text-heading transition-colors hover:border-accent-soft-border hover:bg-accent-soft/50 has-[:checked]:border-accent-strong has-[:checked]:bg-accent-soft has-[:checked]:ring-1 has-[:checked]:ring-accent-strong">
       <input
         type={type}
         name={name}
@@ -211,7 +211,7 @@ export const QuestionStep = forwardRef<HTMLHeadingElement, QuestionStepProps>(fu
           id={`${question.id}-legend`}
           ref={legendRef}
           tabIndex={-1}
-          className="text-xl font-semibold text-heading outline-none"
+          className="text-xl font-bold text-heading outline-none sm:text-[22px]"
           data-testid="question-legend"
         >
           {question.type === "text" ? (

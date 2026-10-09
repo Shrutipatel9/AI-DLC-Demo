@@ -90,7 +90,7 @@ export function RuleIllustration({ ruleId }: { ruleId: string }) {
   const Icon = entry.icon;
   return (
     <span
-      className="relative inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius)] border border-card-border bg-white text-heading"
+      className="relative inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-ui border border-card-border bg-white text-heading"
       aria-hidden="true"
       data-testid={`photo-rule-illustration-${ruleId}`}
     >

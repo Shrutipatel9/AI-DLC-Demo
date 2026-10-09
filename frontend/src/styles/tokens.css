@@ -1,22 +1,45 @@
 /*
- * Design tokens (refined-mockups/design-system-mapping.md, light theme only).
- * One file to rebrand (NFR-011). Corrected contrast values are used where the report
- * design values fail WCAG 2.1 AA.
+ * FaceIQ design tokens (light theme). One file to rebrand (NFR-011).
+ * Every text/background pair below meets WCAG 2.1 AA (4.5:1 for body text, 3:1 for
+ * large text, input borders and focus rings).
  */
 :root {
-  --ink-heading: #1a2230;
-  --ink-subheading: #5a7690; /* corrected from #9FB4C7 (2.1:1) */
-  --ink-body: #2a2d31;
-  --ink-muted: #5f6673; /* corrected for the grey page background */
-  --accent: #2e8b7d; /* fills, borders, large numerals */
-  --accent-strong: #25756a; /* accent text under 24 px and button base (5.5:1) */
-  --surface-page: #f5f6f7;
+  /* Ink */
+  --ink-heading: #0f172a; /* slate-900 */
+  --ink-subheading: #475569; /* slate-600, 7.6:1 on white */
+  --ink-body: #1e293b; /* slate-800 */
+  --ink-muted: #526077; /* 5.9:1 on the page background */
+
+  /* Brand: indigo-violet, with a teal companion used only in gradients and charts */
+  --accent: #6366f1; /* fills, borders, large numerals, focus ring */
+  --accent-strong: #4f46e5; /* buttons and accent text (6.3:1 with white) */
+  --accent-deep: #4338ca; /* hover */
+  --accent-soft: #eef2ff; /* tinted backgrounds */
+  --accent-soft-border: #c7d2fe;
+  --brand-violet: #8b5cf6;
+  --brand-teal: #14b8a6;
+  --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #0d9488 100%);
+  --brand-gradient-soft: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #ecfeff 100%);
+
+  /* Surfaces */
+  --surface-page: #f8fafc;
   --surface-card: #ffffff;
-  --border-card: #e5e7eb;
-  --border-input: #8a919c; /* corrected for 3:1 input borders */
+  --surface-muted: #f1f5f9;
+  --surface-ink: #0b1020; /* dark brand panels */
+  --border-card: #e2e8f0;
+  --border-input: #8592a6; /* 3:1 on white */
+
+  /* Status */
   --danger: #b42318;
-  --success: #1e7b4f;
+  --danger-soft: #fef3f2;
+  --success: #067647;
+  --success-soft: #ecfdf3;
   --warning-text: #8a5a00;
-  --warning-surface: #fff4db;
+  --warning-surface: #fff7e0;
+
+  /* Shape and depth */
   --radius: 12px;
+  --radius-large: 18px;
+  --elevation-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.05);
+  --elevation-raised: 0 12px 40px -12px rgb(79 70 229 / 0.28);
 }

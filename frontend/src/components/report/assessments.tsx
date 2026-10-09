@@ -18,7 +18,7 @@ export const ASSESSMENT_SECTIONS = [
 
 function Heading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <h3 id={`section-${id}`} tabIndex={-1} className="text-xl font-semibold text-heading">
+    <h3 id={`section-${id}`} tabIndex={-1} className="text-xl font-bold text-heading">
       {children}
     </h3>
   );
@@ -33,9 +33,12 @@ function Bar({ value, label }: { value: number; label: string }) {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={value}
-      className="h-3 w-full overflow-hidden rounded-full bg-[#e3e9ee]"
+      className="h-3 w-full overflow-hidden rounded-full bg-surface-muted"
     >
-      <div className="h-full bg-accent-strong" style={{ width: `${Math.min(100, value)}%` }} />
+      <div
+        className="h-full rounded-full bg-brand-gradient"
+        style={{ width: `${Math.min(100, value)}%` }}
+      />
     </div>
   );
 }
@@ -44,7 +47,7 @@ function Section({ id, children }: { id: string; children: ReactNode }) {
   return (
     <section
       aria-labelledby={`section-${id}`}
-      className="space-y-3"
+      className="space-y-3 rounded-card border border-card-border bg-white p-5 shadow-card sm:p-6"
       data-testid={`assessment-${id}`}
     >
       {children}
@@ -55,7 +58,7 @@ function Section({ id, children }: { id: string; children: ReactNode }) {
 export function Assessments({ assessments }: { assessments: ReportAssessments }) {
   const { symmetry, facialThirds, dimorphism, prototypicality, faceShape } = assessments;
   return (
-    <div className="space-y-8">
+    <div className="grid gap-5">
       {symmetry ? (
         <Section id="symmetry">
           <Heading id="symmetry">Symmetry</Heading>
@@ -69,10 +72,10 @@ export function Assessments({ assessments }: { assessments: ReportAssessments })
             </caption>
             <thead>
               <tr>
-                <th scope="col" className="py-1 pr-4 font-semibold">
+                <th scope="col" className="rounded-l-lg bg-surface-muted px-3 py-2 font-semibold">
                   Region
                 </th>
-                <th scope="col" className="py-1 font-semibold">
+                <th scope="col" className="rounded-r-lg bg-surface-muted px-3 py-2 font-semibold">
                   Score
                 </th>
               </tr>
@@ -80,10 +83,10 @@ export function Assessments({ assessments }: { assessments: ReportAssessments })
             <tbody>
               {symmetry.regionalBalance.map((region) => (
                 <tr key={region.region} className="border-t border-card-border">
-                  <th scope="row" className="py-1 pr-4 font-normal">
+                  <th scope="row" className="px-3 py-2 font-normal">
                     {titleCase(region.region)}
                   </th>
-                  <td className="py-1">{region.score}</td>
+                  <td className="px-3 py-2 font-semibold text-heading">{region.score}</td>
                 </tr>
               ))}
             </tbody>

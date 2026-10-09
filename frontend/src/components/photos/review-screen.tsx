@@ -63,7 +63,7 @@ export function ReviewScreen({
             <li
               key={angle}
               className={cn(
-                "flex min-w-0 flex-col gap-2 rounded-[var(--radius)] border p-2",
+                "flex min-w-0 flex-col gap-2 rounded-ui border p-2",
                 isFlagged ? "border-2 border-danger bg-white" : "border-card-border",
               )}
               data-testid={`review-photo-${angle}`}
@@ -73,7 +73,7 @@ export function ReviewScreen({
               {entry.imageUrl ? (
                 <PhotoThumbnail imageUrl={entry.imageUrl} alt={`Your ${label(angle)} photo`} />
               ) : (
-                <div className="flex aspect-[4/5] items-center justify-center rounded-[var(--radius)] border border-dashed border-card-border text-sm text-muted">
+                <div className="flex aspect-[4/5] items-center justify-center rounded-ui border border-dashed border-card-border text-sm text-muted">
                   No photo
                 </div>
               )}

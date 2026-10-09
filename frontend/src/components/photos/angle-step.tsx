@@ -3,7 +3,7 @@
 // One capture step per configured angle (US5.2, US5.3, US5.5, US5.10). File upload is always
 // offered (AC5.3.3); the camera is offered when the browser has one. While the server checks a
 // photo the step shows a checking state; the result is announced by the flow's live region.
-import { Camera, LoaderCircle, TriangleAlert, Upload } from "lucide-react";
+import { Camera, Lightbulb, LoaderCircle, TriangleAlert, Upload } from "lucide-react";
 import { useId, useRef, useState, type ChangeEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -87,29 +87,33 @@ export function AngleStep({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h1
           id={headingId}
-          className="text-2xl font-bold text-heading"
+          className="text-2xl font-bold text-heading sm:text-[28px]"
           data-testid="photo-step-title"
         >
           Photo {position} of {total}: {angle.label}
         </h1>
-        <p className="text-sm font-medium text-muted" data-testid="photo-progress">
+        <p
+          className="rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-deep"
+          data-testid="photo-progress"
+        >
           {progressText(photoSet)} photos done
         </p>
       </div>
 
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-4 rounded-ui bg-brand-gradient-soft p-4">
         <AngleIllustration
           direction={angle.illustration}
           className="h-24 w-20 shrink-0"
           title={`Example: ${angle.label}`}
         />
-        <p className="text-base text-foreground" data-testid="photo-instruction">
+        <p className="text-base font-medium text-heading" data-testid="photo-instruction">
           {angle.instruction}
         </p>
       </div>
 
-      <details className="rounded-[var(--radius)] border border-card-border bg-white p-4" open>
-        <summary className="cursor-pointer text-base font-semibold text-heading">
+      <details className="rounded-ui border border-card-border bg-white p-4" open>
+        <summary className="flex cursor-pointer items-center gap-2 text-base font-semibold text-heading">
+          <Lightbulb className="size-5 text-[#92590a]" aria-hidden="true" />
           Tips for a good photo
         </summary>
         <ul
@@ -134,7 +138,10 @@ export function AngleStep({
       ) : null}
 
       {checking ? (
-        <p className="flex items-center gap-2 text-base text-heading" data-testid="photo-checking">
+        <p
+          className="flex items-center gap-2 rounded-ui bg-accent-soft p-3 text-base font-medium text-accent-deep"
+          data-testid="photo-checking"
+        >
           <LoaderCircle className="h-5 w-5 animate-spin" aria-hidden="true" />
           Checking your photo…
         </p>
@@ -142,7 +149,7 @@ export function AngleStep({
 
       {!checking && (reasons.length > 0 || ownRejection?.message || localProblem) ? (
         <div
-          className="space-y-2 rounded-[var(--radius)] border border-danger bg-white p-4"
+          className="space-y-2 rounded-ui border border-danger/30 bg-danger-soft p-4"
           data-testid="photo-reasons"
         >
           <p className="flex items-center gap-2 font-semibold text-heading">

@@ -5,10 +5,11 @@
 // section and puts focus on that heading, AC8.3.1), the Facial Assessments, the 11 features in
 // the report's order, the three recommendation tiers and the limitations. "Download PDF" is
 // always one click away (US8.5).
+import { ChevronRight, FileText, ListOrdered } from "lucide-react";
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useReport, type Report } from "@/lib/report";
 
@@ -43,19 +44,28 @@ function Toc({ report }: { report: Report }) {
     { id: "recommendations", title: RECOMMENDATIONS_HEADING },
   ];
   return (
-    <nav aria-labelledby="report-toc-heading" data-testid="report-toc">
-      <h2 id="report-toc-heading" className="text-xl font-semibold text-heading">
+    <nav
+      aria-labelledby="report-toc-heading"
+      className="rounded-card border border-card-border bg-white p-5"
+      data-testid="report-toc"
+    >
+      <h2
+        id="report-toc-heading"
+        className="flex items-center gap-2 text-xl font-bold text-heading"
+      >
+        <ListOrdered className="size-5 text-accent-strong" aria-hidden="true" />
         {TOC_HEADING}
       </h2>
-      <ol className="mt-2 grid list-none gap-1 sm:grid-cols-2 lg:grid-cols-3">
+      <ol className="mt-3 grid list-none gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {entries.map((entry) => (
           <li key={entry.id}>
             <a
               href={`#section-${entry.id}`}
               onClick={(event) => goToSection(event, entry.id)}
-              className="inline-flex min-h-11 items-center text-base text-accent-strong underline"
+              className="flex min-h-11 items-center gap-2 rounded-ui px-3 text-[15px] font-medium text-heading transition-colors hover:bg-accent-soft hover:text-accent-deep"
               data-testid={`toc-${entry.id}`}
             >
+              <ChevronRight className="size-4 shrink-0 text-accent-strong" aria-hidden="true" />
               {entry.title}
             </a>
           </li>
@@ -86,7 +96,7 @@ function Heading2({ id, children }: { id?: string; children: ReactNode }) {
     <h2
       id={id ? `section-${id}` : undefined}
       tabIndex={id ? -1 : undefined}
-      className="text-2xl font-bold text-heading"
+      className="border-l-4 border-accent-strong pl-3 text-2xl font-bold text-heading"
     >
       {children}
     </h2>
@@ -98,23 +108,43 @@ export function ReportContent({ report }: { report: Report }) {
   const understanding = sections.understandingYourResults;
   return (
     <div className="space-y-10" data-testid="report">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-bold text-heading">{REPORT_TITLE}</h1>
-        <p className="text-base text-heading" data-testid="report-introduction">
-          {sections.introduction}
-        </p>
-        <DownloadPdfButton />
+      <header className="relative overflow-hidden rounded-[28px] border border-white bg-brand-gradient-soft px-5 py-8 shadow-card sm:px-10 sm:py-12">
+        <div className="bg-dot-grid absolute inset-0 opacity-60" aria-hidden="true" />
+        <div className="relative space-y-4">
+          <p className="inline-flex items-center gap-2 rounded-full border border-accent-soft-border bg-white/80 px-3 py-1 text-sm font-semibold text-accent-deep">
+            <FileText className="size-4" aria-hidden="true" />
+            FaceIQ report
+          </p>
+          <h1 className="text-3xl font-extrabold text-heading sm:text-4xl">{REPORT_TITLE}</h1>
+          <p className="max-w-2xl text-base text-heading" data-testid="report-introduction">
+            {sections.introduction}
+          </p>
+          <DownloadPdfButton />
+        </div>
       </header>
 
-      <section aria-labelledby="report-preamble-heading" data-testid="report-preamble">
-        <h2 id="report-preamble-heading" className="text-2xl font-bold text-heading">
+      <section
+        aria-labelledby="report-preamble-heading"
+        className="rounded-card border border-card-border bg-white p-5 shadow-card sm:p-6"
+        data-testid="report-preamble"
+      >
+        <h2
+          id="report-preamble-heading"
+          className="border-l-4 border-accent-strong pl-3 text-2xl font-bold text-heading"
+        >
           Understanding Your Results
         </h2>
-        <p className="mt-2 text-base text-muted">{understanding.intro}</p>
-        <ol className="mt-4 space-y-3">
+        <p className="mt-2 text-base text-subheading">{understanding.intro}</p>
+        <ol className="mt-5 grid gap-3 sm:grid-cols-2">
           {understanding.principles.map((principle, index) => (
-            <li key={principle.title} className="flex gap-4">
-              <span className="text-2xl font-bold text-accent-strong" aria-hidden="true">
+            <li
+              key={principle.title}
+              className="flex gap-4 rounded-ui border border-card-border bg-surface-muted/50 p-4"
+            >
+              <span
+                className="font-display text-2xl font-extrabold text-brand-gradient"
+                aria-hidden="true"
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>
@@ -129,7 +159,10 @@ export function ReportContent({ report }: { report: Report }) {
       <Toc report={report} />
 
       <section aria-labelledby="report-assessments-heading" className="space-y-6">
-        <h2 id="report-assessments-heading" className="text-2xl font-bold text-heading">
+        <h2
+          id="report-assessments-heading"
+          className="border-l-4 border-accent-strong pl-3 text-2xl font-bold text-heading"
+        >
           {ASSESSMENTS_HEADING}
         </h2>
         <Assessments assessments={report.assessments} />
@@ -146,8 +179,14 @@ export function ReportContent({ report }: { report: Report }) {
         <Recommendations data={report.recommendations} />
       </section>
 
-      <section aria-labelledby="report-limitations-heading" className="space-y-2">
-        <h2 id="report-limitations-heading" className="text-2xl font-bold text-heading">
+      <section
+        aria-labelledby="report-limitations-heading"
+        className="space-y-3 rounded-card bg-surface-muted p-5 sm:p-6"
+      >
+        <h2
+          id="report-limitations-heading"
+          className="border-l-4 border-accent-strong pl-3 text-2xl font-bold text-heading"
+        >
           {LIMITATIONS_HEADING}
         </h2>
         <p className="text-base" data-testid="report-limitations">
@@ -185,11 +224,7 @@ export function ReportScreen() {
       <section className="space-y-4" data-testid="report-none">
         <h1 className="text-2xl font-bold text-heading">{NO_REPORT_TITLE}</h1>
         <p className="text-base text-muted">{NO_REPORT_TEXT}</p>
-        <Link
-          href="/analysis"
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-          data-testid="report-analysis-link"
-        >
+        <Link href="/analysis" className={buttonVariants()} data-testid="report-analysis-link">
           Go to your analysis
         </Link>
       </section>
@@ -200,7 +235,7 @@ export function ReportScreen() {
 
   return (
     <div className="mx-auto max-w-[900px]">
-      <Card className="p-4 sm:p-8">{body}</Card>
+      {phase === "ready" && data !== null ? body : <Card className="p-4 sm:p-8">{body}</Card>}
     </div>
   );
 }

@@ -8,13 +8,14 @@
 // be charged twice and can safely leave (AC6.5.3). The analysis never starts by itself: only
 // the "Start Analysis" click calls the server (US7.1, FR-015). A 409 about the photos shows its
 // message and sends the user to the photo screen (AC7.1.2).
+import { CircleCheck, LoaderCircle, ScanFace } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { analysisErrorMessage, needsPhotos } from "@/components/analysis/messages";
 import { toast } from "@/components/feedback/toast";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { isApiError } from "@/lib/api/errors";
 import { startAnalysis } from "@/lib/analysis";
@@ -82,7 +83,10 @@ export function PaymentConfirmation({
 
   return (
     <div className="mx-auto max-w-[720px]">
-      <p className="mb-3 text-sm font-medium text-muted" data-testid="payment-step-label">
+      <p
+        className="mb-3 inline-flex rounded-full border border-accent-soft-border bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-deep"
+        data-testid="payment-step-label"
+      >
         {PAYMENT_STEP_LABEL}
       </p>
       <Card className="p-4 sm:p-8">
@@ -95,45 +99,62 @@ export function PaymentConfirmation({
             <p className="text-base text-foreground">
               No payment has been started for your report yet.
             </p>
-            <Link
-              href="/payment"
-              className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-              data-testid="payment-back-link"
-            >
+            <Link href="/payment" className={buttonVariants()} data-testid="payment-back-link">
               Go to payment
             </Link>
           </section>
         ) : (
-          <section className="space-y-5" data-testid="payment-confirmation" data-state={phase}>
+          <section
+            className="space-y-5 text-center"
+            data-testid="payment-confirmation"
+            data-state={phase}
+          >
+            <span
+              aria-hidden="true"
+              className={`mx-auto inline-flex size-16 items-center justify-center rounded-full ${
+                paid ? "bg-success-soft text-success" : "bg-accent-soft text-accent-strong"
+              }`}
+            >
+              {paid ? (
+                <CircleCheck className="size-8" />
+              ) : (
+                <LoaderCircle className="size-8 animate-spin" />
+              )}
+            </span>
             <div>
               <h1
-                className="text-2xl font-bold text-heading"
+                className="text-2xl font-bold text-heading sm:text-[28px]"
                 data-testid="payment-confirmation-title"
               >
                 {title}
               </h1>
               {message ? (
-                <p className="mt-2 text-base text-muted" data-testid="payment-confirmation-message">
+                <p
+                  className="mt-2 text-base text-subheading"
+                  data-testid="payment-confirmation-message"
+                >
                   {message}
                 </p>
               ) : null}
             </div>
             {waitedTooLong && !paid ? (
               <p
-                className="rounded-[var(--radius)] border border-card-border bg-white p-3 text-base text-heading"
+                className="rounded-ui border border-[#fedf89] bg-[var(--warning-surface)] p-3 text-base text-heading"
                 data-testid="payment-still-confirming"
               >
                 {STILL_CONFIRMING}
               </p>
             ) : null}
-            <p className="text-base text-heading">{START_ANALYSIS_NOTE}</p>
-            <div className="flex flex-wrap items-center gap-3">
+            <p className="mx-auto max-w-md text-base text-subheading">{START_ANALYSIS_NOTE}</p>
+            <div className="flex flex-col items-center gap-3">
               <Button
                 onClick={onStart}
                 disabled={!paid || starting}
                 aria-describedby={paid ? undefined : reasonId}
+                size="lg"
                 data-testid="payment-start-analysis-button"
               >
+                <ScanFace aria-hidden="true" />
                 Start Analysis
               </Button>
               {paid ? null : (

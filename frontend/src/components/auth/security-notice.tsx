@@ -24,7 +24,7 @@ export function SecurityNotice() {
   return (
     <p
       role="status"
-      className="mb-5 rounded-[var(--radius)] border border-card-border bg-[#eef2f5] p-3 text-base text-heading"
+      className="mb-5 rounded-ui border border-card-border bg-surface-muted p-3 text-base text-heading"
       data-testid="security-notice"
     >
       {message}

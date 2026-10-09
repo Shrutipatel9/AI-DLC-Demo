@@ -7,11 +7,21 @@
 // ready it offers "View my report" (Home Overview until the report screens exist, AC7.2.4).
 // After a failed run it explains in plain language and offers the one free re-run; after a
 // second failure it points to support (US7.11).
+import {
+  CircleCheck,
+  CircleDashed,
+  CircleX,
+  FileText,
+  LoaderCircle,
+  ScanFace,
+  Sparkles,
+  TriangleAlert,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { toast } from "@/components/feedback/toast";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAnalysisProgress, type AnalysisRun } from "@/lib/analysis";
 
@@ -90,11 +100,7 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
         <p className="text-base text-muted">
           Your analysis starts only when you click Start Analysis after paying.
         </p>
-        <Link
-          href="/payment"
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-          data-testid="analysis-payment-link"
-        >
+        <Link href="/payment" className={buttonVariants()} data-testid="analysis-payment-link">
           Go to payment
         </Link>
       </section>
@@ -108,29 +114,61 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
           : "Analysing your photos";
     body = (
       <section className="space-y-6" data-testid="analysis-progress" data-status={run.status}>
-        <div>
-          <h1 className="text-2xl font-bold text-heading" data-testid="analysis-title">
-            {title}
-          </h1>
-          {run.status === "running" ? (
-            <p className="mt-2 text-base text-muted" data-testid="analysis-leave-note">
-              {leaveNote(run.expectedWaitMinutes)}
-            </p>
-          ) : null}
+        <div className="flex items-start gap-4">
+          <span
+            aria-hidden="true"
+            className={`inline-flex size-14 shrink-0 items-center justify-center rounded-2xl ${
+              run.status === "completed"
+                ? "bg-success-soft text-success"
+                : run.status === "failed"
+                  ? "bg-danger-soft text-danger"
+                  : "bg-brand-gradient text-white shadow-raised"
+            }`}
+          >
+            {run.status === "completed" ? (
+              <CircleCheck className="size-7" />
+            ) : run.status === "failed" ? (
+              <TriangleAlert className="size-7" />
+            ) : (
+              <ScanFace className="size-7 animate-pulse" />
+            )}
+          </span>
+          <div>
+            <h1
+              className="text-2xl font-bold text-heading sm:text-[28px]"
+              data-testid="analysis-title"
+            >
+              {title}
+            </h1>
+            {run.status === "running" ? (
+              <p className="mt-2 text-base text-muted" data-testid="analysis-leave-note">
+                {leaveNote(run.expectedWaitMinutes)}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <ol className="space-y-3" aria-label="Analysis steps">
           {run.steps.map((step) => (
             <li
               key={step.key}
-              className="flex items-baseline justify-between gap-4 rounded-[var(--radius)] border border-card-border bg-white p-3"
+              className={`flex items-center justify-between gap-4 rounded-ui border p-4 transition-colors ${
+                step.state === "current"
+                  ? "border-accent-soft-border bg-accent-soft"
+                  : step.state === "failed"
+                    ? "border-danger/30 bg-danger-soft"
+                    : "border-card-border bg-white"
+              }`}
               data-testid={`analysis-step-${step.key}`}
               data-state={step.state}
               aria-current={step.state === "current" ? "step" : undefined}
             >
-              <span className="text-base font-medium text-heading">{stepLabel(step.key)}</span>
+              <span className="flex items-center gap-3 text-base font-semibold text-heading">
+                <StepIcon state={step.state} />
+                {stepLabel(step.key)}
+              </span>
               <span
-                className="text-sm text-heading"
+                className="text-sm font-medium text-subheading"
                 data-testid={`analysis-step-${step.key}-state`}
               >
                 {STATE_TEXT[step.state]}
@@ -143,17 +181,19 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
           <div className="flex flex-wrap gap-3">
             <Link
               href={REPORT_HREF}
-              className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
+              className={buttonVariants()}
               data-testid="analysis-view-report"
             >
+              <FileText aria-hidden="true" />
               View my report
             </Link>
             {/* Until U8 adds header navigation, the AI Visuals are reached from here and Home. */}
             <Link
               href="/visuals"
-              className="inline-flex min-h-11 items-center rounded-[var(--radius)] border border-card-border bg-white px-4 text-base font-semibold text-heading hover:bg-[#eef2f5]"
+              className={buttonVariants({ variant: "secondary" })}
               data-testid="analysis-visuals-link"
             >
+              <Sparkles aria-hidden="true" />
               See my AI Visuals
             </Link>
           </div>
@@ -189,7 +229,10 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
 
   return (
     <div className="mx-auto max-w-[720px]">
-      <p className="mb-3 text-sm font-medium text-muted" data-testid="analysis-step-label">
+      <p
+        className="mb-3 inline-flex rounded-full border border-accent-soft-border bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-deep"
+        data-testid="analysis-step-label"
+      >
         {ANALYSIS_STEP_LABEL}
       </p>
       <Card className="p-4 sm:p-8">
@@ -198,4 +241,23 @@ export function AnalysisProgress({ pollIntervalMs }: { pollIntervalMs?: number }
       </Card>
     </div>
   );
+}
+
+/** The leading icon for one analysis step. */
+function StepIcon({ state }: { state: string }) {
+  if (state === "done") {
+    return <CircleCheck className="size-5 shrink-0 text-success" aria-hidden="true" />;
+  }
+  if (state === "current") {
+    return (
+      <LoaderCircle
+        className="size-5 shrink-0 animate-spin text-accent-strong"
+        aria-hidden="true"
+      />
+    );
+  }
+  if (state === "failed") {
+    return <CircleX className="size-5 shrink-0 text-danger" aria-hidden="true" />;
+  }
+  return <CircleDashed className="size-5 shrink-0 text-muted" aria-hidden="true" />;
 }

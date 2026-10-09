@@ -27924,3 +27924,240 @@
 **Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
 
 ---
+
+## Human Turn
+**Timestamp**: 2026-10-09T04:32:39Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T04:46:13Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T04:47:46Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T04:48:46Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T05:07:35Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T05:37:21Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T05:38:42Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T06:12:43Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T06:28:44Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T06:35:44Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T06:40:14Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T06:43:34Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T08:28:57Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T11:16:56Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:24:43Z
+**Event**: SENSOR_FIRED
+**Fire id**: 1328bf39
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:24:44Z
+**Event**: SENSOR_PASSED
+**Fire id**: 1328bf39
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+**Duration ms**: 338
+**Note**: tool-unavailable
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:24:52Z
+**Event**: SENSOR_FIRED
+**Fire id**: e6f58b93
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:24:53Z
+**Event**: SENSOR_PASSED
+**Fire id**: e6f58b93
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+**Duration ms**: 185
+**Note**: tool-unavailable
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:24:59Z
+**Event**: SENSOR_FIRED
+**Fire id**: 8963220b
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:24:59Z
+**Event**: SENSOR_PASSED
+**Fire id**: 8963220b
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/user-menu.tsx
+**Duration ms**: 148
+**Note**: tool-unavailable
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:26:21Z
+**Event**: SENSOR_FIRED
+**Fire id**: d2f92994
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/auth/auth-shell.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:26:22Z
+**Event**: SENSOR_PASSED
+**Fire id**: d2f92994
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/auth/auth-shell.tsx
+**Duration ms**: 322
+**Note**: tool-unavailable
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:27:45Z
+**Event**: SENSOR_FIRED
+**Fire id**: 0b0bfe9f
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/landing/landing-page.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:27:45Z
+**Event**: SENSOR_PASSED
+**Fire id**: 0b0bfe9f
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/landing/landing-page.tsx
+**Duration ms**: 134
+**Note**: tool-unavailable
+
+---
+
+## Sensor Fired
+**Timestamp**: 2026-10-09T11:28:01Z
+**Event**: SENSOR_FIRED
+**Fire id**: a3b47e49
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/app-shell.tsx
+
+---
+
+## Sensor Passed
+**Timestamp**: 2026-10-09T11:28:02Z
+**Event**: SENSOR_PASSED
+**Fire id**: a3b47e49
+**Sensor ID**: type-check
+**Stage slug**: build-and-test
+**Output path**: frontend/src/components/app/app-shell.tsx
+**Duration ms**: 216
+**Note**: tool-unavailable
+
+---
+
+## Human Turn
+**Timestamp**: 2026-10-09T11:34:49Z
+**Event**: HUMAN_TURN
+**Session**: 8a2b95f1-2f1a-4d2a-9aa4-63a911f68eb6
+
+---

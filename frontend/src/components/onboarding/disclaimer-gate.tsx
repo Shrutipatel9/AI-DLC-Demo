@@ -22,7 +22,7 @@ export function DisclaimerGate({
 }) {
   return (
     <div className="mt-6 border-t border-card-border pt-6" data-testid="disclaimer-gate">
-      <label className="flex items-start gap-3 text-base text-heading">
+      <label className="flex cursor-pointer items-start gap-3 rounded-ui border border-[#fedf89] bg-[var(--warning-surface)] p-4 text-base text-heading">
         <input
           type="checkbox"
           className="mt-1 size-5 shrink-0 accent-[var(--accent-strong)]"
@@ -52,7 +52,7 @@ export function SupportPanel({
   return (
     <section
       aria-labelledby={headingId}
-      className="rounded-[var(--radius)] border border-card-border bg-white p-6"
+      className="rounded-ui border border-card-border bg-white p-6"
       data-testid="support-panel"
     >
       <h2

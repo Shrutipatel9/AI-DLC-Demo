@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 import { toast } from "@/components/feedback/toast";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { isApiError } from "@/lib/api/errors";
 import {
@@ -166,11 +166,7 @@ export function PhotoFlow() {
       <div className="space-y-4" data-testid="photos-not-ready">
         <h1 className="text-2xl font-bold text-heading">Finish your questionnaire first</h1>
         <p className="text-base text-foreground">The photo step comes after the questionnaire.</p>
-        <Link
-          href="/onboarding"
-          className="inline-flex min-h-11 items-center rounded-[var(--radius)] bg-accent-strong px-4 text-base font-semibold text-white hover:bg-[#1f6159]"
-          data-testid="photos-onboarding-link"
-        >
+        <Link href="/onboarding" className={buttonVariants()} data-testid="photos-onboarding-link">
           Go to the questionnaire
         </Link>
       </div>
@@ -240,7 +236,10 @@ export function PhotoFlow() {
 
   return (
     <div className="mx-auto max-w-[720px]">
-      <p className="mb-3 text-sm font-medium text-muted" data-testid="photos-step-label">
+      <p
+        className="mb-3 inline-flex rounded-full border border-accent-soft-border bg-accent-soft px-3 py-1 text-sm font-semibold text-accent-deep"
+        data-testid="photos-step-label"
+      >
         {STEP_LABEL}
       </p>
       <p className="sr-only" role="status" aria-live="polite" data-testid="photo-announcement">
