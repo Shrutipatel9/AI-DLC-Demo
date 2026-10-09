@@ -169,6 +169,9 @@ class SmtpEmailSender:
         config = self._config
         self._check(deadline)
         client.connect(config.host, config.port)
+        # smtplib only records the host when it is passed to the constructor, and
+        # starttls() needs it to verify the server certificate (server_hostname).
+        client._host = config.host  # type: ignore[attr-defined]
         self._check(deadline)
         client.ehlo()
         if config.starttls:

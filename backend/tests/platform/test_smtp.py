@@ -139,3 +139,24 @@ def test_connection_refused_is_a_transient_failure() -> None:
 )
 def test_classify_smtp_error(exc: BaseException, expected: type[Exception]) -> None:
     assert classify_smtp_error(exc) is expected
+
+
+def test_starttls_verifies_the_configured_host(
+    smtp_stub: tuple[StubHandler, int], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Regression: connect() after a bare SMTP() left _host empty, so starttls() failed
+    # with "check_hostname requires server_hostname" and no code email was sent.
+    handler, port = smtp_stub
+    seen: list[str] = []
+
+    def fake_starttls(self: smtplib.SMTP, **_kwargs: Any) -> tuple[int, bytes]:
+        seen.append(self._host)  # type: ignore[attr-defined]
+        return 220, b"ready"
+
+    monkeypatch.setattr(smtplib.SMTP, "starttls", fake_starttls)
+    config = SmtpConfig(host="127.0.0.1", port=port, sender="no-reply@example.test", starttls=True)
+    SmtpEmailSender(config).send(
+        "maya@example.test", EmailTemplate.SIGNUP_CODE, VARIABLES, deadline=Deadline(25)
+    )
+    assert seen == ["127.0.0.1"]
+    assert len(handler.messages) == 1
