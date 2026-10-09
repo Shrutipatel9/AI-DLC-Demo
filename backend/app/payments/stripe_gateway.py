@@ -79,6 +79,8 @@ class StripeGateway:
             "success_url": request.success_url,
             "cancel_url": request.cancel_url,
             "client_reference_id": str(request.user_id),
+            # Stripe's hosted page asks for the card holder's full billing address.
+            "billing_address_collection": "required",
             "metadata": metadata,
             "payment_intent_data": {"metadata": metadata},
         }

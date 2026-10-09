@@ -109,6 +109,7 @@ def test_creates_a_one_time_hosted_checkout_at_the_configured_price() -> None:
     assert form["cancel_url"] == ["http://web.test/payment/cancel"]
     assert form["metadata[payment_id]"] == ["00000000-0000-4000-8000-000000000001"]
     assert form["client_reference_id"] == ["00000000-0000-4000-8000-000000000002"]
+    assert form["billing_address_collection"] == ["required"]
 
 
 def test_a_connection_error_is_retried_once() -> None:
