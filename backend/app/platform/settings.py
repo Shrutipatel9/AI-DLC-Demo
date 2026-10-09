@@ -35,6 +35,7 @@ _ANGLE_ID = re.compile(r"[a-z][a-z0-9_]{0,31}")
 
 MIN_KEY_BYTES = 32
 INSECURE_ENVIRONMENTS: frozenset[str] = frozenset({"development", "test"})
+LOCAL_SMTP_HOSTS: frozenset[str] = frozenset({"127.0.0.1", "localhost", "::1", "mailpit"})
 #: The refresh cookie must cover /auth/refresh, /auth/logout and /auth/change-password
 #: (U2 functional design post-review R-03, NFR2.5).
 REQUIRED_REFRESH_COOKIE_PATH = "/auth"
@@ -626,6 +627,18 @@ class Settings(BaseSettings):
             and not self.smtp_starttls
         ):
             raise ValueError("SMTP_STARTTLS must be true outside development and test")
+        if (
+            self.email_backend == "smtp"
+            and self.smtp_username
+            and not self.smtp_starttls
+            and self.smtp_host not in LOCAL_SMTP_HOSTS
+        ):
+            # Remote servers such as Gmail refuse login over plain text, so every code
+            # email would fail; say so at start-up instead.
+            raise ValueError(
+                "SMTP_STARTTLS must be true when logging in to a remote SMTP server "
+                "(for Gmail use SMTP_PORT=587 and SMTP_STARTTLS=true)"
+            )
         if self.rate_limit_backend == "memory" and self.app_env not in INSECURE_ENVIRONMENTS:
             raise ValueError(
                 "RATE_LIMIT_BACKEND=memory is only allowed when APP_ENV is development or test"

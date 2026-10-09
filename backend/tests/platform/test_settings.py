@@ -111,3 +111,33 @@ def test_lists_accept_comma_separated_values_and_urls_use_psycopg() -> None:
     assert settings.frontend_origin == "http://localhost:3000"
     with pytest.raises(ValidationError):
         make_settings(TRUSTED_PROXIES="not-an-ip")
+
+
+def test_remote_smtp_login_without_tls_is_refused() -> None:
+    # Gmail and other remote servers refuse login over plain text: fail at start-up instead.
+    with pytest.raises(ValidationError, match="SMTP_STARTTLS must be true when logging in"):
+        make_settings(
+            EMAIL_BACKEND="smtp",
+            SMTP_HOST="smtp.gmail.com",
+            SMTP_PORT="587",
+            SMTP_USERNAME="user",
+            SMTP_PASSWORD="app-password",
+            SMTP_STARTTLS="false",
+        )
+    tls = make_settings(
+        EMAIL_BACKEND="smtp",
+        SMTP_HOST="smtp.gmail.com",
+        SMTP_USERNAME="user",
+        SMTP_PASSWORD="app-password",
+        SMTP_STARTTLS="true",
+    )
+    assert tls.smtp_starttls is True
+    # Local Mailpit without TLS stays allowed.
+    local = make_settings(
+        EMAIL_BACKEND="smtp",
+        SMTP_HOST="127.0.0.1",
+        SMTP_USERNAME="user",
+        SMTP_PASSWORD="x",
+        SMTP_STARTTLS="false",
+    )
+    assert local.smtp_host == "127.0.0.1"
