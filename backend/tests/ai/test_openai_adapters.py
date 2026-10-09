@@ -188,3 +188,30 @@ def test_image_edit_posts_the_photo_and_returns_the_decoded_image() -> None:
 def test_image_failures_are_typed(response: httpx.Response, error: type[Exception]) -> None:
     with pytest.raises(error):
         image_editor(lambda _r: response).edit(ImageInput(b"s", "image/png", "front"), "x", "high")
+
+
+def test_a_rejected_api_key_is_logged_as_an_error_naming_the_setting(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    body = {"error": {"code": "invalid_api_key", "message": f"Incorrect API key {CANARY}"}}
+    model = text_model(lambda _r: httpx.Response(401, json=body))
+    with caplog.at_level(logging.DEBUG), pytest.raises(AiRequestRejectedError) as caught:
+        model.generate_structured([TextMessage("user", "hi")], [], SCHEMA)
+    assert "API key" in str(caught.value)
+    [record] = [r for r in caplog.records if getattr(r, "event", None) == "ai.auth_failed"]
+    assert record.levelno == logging.ERROR
+    assert "OPENAI_API_KEY" in record.getMessage()
+    assert record.vendorCode == "invalid_api_key"  # type: ignore[attr-defined]
+    # The vendor's message can echo part of the key: never logged.
+    assert CANARY not in " ".join(r.getMessage() + str(r.__dict__) for r in caplog.records)
+
+
+def test_other_rejections_log_only_the_vendor_error_code(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    body = {"error": {"code": "model_not_found", "message": CANARY}}
+    model = text_model(lambda _r: httpx.Response(404, json=body))
+    with caplog.at_level(logging.DEBUG), pytest.raises(AiRequestRejectedError):
+        model.generate_structured([TextMessage("user", "hi")], [], SCHEMA)
+    [record] = [r for r in caplog.records if getattr(r, "event", None) == "ai.rejected"]
+    assert record.vendorCode == "model_not_found"  # type: ignore[attr-defined]

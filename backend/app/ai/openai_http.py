@@ -24,6 +24,8 @@ logger = logging.getLogger("ai")
 HTTP_TOO_MANY_REQUESTS = 429
 HTTP_SERVER_ERROR = 500
 HTTP_CLIENT_ERROR = 400
+HTTP_UNAUTHORIZED = 401
+HTTP_FORBIDDEN = 403
 
 
 def post(
@@ -83,9 +85,28 @@ def post(
         )
         raise AiUnavailableError(f"The AI service answered {status}.")
     if status >= HTTP_CLIENT_ERROR:
+        vendor_code = _vendor_error_code(response)
+        if status in (HTTP_UNAUTHORIZED, HTTP_FORBIDDEN):
+            # A configuration problem, not a passing fault: say exactly what to fix.
+            logger.error(
+                "vendor rejected the API key: check OPENAI_API_KEY (and the account's access "
+                "to the configured model) in the backend .env, then restart the API and worker",
+                extra={
+                    "event": "ai.auth_failed",
+                    "reason": operation,
+                    "status": status,
+                    "vendorCode": vendor_code,
+                },
+            )
+            raise AiRequestRejectedError(f"The AI service refused the API key ({status}).")
         logger.warning(
             "vendor rejected the request",
-            extra={"event": "ai.rejected", "reason": operation, "status": status},
+            extra={
+                "event": "ai.rejected",
+                "reason": operation,
+                "status": status,
+                "vendorCode": vendor_code,
+            },
         )
         raise AiRequestRejectedError(f"The AI service refused the request ({status}).")
     try:
@@ -105,3 +126,17 @@ def _retry_after(response: httpx.Response) -> float | None:
         return max(0.0, float(raw))
     except ValueError:
         return None
+
+
+def _vendor_error_code(response: httpx.Response) -> str | None:
+    """The vendor's machine-readable error code (e.g. ``invalid_api_key``), never its message.
+
+    The message can echo part of the key, so only the short code is logged.
+    """
+    try:
+        body = response.json()
+    except ValueError:
+        return None
+    error = body.get("error") if isinstance(body, dict) else None
+    code = error.get("code") if isinstance(error, dict) else None
+    return str(code)[:64] if code else None
