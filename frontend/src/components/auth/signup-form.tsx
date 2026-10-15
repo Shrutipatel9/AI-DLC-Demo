@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { PageLoader } from "@/components/app/page-loader";
 import { toast } from "@/components/feedback/toast";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import { useAuthActions } from "@/lib/auth";
 import { fieldMessage, messageFor } from "./messages";
 import { PasswordRules } from "./password-rules";
 import { signUpSchema, type SignUpValues } from "./schemas";
+import { useSignedInRedirect } from "./use-signed-in-redirect";
 
 // Sign up (US3.1, WF-U1-1; mockups §2.1).
 export function SignUpForm() {
@@ -24,6 +26,7 @@ export function SignUpForm() {
   const { signUp } = useAuthActions();
   const [showPassword, setShowPassword] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const { redirecting } = useSignedInRedirect();
   const {
     register,
     handleSubmit,
@@ -61,6 +64,8 @@ export function SignUpForm() {
       toast.error(messageFor(error));
     }
   }
+
+  if (redirecting) return <PageLoader message="Taking you to your account…" />;
 
   return (
     <form

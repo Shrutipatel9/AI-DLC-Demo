@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { PageLoader } from "@/components/app/page-loader";
 import { toast } from "@/components/feedback/toast";
 import { Button } from "@/components/ui/button";
 import { describedBy, FormField } from "@/components/ui/form-field";
@@ -15,6 +16,7 @@ import { useAuth, useAuthActions, type CodePurpose } from "@/lib/auth";
 import { useGoToNextStep } from "@/lib/journey";
 
 import { messageFor } from "./messages";
+import { useSignedInRedirect } from "./use-signed-in-redirect";
 import { ResendCodeButton } from "./resend-code-button";
 import { codeSchema, type CodeValues } from "./schemas";
 
@@ -32,7 +34,8 @@ function startPage(purpose: CodePurpose, email: string | null): string {
 export function VerifyForm() {
   const router = useRouter();
   const goToNextStep = useGoToNextStep();
-  const { pending, pendingEmail } = useAuth();
+  const { pending, pendingEmail, status } = useAuth();
+  const { markNavigating } = useSignedInRedirect();
   const { verifyCode, verifyResetCode, cancelPending } = useAuthActions();
   const [locked, setLocked] = useState(false);
   const {
@@ -45,16 +48,23 @@ export function VerifyForm() {
     formState: { errors, isSubmitting },
   } = useForm<CodeValues>({ resolver: zodResolver(codeSchema), defaultValues: { code: "" } });
 
+  // A verified code signs the user in and clears `pending` while the next step is being
+  // looked up: keep the loader up instead of bouncing through /login.
+  const signedIn = status === "signedIn";
   useEffect(() => {
     if (!pending) {
-      router.replace("/login");
+      if (!signedIn) router.replace("/login");
       return;
     }
     setFocus("code");
-  }, [pending, router, setFocus]);
+  }, [pending, signedIn, router, setFocus]);
 
   if (!pending) {
-    return <p className="text-base text-muted">Taking you to sign in…</p>;
+    return signedIn ? (
+      <PageLoader message="Signing you in…" detail="Taking you to your next step." />
+    ) : (
+      <PageLoader message="Taking you to sign in…" />
+    );
   }
 
   const purpose = pending.purpose;
@@ -68,6 +78,7 @@ export function VerifyForm() {
         router.push("/reset-password");
         return;
       }
+      markNavigating(); // this form opens the next step itself once the code is accepted
       await verifyCode(values.code.trim());
       toast.success(purpose === "signup" ? "Your account is ready." : "You're signed in.");
       await goToNextStep(); // US11.8: sign-in lands on the next unfinished step

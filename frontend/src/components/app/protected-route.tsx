@@ -11,15 +11,14 @@ import { useAuth, useAuthActions } from "@/lib/auth";
 import { useJourneyGuard, type JourneyStage } from "@/lib/journey";
 
 import { FullPageLoader } from "./full-page-loader";
+import { PageLoader } from "./page-loader";
 
 function JourneyGate({ stage, children }: { stage: JourneyStage; children: ReactNode }) {
   const state = useJourneyGuard(stage);
   if (state === "checking") {
     return (
-      <main id="main" className="flex min-h-screen items-center justify-center">
-        <p role="status" className="text-base text-muted" data-testid="journey-loader">
-          Finding your next step�
-        </p>
+      <main id="main">
+        <PageLoader message="Finding your next step…" testId="journey-loader" />
       </main>
     );
   }
@@ -35,6 +34,14 @@ export function ProtectedRoute({ children, stage }: { children: ReactNode; stage
     if (status === "signedOut") router.replace("/login");
   }, [status, router]);
 
+  if (status === "signedOut") {
+    // On the way to the login page (after logging out or an expired session).
+    return (
+      <main id="main">
+        <PageLoader message="Taking you to sign in…" testId="signout-loader" />
+      </main>
+    );
+  }
   if (status !== "signedIn") {
     return <FullPageLoader failed={restoreFailed} onRetry={() => void restore()} />;
   }

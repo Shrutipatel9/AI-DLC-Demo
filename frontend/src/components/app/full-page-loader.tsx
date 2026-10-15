@@ -2,8 +2,9 @@
 
 import { WifiOff } from "lucide-react";
 
-import { LogoMark } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
+
+import { PageLoader } from "./page-loader";
 
 // Shown on protected pages while the session is restored (BR6.1): never the login form.
 // When the server cannot be reached (network error or 5xx) it offers Retry (BR6.5).
@@ -27,22 +28,8 @@ export function FullPageLoader({ failed, onRetry }: { failed: boolean; onRetry: 
     );
   }
   return (
-    <main id="main" className="flex min-h-screen items-center justify-center">
-      <div
-        role="status"
-        aria-live="polite"
-        className="flex flex-col items-center gap-3"
-        data-testid="session-loader"
-      >
-        <span
-          aria-hidden="true"
-          className="relative inline-flex size-16 items-center justify-center"
-        >
-          <span className="absolute inset-0 animate-spin rounded-full border-4 border-accent-soft border-t-accent-strong" />
-          <LogoMark className="size-8" />
-        </span>
-        <span className="text-base font-medium text-subheading">Restoring your session</span>
-      </div>
+    <main id="main">
+      <PageLoader message="Restoring your session" testId="session-loader" />
     </main>
   );
 }

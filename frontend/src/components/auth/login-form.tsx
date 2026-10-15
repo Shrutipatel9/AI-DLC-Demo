@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { PageLoader } from "@/components/app/page-loader";
 import { toast } from "@/components/feedback/toast";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { isApiError } from "@/lib/api/errors";
 import { useAuthActions } from "@/lib/auth";
 
 import { messageFor } from "./messages";
+import { useSignedInRedirect } from "./use-signed-in-redirect";
 import { logInSchema, type LogInValues } from "./schemas";
 
 // Log in, step 1 (US3.4, WF-U1-3; mockups §2.3).
@@ -22,6 +24,7 @@ export function LogInForm() {
   const router = useRouter();
   const { logIn } = useAuthActions();
   const [formError, setFormError] = useState<string | null>(null);
+  const { redirecting } = useSignedInRedirect();
   const {
     register,
     handleSubmit,
@@ -47,6 +50,8 @@ export function LogInForm() {
       toast.error(message);
     }
   }
+
+  if (redirecting) return <PageLoader message="Taking you to your account…" />;
 
   return (
     <form

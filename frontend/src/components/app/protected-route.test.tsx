@@ -81,6 +81,8 @@ describe("ProtectedRoute", () => {
     });
     page();
     expect(router.replace).toHaveBeenCalledWith("/login");
+    expect(screen.getByTestId("signout-loader")).toHaveTextContent("Taking you to sign in");
+    expect(screen.queryByTestId("secret-page")).toBeNull();
   });
 
   it("renders the page once signed in", () => {

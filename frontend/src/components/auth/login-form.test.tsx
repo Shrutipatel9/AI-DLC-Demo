@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { configureApiOrigin } from "@/lib/api/client";
-import { resetAuthStore, useAuthStore } from "@/lib/auth/store";
+import { resetAuthStore, setSession, useAuthStore } from "@/lib/auth/store";
 import { errorResponse, jsonResponse, mockFetch, route } from "@/test-utils/fetch-mock";
 import { resetNextMocks, router, toastMock } from "@/test-utils/next-mocks";
 
@@ -30,6 +30,26 @@ describe("LogInForm", () => {
     resetAuthStore();
     resetNextMocks();
     configureApiOrigin("http://api.test");
+  });
+
+  it("sends an already signed-in visitor to their next step behind the loader", async () => {
+    setSession("tok", "2099-01-01T00:00:00Z", {
+      id: "u",
+      fullName: "Maya",
+      email: "maya@example.test",
+      isVerified: true,
+      role: "user",
+      memberSince: "2026-10-01T10:00:00Z",
+    });
+    mockFetch(
+      route("GET", "/journey/next-step", () =>
+        jsonResponse(200, { step: "payment", flaggedAngles: [] }),
+      ),
+    );
+    render(<LogInForm />);
+    expect(screen.getByTestId("page-loader")).toBeInTheDocument();
+    expect(screen.queryByTestId("login-form")).toBeNull();
+    await waitFor(() => expect(router.push).toHaveBeenCalledWith("/payment"));
   });
 
   it("requires email and password", async () => {

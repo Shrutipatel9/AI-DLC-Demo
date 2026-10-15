@@ -4,7 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { configureApiOrigin } from "@/lib/api/client";
-import { resetAuthStore, setPending, useAuthStore, type CodePurpose } from "@/lib/auth/store";
+import {
+  resetAuthStore,
+  setPending,
+  setSession,
+  useAuthStore,
+  type CodePurpose,
+} from "@/lib/auth/store";
 import { errorResponse, jsonResponse, mockFetch, route } from "@/test-utils/fetch-mock";
 import { resetNextMocks, router } from "@/test-utils/next-mocks";
 
@@ -79,6 +85,31 @@ describe("VerifyForm", () => {
     await enter("123456");
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/home"));
     expect(useAuthStore.getState().accessToken).toBe("tok");
+    // No bounce through the login page while the next step is opened: the loader stays up,
+    // and the next step is opened once.
+    expect(router.replace).not.toHaveBeenCalledWith("/login");
+    expect(screen.getByTestId("page-loader")).toHaveTextContent("Signing you in…");
+    expect(router.push).toHaveBeenCalledTimes(1);
+  });
+
+  it("sends a signed-in visitor with no code step to their next step, not to log in", async () => {
+    setSession("tok", "2099-01-01T00:00:00Z", {
+      id: "u",
+      fullName: "Maya",
+      email: "maya@example.test",
+      isVerified: true,
+      role: "user",
+      memberSince: "2026-10-01T10:00:00Z",
+    });
+    mockFetch(
+      route("GET", "/journey/next-step", () =>
+        jsonResponse(200, { step: "photos", flaggedAngles: [] }),
+      ),
+    );
+    render(<VerifyForm />);
+    expect(screen.getByTestId("page-loader")).toBeInTheDocument();
+    await waitFor(() => expect(router.push).toHaveBeenCalledWith("/photos"));
+    expect(router.replace).not.toHaveBeenCalledWith("/login");
   });
 
   it("shows tries left for a wrong code and requires six digits", async () => {
